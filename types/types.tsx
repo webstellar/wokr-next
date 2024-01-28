@@ -7,7 +7,7 @@ export type NavItem = {
 export type IntegrationsAi = {
   id: string;
   title: string;
-  icon: string;
+  src: string;
 };
 
 export type ProcessBlurb = {
