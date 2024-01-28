@@ -29,7 +29,7 @@ const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);
 
 export const actionCodeSettings = {
-  url: process.env.CONFIRMATION_EMAIL_REDIRECT,
+  url: "http://localhost:3000/complete-registration",
   handleCodeInApp: true,
 };
 

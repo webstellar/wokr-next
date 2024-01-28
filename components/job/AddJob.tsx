@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Fragment } from "react";
-import { storage } from "../../config/firebase.js";
+import { storage } from "../../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";

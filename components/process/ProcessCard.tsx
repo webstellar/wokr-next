@@ -1,4 +1,5 @@
-import { ProcessBlurb } from "../../types/Types";
+import Image from "next/image";
+import { ProcessBlurb } from "../../types/types";
 
 interface processProps {
   data: ProcessBlurb;
@@ -7,7 +8,7 @@ interface processProps {
 const ProcessCard: React.FC<processProps> = ({ data }) => {
   return (
     <div className="flex flex-col items-center gap-y-4 justify-around p-10">
-      <img alt={data.title} src={data.icon} className="h-full" />
+      <Image alt={data.title} src={data.icon} className="h-full" />
 
       <h4 className="font-pangram-medium text-lg text-center">{data.title}</h4>
 

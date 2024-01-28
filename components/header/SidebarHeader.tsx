@@ -1,7 +1,7 @@
 import { useState, FormEvent, Fragment, useContext } from "react";
 import { Popover, Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { getAuth, signOut } from "firebase/auth";
 import { AuthContext } from "../../context/authContext";
 import {
@@ -21,6 +21,7 @@ type Props = {
 const SidebarHeader = (props: Props) => {
   const { state, dispatch } = useContext(AuthContext);
   const router = useRouter();
+  const pathname = usePathname();
   const auth = getAuth();
   const { user } = state;
 
@@ -62,7 +63,7 @@ const SidebarHeader = (props: Props) => {
   return (
     <header
       className={`${
-        window.location.pathname == currentUrl ? "absolute" : "'"
+        pathname == currentUrl ? "absolute" : "'"
       } bg-transparent w-full`}
     >
       <nav

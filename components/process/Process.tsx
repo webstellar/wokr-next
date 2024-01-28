@@ -10,7 +10,7 @@ const Process = () => {
       <p className="max-w-6xl font-pangram-light text-base text-center">
         where we transform your current content into diverse formats and tailor
         it for multiple platforms. Reach a wider audience, enhance content
-        value, and elevate your brand's impact.
+        value, and elevate your brand&apos;s impact.
       </p>
 
       <div className="mt-5 flex flex-col lg:flex-row max-w-7xl gap-x-10">

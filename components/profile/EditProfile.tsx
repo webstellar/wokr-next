@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import {
   languages,
   languageLevels,
@@ -10,12 +10,14 @@ import {
   automationLevels,
 } from "../../data/data";
 import { useRouter } from "next/navigation";
-import { storage } from "../../config/firebase.js";
+import { storage } from "../../config/firebase";
 import { v4 } from "uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "react-toastify";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { useReCaptcha } from "next-recaptcha-v3";
+import { verifyCaptchaAction } from "@/utils/verify";
 
 type valueProps = {
   [key: string]: string;
@@ -45,6 +47,7 @@ const EditProfile = () => {
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [valid, setValid] = useState(true);
+  const { executeRecaptcha } = useReCaptcha();
 
   const handleChange = (
     e:
@@ -67,46 +70,75 @@ const EditProfile = () => {
     return phoneNumberPattern.test(phoneNumber);
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setLoading(true);
 
-    if (profileImage == null) return;
+      const token = await executeRecaptcha("contactform_submit");
+      const verified = await verifyCaptchaAction(token);
 
-    try {
-      const profileRef = ref(storage, `profiles/${profileImage.name + v4()}`);
-      await uploadBytes(profileRef, profileImage);
+      console.log(token);
 
-      // Get download URLs
-      const profileUrl = await getDownloadURL(profileRef);
+      if (profileImage == null) return;
 
-      const formData = {
-        displayName: state.displayName,
-        description: state.description,
-        universityCollege: state.universityCollege,
-        universityCountry: state.universityCountry,
-        educationTitle: state.educationTitle,
-        graduationYear: state.graduationYear,
-        profileImage: profileUrl,
-        skill: skill,
-        skillLevel: skillLevel,
-        automation: automation,
-        automationLevel: automationLevel,
-        language: language,
-        languageLevel: languageLevel,
-      };
+      if (verified) {
+        try {
+          const profileRef = ref(
+            storage,
+            `profiles/${profileImage.name + v4()}`
+          );
+          await uploadBytes(profileRef, profileImage);
 
-      console.log(formData);
-      toast("Thanks for setting up your profile", {
-        hideProgressBar: true,
-        autoClose: 2000,
-        type: "success",
-      });
-      router.push("/profile");
-    } catch (error) {
-      console.log(error);
-    }
-  };
+          // Get download URLs
+          const profileUrl = await getDownloadURL(profileRef);
+
+          const formData = {
+            displayName: state.displayName,
+            description: state.description,
+            universityCollege: state.universityCollege,
+            universityCountry: state.universityCountry,
+            educationTitle: state.educationTitle,
+            graduationYear: state.graduationYear,
+            profileImage: profileUrl,
+            skill: skill,
+            skillLevel: skillLevel,
+            automation: automation,
+            automationLevel: automationLevel,
+            language: language,
+            languageLevel: languageLevel,
+          };
+
+          console.log(formData);
+          toast("Thanks for setting up your profile", {
+            hideProgressBar: true,
+            autoClose: 2000,
+            type: "success",
+          });
+          router.push("/profile");
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    },
+    [
+      automation,
+      automationLevel,
+      executeRecaptcha,
+      language,
+      languageLevel,
+      profileImage,
+      router,
+      skill,
+      skillLevel,
+      state.description,
+      state.displayName,
+      state.educationTitle,
+      state.graduationYear,
+      state.universityCollege,
+      state.universityCountry,
+    ]
+  );
 
   return (
     <section className="mx-auto">

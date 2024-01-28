@@ -15,11 +15,12 @@ import logo from "../../public/images/wokri_logo.png";
 //data
 import { homeMenu, profileLinks, settinglinks } from "../../data/data";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 const LoggedInHeader = () => {
   const { state, dispatch } = useContext(AuthContext);
   const router = useRouter();
+  const pathname = usePathname();
   const auth = getAuth();
   const { user } = state;
 
@@ -62,7 +63,7 @@ const LoggedInHeader = () => {
   return (
     <header
       className={`${
-        window.location.pathname == currentUrl ? "absolute" : "'"
+        pathname == currentUrl ? "absolute" : "'"
       } bg-transparent w-full`}
     >
       <nav

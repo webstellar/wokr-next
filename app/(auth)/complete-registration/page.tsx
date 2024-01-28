@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "../../../config/firebase";
 import {
@@ -22,6 +22,10 @@ const CompleteRegistration = () => {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+
+  useEffect(() => {
+    setEmail(window.localStorage.getItem("emailForSignIn")!);
+  }, []);
 
   const handleNext = () => {
     setCurrentStep(currentStep + 1);
@@ -160,22 +164,24 @@ const CompleteRegistration = () => {
 
                       <form className="mt-4" onSubmit={onSignup}>
                         <WokrInput
-                          htmlFor={`email`}
-                          labelName={`Email`}
-                          inputName={`email`}
-                          inputType={`email`}
-                          inputPlaceholder={`Enter your email`}
+                          htmlFor="email"
+                          labelName="Email"
+                          inputName="email"
+                          inputType="email"
+                          inputPlaceholder="Enter your email"
                           disabled={true}
                           onChange={handleEmail}
+                          inputValue={email}
                         />
                         <WokrInput
-                          htmlFor={`password`}
-                          labelName={`Password`}
-                          inputName={`password`}
-                          inputType={`password`}
-                          inputPlaceholder={`Password`}
+                          htmlFor="password"
+                          labelName="Password"
+                          inputName="password"
+                          inputType="password"
+                          inputPlaceholder="Password"
                           disabled={loading}
                           onChange={handlePassword}
+                          inputValue={password}
                         />
                         <WokrButton
                           title={`signUp`}
@@ -201,14 +207,16 @@ const CompleteRegistration = () => {
 
                       <form className="mt-4" onSubmit={onHandleSubmit}>
                         <WokrInput
-                          htmlFor={`username`}
-                          labelName={`Username`}
-                          inputName={`username`}
-                          inputType={`text`}
-                          inputPlaceholder={`John_snow`}
+                          htmlFor="username"
+                          labelName="Username"
+                          inputName="username"
+                          inputType="text"
+                          inputPlaceholder="johnsnow"
                           disabled={false}
                           onChange={handleUsername}
+                          inputValue={username}
                         />
+
                         <WokrButton
                           title={`signUp`}
                           type={`submit`}
@@ -231,6 +239,7 @@ const CompleteRegistration = () => {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                       className="md:w-72 flex flex-col justify-center items-center gap-y-3"
+                      show={true}
                     >
                       <div className="text-center">
                         <svg

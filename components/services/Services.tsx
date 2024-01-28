@@ -15,7 +15,7 @@ const Services = () => {
             {offerings.map((offer) => (
               <div
                 key={offer.id}
-                className="flex h-[25vh] flex-col justify-end items-stretch  border border-gray-600 rounded-xl hover:bg-wokr-red-200 hover:text-gray-50 px-10 py-10 gap-y-3"
+                className="flex h-[25vh] flex-col justify-end items-stretch border border-gray-600 rounded-xl hover:bg-wokr-red-200 hover:text-gray-50 px-10 py-10 gap-y-3"
               >
                 <h4 className="text-xl font-pangram-normal">{offer.title}</h4>
                 <p className="text-sm font-pangram-light">

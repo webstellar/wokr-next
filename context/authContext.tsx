@@ -56,6 +56,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         const idTokenResult = await getIdTokenResult(user);
+        console.log(user);
         dispatch({
           type: "LOGGED_IN_USER",
           payload: {

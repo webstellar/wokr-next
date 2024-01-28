@@ -20,11 +20,11 @@ export const WokrInput = ({ ...props }) => {
       </label>
       <div className="relative">
         <input
-          value={props.inputName}
+          value={props.inputValue}
           id={props.inputName}
           name={props.inputName}
           type={showPassword ? "text" || "email" : props.inputType}
-          placeholder={`Enter your ${props.inputPlaceholder}`}
+          placeholder={props.inputPlaceholder}
           disabled={props.disabled}
           className="block w-full rounded-md border border-gray-300 focus:border-wokr-red-100 focus:outline-none focus:ring-1 focus:ring-wokr-red-100 py-1 px-1.5 text-gray-500"
           onChange={props.onChange}

@@ -1,10 +1,11 @@
 import classNames from "classnames";
-import logo from "../../assets/wokri_logo.png";
-import iconLogo from "../../assets/wokr_icon_only.png";
+import logo from "../../public/images/wokri_logo.png";
+import iconLogo from "../../public/images//wokr_icon_only.png";
 import { sidebarNavItems } from "../../data/data";
 import { HiChevronDoubleLeft, HiChevronDoubleRight } from "react-icons/hi";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { NavItem } from "@/types/types";
 import Image from "next/image";
 
@@ -22,6 +23,7 @@ const Sidebar = ({
   shown,
 }: Props) => {
   const Icon = collapsed ? HiChevronDoubleRight : HiChevronDoubleLeft;
+  const router = useRouter();
 
   return (
     <div
@@ -55,7 +57,7 @@ const Sidebar = ({
               "grid place-content-center": true,
               "w-auto h-14 rounded-full": true,
             })}
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={() => router.push("/")}
           >
             <span className="whitespace-nowrap">
               {!collapsed ? (
@@ -116,7 +118,9 @@ const Sidebar = ({
             <Image
               src="https://unsplash.it/640/425"
               alt="profile image"
-              className="rounded-full w-10 h-10"
+              className="rounded-full w-8 h-8"
+              width="100"
+              height="100"
             />
             {!collapsed && (
               <div className="flex flex-col ">

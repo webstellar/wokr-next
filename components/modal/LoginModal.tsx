@@ -55,7 +55,6 @@ const LoginModal = ({ setOpen, open }: ModalProps) => {
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
-
         const idTokenResult = await getIdToken(user);
 
         dispatch({
@@ -81,7 +80,6 @@ const LoginModal = ({ setOpen, open }: ModalProps) => {
       })
       .finally(async () => {
         setLoading(false);
-        console.log("Peter this is not working");
       });
   };
 
@@ -165,22 +163,24 @@ const LoginModal = ({ setOpen, open }: ModalProps) => {
 
                       <form className="mt-4" onSubmit={onLogin}>
                         <WokrInput
-                          htmlFor={`email`}
-                          labelName={`Email`}
-                          inputName={`email`}
-                          inputType={`email`}
-                          inputPlaceholder={`Enter your email`}
+                          htmlFor="email"
+                          labelName="Email"
+                          inputName="email"
+                          inputType="email"
+                          inputPlaceholder="Enter your email"
                           disabled={false}
                           onChange={handleEmail}
+                          inputValue={email}
                         />
                         <WokrInput
-                          htmlFor={`password`}
-                          labelName={`Password`}
-                          inputName={`password`}
-                          inputType={`password`}
-                          inputPlaceholder={`Password`}
+                          htmlFor="password"
+                          labelName="Password"
+                          inputName="password"
+                          inputType="password"
+                          inputPlaceholder="Password"
                           disabled={loading}
                           onChange={handlePassword}
+                          inputValue={password}
                         />
 
                         <div className="mb-3 flex flex-wrap content-center">

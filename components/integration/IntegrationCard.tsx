@@ -1,4 +1,5 @@
-import { IntegrationsAi } from "../../types/Types";
+import Image from "next/image";
+import { IntegrationsAi } from "../../types/types";
 
 interface integrationProps {
   data: IntegrationsAi;
@@ -7,7 +8,7 @@ interface integrationProps {
 const IntegrationCard: React.FC<integrationProps> = ({ data }) => {
   return (
     <div className="border rounded-xl flex flex-col items-center h-[30vh] md:w-[12vw] justify-around p-10">
-      <img src={data.icon} alt={data.title} className="" />
+      <Image src={data.icon} alt={data.title} className="" />
       <h5 className="font-pangram-medium text-lg">{data.title}</h5>
     </div>
   );

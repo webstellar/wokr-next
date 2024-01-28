@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useRef, useState, useContext } from "react";
+import { Fragment, useRef, useState, useContext, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Link from "next/link.js";
 import { useRouter } from "next/navigation";
@@ -32,6 +32,10 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const cancelButtonRef = useRef(null);
+
+  useEffect(() => {
+    setEmail(window.localStorage.getItem("emailForSignIn")!);
+  }, []);
 
   const handleEmail = (
     e:
@@ -153,13 +157,14 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
 
                       <form className="mt-4" onSubmit={handleSubmit}>
                         <WokrInput
-                          htmlFor={`email`}
-                          labelName={`Email`}
-                          inputName={`email`}
-                          inputType={`email`}
-                          inputPlaceholder={`Enter your email`}
+                          htmlFor="email"
+                          labelName="Email"
+                          inputName="email"
+                          inputType="email"
+                          inputPlaceholder="Enter your email"
                           disabled={false}
                           onChange={handleEmail}
+                          inputValue={email}
                         />
 
                         <WokrButton
