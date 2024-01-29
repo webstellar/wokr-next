@@ -1,3 +1,5 @@
+import { StaticImageData } from "next/image";
+
 export type NavItem = {
   label: string;
   href: string;
@@ -7,12 +9,12 @@ export type NavItem = {
 export type IntegrationsAi = {
   id: string;
   title: string;
-  src: string;
+  icon: StaticImageData;
 };
 
 export type ProcessBlurb = {
   id: string;
   title: string;
   description: string;
-  src: string;
+  icon: StaticImageData;
 };
