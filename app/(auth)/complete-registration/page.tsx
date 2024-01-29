@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import { WokrButton, WokrInput } from "@/components/formfields/FormFields";
 import { Transition } from "@headlessui/react";
 import { AuthContext } from "@/context/authContext";
+import { registerUser } from "@/utils/api";
 
 const CompleteRegistration = () => {
   const { dispatch } = useContext(AuthContext);
@@ -71,9 +72,9 @@ const CompleteRegistration = () => {
               console.log("It happened here!");
             });
 
-          //dispatch user with token and email
-          //then redirect
           const idTokenResult = await getIdToken(result.user);
+
+          await registerUser({ email: user.email });
 
           //dispatch stays here
           dispatch({

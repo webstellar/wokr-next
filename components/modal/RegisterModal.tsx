@@ -20,6 +20,7 @@ import {
 import { toast } from "react-toastify";
 import { WokrButton, WokrInput } from "../formfields/FormFields";
 import { AuthContext } from "@/context/authContext";
+import { registerUser } from "@/utils/api";
 
 type ModalProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -86,6 +87,8 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
       .then(async (result) => {
         const user = result.user;
         const idTokenResult = await getIdToken(result.user);
+
+        await registerUser({ email: user.email });
 
         dispatch({
           type: "LOGGED_IN_USER",

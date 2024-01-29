@@ -33,6 +33,7 @@ const app = initializeApp(firebaseConfig);
 
 export const actionCodeSettings = {
   url: "https://fascinating-lamington-d30913.netlify.app/complete-registration",
+  //url: "http://localhost:3000/complete-registration",
   handleCodeInApp: true,
 };
 

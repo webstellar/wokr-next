@@ -2,11 +2,6 @@ import mongoose, { Schema } from "mongoose";
 
 const automationSchema = new Schema(
   {
-    id: {
-      type: String,
-      required: true,
-      index: true,
-    },
     title: {
       type: String,
       required: true,
