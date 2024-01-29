@@ -143,6 +143,8 @@ const LoggedInHeader = () => {
                     src="https://unsplash.it/640/425"
                     alt="image"
                     className="rounded-full w-8 h-8"
+                    width="100"
+                    height="100"
                   />
                   <HiOutlineChevronDown
                     className="-mr-1 ml-2 h-5 w-5 text-wokr-red-100 hover:text-wokr-red-200"

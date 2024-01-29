@@ -14,13 +14,12 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
   console.log(state);
 
   return (
-    <AuthProvider>
+    <>
       {user ? <LoggedInHeader /> : <Header />}
-      {children}  
+      {children}
       {user ? <LoggedInFooter /> : <Footer />}
-    </AuthProvider>
+    </>
   );
 };
 
 export default LayoutProvider;
-  

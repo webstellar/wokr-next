@@ -1,3 +1,5 @@
+"use client";
+
 import { useReducer, createContext, useEffect } from "react";
 import { auth } from "../config/firebase";
 import { getIdTokenResult, onAuthStateChanged } from "firebase/auth";

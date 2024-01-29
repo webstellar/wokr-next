@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ReCaptchaProvider } from "next-recaptcha-v3";
 import localFont from "next/font/local";
+import { AuthProvider } from "@/context/authContext";
 
 const pangram = localFont({
   src: [
@@ -34,13 +35,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ReCaptchaProvider reCaptchaKey={process.env.RECAPTCHA_SITE_KEY}>
-      <html lang="en">
-        <body className={`${pangram.variable} font-sans ${pangram.className}`}>
-          {children}
-          <ToastContainer />
-        </body>
-      </html>
-    </ReCaptchaProvider>
+    <AuthProvider>
+      <ReCaptchaProvider reCaptchaKey={process.env.RECAPTCHA_SITE_KEY}>
+        <html lang="en">
+          <body
+            className={`${pangram.variable} font-sans ${pangram.className}`}
+          >
+            {children}
+            <ToastContainer />
+          </body>
+        </html>
+      </ReCaptchaProvider>
+    </AuthProvider>
   );
 }

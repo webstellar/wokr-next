@@ -121,6 +121,8 @@ const SidebarHeader = (props: Props) => {
                   <Image
                     src="https://unsplash.it/640/425"
                     alt="image"
+                    width={100}
+                    height={100}
                     className="rounded-full w-8 h-8"
                   />
                   <HiOutlineChevronDown
