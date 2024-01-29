@@ -14,5 +14,5 @@ export type ProcessBlurb = {
   id: string;
   title: string;
   description: string;
-  icon: string;
+  src: string;
 };
