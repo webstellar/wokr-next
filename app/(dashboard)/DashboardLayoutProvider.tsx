@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AuthContext } from "@/context/authContext";
 import classNames from "classnames";
 import Sidebar from "@/components/sidebar/Sidebar";
 import SidebarHeader from "@/components/header/SidebarHeader";
@@ -12,6 +13,8 @@ const DashboardLayoutProvider = ({
 }) => {
   const [collapsed, setSidebarCollapsed] = useState(true);
   const [showSidebar, setShowSidebar] = useState(true);
+  const { state } = useContext(AuthContext);
+  const { user } = state;
 
   return (
     <div
@@ -27,6 +30,7 @@ const DashboardLayoutProvider = ({
           collapsed={collapsed}
           setCollapsed={() => setSidebarCollapsed((prev) => !prev)}
           shown={showSidebar}
+          user={user ?? {}} // Provide a default value for user prop
         />
       </div>
       <main>

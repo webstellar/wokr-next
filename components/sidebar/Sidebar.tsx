@@ -9,11 +9,16 @@ import { useRouter } from "next/navigation";
 import { NavItem } from "@/types/types";
 import Image from "next/image";
 
+type userProfile = {
+  [key: string]: string;
+};
+
 type Props = {
   collapsed: boolean;
   setCollapsed(collapsed: boolean): void;
   navItems?: NavItem[];
   shown: boolean;
+  user: userProfile;
 };
 
 const Sidebar = ({
@@ -21,6 +26,7 @@ const Sidebar = ({
   setCollapsed,
   navItems = sidebarNavItems,
   shown,
+  user,
 }: Props) => {
   const Icon = collapsed ? HiChevronDoubleRight : HiChevronDoubleLeft;
   const router = useRouter();
@@ -124,7 +130,10 @@ const Sidebar = ({
             />
             {!collapsed && (
               <div className="flex flex-col ">
-                <span className="text-gray-600 my-0">{"Full Name"}</span>
+                <span className="text-gray-600 my-0">
+                  {user &&
+                    (user.name || (user.email && user.email.split("@")[0]))}
+                </span>
                 <Link href="/profile" className="text-wokr-red-100 text-sm">
                   View Profile
                 </Link>

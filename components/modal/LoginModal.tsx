@@ -185,7 +185,7 @@ const LoginModal = ({ setOpen, open }: ModalProps) => {
 
                         <div className="mb-3 flex flex-wrap content-center">
                           <Link
-                            href="#"
+                            href="/forgot-password"
                             className="text-xs font-semibold text-wokr-red-100"
                           >
                             Forgot password?
@@ -215,7 +215,7 @@ const LoginModal = ({ setOpen, open }: ModalProps) => {
 
                       <div className="text-center">
                         <span className="text-xs text-gray-400 font-semibold">
-                          Don$apos;t have an account?
+                          Don&apos;t have an account?
                         </span>
                         <Link
                           href="/register"

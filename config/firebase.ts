@@ -2,7 +2,6 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 //import { getAnalytics } from "firebase/analytics";
-import { useUrl } from "nextjs-current-url";
 
 /*
 const firebaseConfig = {
@@ -32,8 +31,10 @@ const app = initializeApp(firebaseConfig);
 //const analytics = getAnalytics(app);
 
 export const actionCodeSettings = {
-  url: "https://fascinating-lamington-d30913.netlify.app/complete-registration",
-  //url: "http://localhost:3000/complete-registration",
+  // url: "https://fascinating-lamington-d30913.netlify.app/complete-registration",
+  url:
+    process.env.CONFIRMATION_EMAIL_REDIRECT ||
+    "http://localhost:3000/complete-registration",
   handleCodeInApp: true,
 };
 
