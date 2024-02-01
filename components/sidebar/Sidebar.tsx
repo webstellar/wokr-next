@@ -134,7 +134,7 @@ const Sidebar = ({
                   {user &&
                     (user.name || (user.email && user.email.split("@")[0]))}
                 </span>
-                <Link href="/profile" className="text-wokr-red-100 text-sm">
+                <Link href="/my-profile" className="text-wokr-red-100 text-sm">
                   View Profile
                 </Link>
               </div>

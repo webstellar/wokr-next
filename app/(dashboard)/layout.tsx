@@ -38,9 +38,9 @@ export default function RootLayout({
   return (
     <AuthProvider>
       <ReCaptchaProvider reCaptchaKey={process.env.RECAPTCHA_SITE_KEY}>
-        <html lang="en">
+        <html lang="en" className="h-full">
           <body
-            className={`${pangram.variable} font-sans ${pangram.className}`}
+            className={`${pangram.variable} font-sans ${pangram.className} h-full`}
           >
             <DashboardLayoutProvider>{children}</DashboardLayoutProvider>
             <ToastContainer />

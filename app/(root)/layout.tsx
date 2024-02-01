@@ -4,10 +4,9 @@ import type { Metadata } from "next";
 import "../globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ReCaptchaProvider } from "next-recaptcha-v3";
 import localFont from "next/font/local";
-import LayoutProvider from "./LayoutProvider";
 import { AuthProvider } from "@/context/authContext";
+import LayoutProvider from "./LayoutProvider";
 
 const pangram = localFont({
   src: [
@@ -25,7 +24,7 @@ const pangram = localFont({
 export const metadata: Metadata = {
   title: {
     default: "Wokr Marketplace",
-    template: "%s | Automation Marketplace",
+    template: "%s | Registration",
   },
   description: "Wokr marketplace for finding automations and AI",
 };
@@ -37,16 +36,12 @@ export default function RootLayout({
 }>) {
   return (
     <AuthProvider>
-      <ReCaptchaProvider reCaptchaKey={process.env.RECAPTCHA_SITE_KEY}>
-        <html lang="en">
-          <body
-            className={`${pangram.variable} font-sans ${pangram.className}`}
-          >
-            <LayoutProvider>{children}</LayoutProvider>
-            <ToastContainer />
-          </body>
-        </html>
-      </ReCaptchaProvider>
+      <html lang="en">
+        <body className={`${pangram.variable} font-sans ${pangram.className}`}>
+          <LayoutProvider>{children}</LayoutProvider>
+          <ToastContainer />
+        </body>
+      </html>
     </AuthProvider>
   );
 }

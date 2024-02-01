@@ -21,8 +21,8 @@ const Footer = () => {
   const year = d.getFullYear();
 
   return (
-    <footer className="bg-white">
-      <div
+    <footer className="bg-white my-12">
+      <section
         className="mx-auto flex flex-grow flex-wrap max-w-screen-2xl items-center justify-between p-6 lg:px-8 lg:gap-0 gap-y-20"
         style={myStyle}
         aria-label="Global"
@@ -75,7 +75,7 @@ const Footer = () => {
             </button>
           </div>
         </div>
-      </div>
+      </section>
     </footer>
   );
 };

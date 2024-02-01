@@ -17,7 +17,7 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
     <>
       {user ? <LoggedInHeader /> : <Header />}
       {children}
-      {user ? <LoggedInFooter /> : <Footer />}
+      <Footer />
     </>
   );
 };

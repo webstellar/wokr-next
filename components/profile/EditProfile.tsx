@@ -142,8 +142,7 @@ const EditProfile = () => {
 
   return (
     <section className="mx-auto">
-      <div className="grid grid-cols-1 justify-start items-center mx-auto max-w-screen-2xl px-6 lg:px-8">
-        <h2 className="my-12 text-3xl font-bold text-gray-900">Edit Profile</h2>
+      <div className="grid grid-cols-1 justify-start items-center mx-auto max-w-screen-2xl">
         <form onSubmit={handleSubmit}>
           <div className="mb-8 w-full grid grid-cols-2 justify-around items-center gap-x-2">
             <div>
