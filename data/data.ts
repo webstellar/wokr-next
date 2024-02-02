@@ -140,23 +140,17 @@ export const homeMenu = [
   },
   {
     id: 2,
-    url: "/my-selling-profile",
+    url: "/my-rofile",
     title: "Switch to Selling",
-  },
-  {
-    id: 3,
-    url: "/my-buying-profile",
-    title: "Switch to Buying",
   },
 ];
 
 export const profileLinks = [
-  { href: "/profile", label: "Profile" },
-  { href: "/post-a-job", label: "Post a Job" },
+  { href: "/my-profile", label: "Profile" },
+  { href: "/post-job", label: "Post a Job" },
 ];
 export const settinglinks = [
-  { href: "/become-seller", label: "Become a Seller" },
-  { href: "/account-settings", label: "Settings" },
+  { href: "/settings", label: "Settings" },
   { href: "/support", label: "Help & Support" },
   { href: "/billing", label: "Billing" },
 ];
@@ -240,7 +234,7 @@ export const automationLevels = [
 export const sidebarNavItems: NavItem[] = [
   {
     label: "Dashboard",
-    href: "/setup-profile",
+    href: "/dashboard",
     icon: dashboard,
   },
   {
@@ -269,8 +263,8 @@ export const sidebarNavItems: NavItem[] = [
     icon: contacts,
   },
   {
-    label: "Setting",
-    href: "/setup-profile",
+    label: "Settings",
+    href: "/settings",
     icon: setting,
   },
 ];

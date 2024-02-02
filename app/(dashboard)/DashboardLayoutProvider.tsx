@@ -7,7 +7,6 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import SidebarHeader from "@/components/header/SidebarHeader";
 import Spinner from "@/components/spinner/Spinner";
 import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
-import { error } from "console";
 
 const DashboardLayoutProvider = ({
   children,
@@ -18,6 +17,7 @@ const DashboardLayoutProvider = ({
   const [showSidebar, setShowSidebar] = useState(true);
   const { state } = useContext(AuthContext);
   const { user } = state;
+  console.log(user);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
