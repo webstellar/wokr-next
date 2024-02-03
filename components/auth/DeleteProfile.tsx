@@ -22,12 +22,12 @@ const DeleteProfile = () => {
     const currentUser = auth.currentUser;
     //first action
     const credential = EmailAuthProvider.credential(
-      currentUser?.email,
+      currentUser?.email || "",
       password
     );
 
-    await reauthenticateWithCredential(currentUser, credential).then(() => {
-      deleteUser(currentUser)
+    await reauthenticateWithCredential(currentUser!, credential).then(() => {
+      deleteUser(currentUser!)
         .then(() => {
           setLoading(false);
           toast("Account deleted successfully", {

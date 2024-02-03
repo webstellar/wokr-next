@@ -41,12 +41,12 @@ const UpdatePassword = ({ user }: any) => {
 
     //first action
     const credential = EmailAuthProvider.credential(
-      currentUser?.email,
+      currentUser?.email || "",
       oldPassword
     );
 
-    await reauthenticateWithCredential(currentUser, credential).then(() => {
-      updatePassword(currentUser, newPassword)
+    await reauthenticateWithCredential(currentUser!, credential).then(() => {
+      updatePassword(currentUser!, newPassword)
         .then(() => {
           setLoading(false);
           toast("Password updated successfully", {
