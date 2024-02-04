@@ -68,12 +68,7 @@ const automationSchema = new Schema(
     },
     buyers: [
       {
-        type: {
-          id: Schema.ObjectId,
-          name: String,
-          username: String,
-          profileImage: { url: String },
-        },
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
       },
     ],
