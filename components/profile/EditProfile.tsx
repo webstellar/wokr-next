@@ -14,7 +14,7 @@ import { storage } from "../../config/firebase";
 import { v4 } from "uuid";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "react-toastify";
-import "react-phone-input-2/lib/style.css";
+import { WokrDashboardUrlInput } from "../formfields/FormFields";
 import {
   WokrDashboardButton,
   WokrDashboardDescription,
@@ -23,6 +23,7 @@ import {
   WokrPhone,
   WokrPhotoUpload,
 } from "../formfields/FormFields";
+import { updateUser } from "@/utils/api";
 
 type valueProps = {
   [key: string]: string;
@@ -36,12 +37,16 @@ const initState: valueProps = {
   eductionTitle: "",
   educationMajor: "",
   graduationYear: "",
+  xLink: "",
+  discordLink: "",
+  facebookLink: "",
 };
 
 const EditProfile = ({ user }: any) => {
   const router = useRouter();
   const [state, setState] = useState(initState);
   const [email, setEmail] = useState(user?.email);
+  const [fullname, setFullName] = useState(user?.displayName);
   const [language, setLanguage] = useState("ADD LANGUAGE");
   const [languageLevel, setLanguageLevel] = useState("LANGUAGE LEVEL");
   const [skill, setSkill] = useState("ADD SKILL");
@@ -73,6 +78,15 @@ const EditProfile = ({ user }: any) => {
     setEmail(e.target.value);
   };
 
+  const handleFullName = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setFullName(e.target.value);
+  };
+
   const handleChange = (
     e:
       | React.ChangeEvent<HTMLInputElement>
@@ -99,38 +113,53 @@ const EditProfile = ({ user }: any) => {
       e.preventDefault();
       setLoading(true);
 
-      if (profileImage == null) return;
+      //if (profileImage == null) return;
 
       try {
-        const profileRef = ref(storage, `profiles/${profileImage.name + v4()}`);
-        await uploadBytes(profileRef, profileImage);
+        const profileRef = ref(
+          storage,
+          `profiles/${profileImage!.name + v4()}`
+        );
+        await uploadBytes(profileRef, profileImage!);
 
         // Get download URLs
         const profileUrl = await getDownloadURL(profileRef);
 
         const formData = {
-          displayName: state.displayName,
+          email: email,
+          username: state.displayName,
+          name: fullname,
           description: state.description,
           universityCollege: state.universityCollege,
           universityCountry: state.universityCountry,
           educationTitle: state.educationTitle,
           graduationYear: state.graduationYear,
-          profileImage: profileUrl,
-          skill: skill,
-          skillLevel: skillLevel,
-          automation: automation,
-          automationLevel: automationLevel,
-          language: language,
-          languageLevel: languageLevel,
+          xLink: state.xLink,
+          discordLink: state.discordLink,
+          facebookLink: state.facebookLink,
+          profileImage: profileUrl || null,
+          automationTools: {
+            automation: automation,
+            automationLevel: automationLevel,
+          },
+          skillsets: {
+            skill: skill,
+            skillLevel: skillLevel,
+          },
+          languages: {
+            language: language,
+            languageLevel: languageLevel,
+          },
         };
 
-        console.log(formData);
+        await updateUser(formData);
+
         toast("Thanks for setting up your profile", {
           hideProgressBar: true,
           autoClose: 2000,
           type: "success",
         });
-        router.push("/profile");
+        router.push("/my-profile");
       } catch (error) {
         console.log(error);
       }
@@ -138,6 +167,8 @@ const EditProfile = ({ user }: any) => {
     [
       automation,
       automationLevel,
+      email,
+      fullname,
       language,
       languageLevel,
       profileImage,
@@ -145,11 +176,14 @@ const EditProfile = ({ user }: any) => {
       skill,
       skillLevel,
       state.description,
+      state.discordLink,
       state.displayName,
       state.educationTitle,
+      state.facebookLink,
       state.graduationYear,
       state.universityCollege,
       state.universityCountry,
+      state.xLink,
     ]
   );
 
@@ -158,21 +192,21 @@ const EditProfile = ({ user }: any) => {
       <div className="grid grid-cols-1 justify-start items-center max-w-screen-md">
         <form onSubmit={handleSubmit} className="mb-10">
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <WokrDashboardInput
+            <WokrDashboardUrlInput
               classname="sm:col-span-3"
               htmlFor="displayName"
               label="DISPLAY NAME"
-              inputTitle="displayName"
-              inputValue={state.displayName}
+              title="displayName"
+              value={state.displayName}
               disabled={false}
-              inputType="text"
-              inputName="displayName"
-              inputId="displayName"
+              type="text"
+              name="displayName"
+              id="displayName"
               autocomplete="display name"
-              inputPlaceholder="john_wick"
+              placeholder="jonn_wick"
               onChange={handleChange}
+              url="wokr.io/"
             />
-
             <WokrDashboardInput
               classname="sm:col-span-3"
               htmlFor="email"
@@ -187,14 +221,26 @@ const EditProfile = ({ user }: any) => {
               inputPlaceholder="Your Email"
               onChange={handleEmail}
             />
-
             <WokrPhone
               label="PHONE"
               phoneNumber={phoneNumber}
               onChange={handlePhoneChange}
               valid={valid}
             />
-
+            <WokrDashboardInput
+              classname="sm:col-span-3"
+              htmlFor="fullname"
+              label="FULL NAME"
+              inputTitle="fullname"
+              inputValue={fullname}
+              disabled={false}
+              inputType="text"
+              inputName="fullname"
+              inputId="fullname"
+              autocomplete="your fulltname"
+              inputPlaceholder="Your Full name"
+              onChange={handleFullName}
+            />
             <WokrDashboardDescription
               title="ABOUT"
               writeUp="Write a few sentences about yourself."
@@ -204,7 +250,6 @@ const EditProfile = ({ user }: any) => {
               onChange={handleChange}
               value={state.description}
             />
-
             <div className="border-b border-gray-900/10 pb-12 col-span-full">
               <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
                 LANGUAGE INFORMATION
@@ -244,7 +289,6 @@ const EditProfile = ({ user }: any) => {
                 {`${language} - ${languageLevel}`}
               </p>
             </div>
-
             <div className="border-b border-gray-900/10 pb-12 col-span-full">
               <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
                 SKILL INFORMATION
@@ -284,7 +328,6 @@ const EditProfile = ({ user }: any) => {
                 {`${skill} - ${skillLevel}`}
               </p>
             </div>
-
             <div className="border-b border-gray-900/10 pb-12 col-span-full">
               <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
                 AUTOMATION TOOL INFORMATION
@@ -324,7 +367,6 @@ const EditProfile = ({ user }: any) => {
                 {`${automation} - ${automationLevel}`}
               </p>
             </div>
-
             <div className="border-b border-gray-900/10 pb-12 col-span-full">
               <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
                 EDUCATION INFORMATION
@@ -336,7 +378,7 @@ const EditProfile = ({ user }: any) => {
                   htmlFor="universityCountry"
                   inputTitle="universityCountry"
                   inputValue={state.universityCountry}
-                  disabled={true}
+                  disabled={false}
                   inputType="text"
                   inputName="universityCountry"
                   inputId="universityCountry"
@@ -349,7 +391,7 @@ const EditProfile = ({ user }: any) => {
                   htmlFor="universityCollege"
                   inputTitle="universityCollege"
                   inputValue={state.universityCollege}
-                  disabled={true}
+                  disabled={false}
                   inputType="text"
                   inputName="universityCollege"
                   inputId="universityCollege"
@@ -362,7 +404,7 @@ const EditProfile = ({ user }: any) => {
                   htmlFor="educationTitle"
                   inputTitle="educationTitle"
                   inputValue={state.educationTitle}
-                  disabled={true}
+                  disabled={false}
                   inputType="text"
                   inputName="educationTitle"
                   inputId="educationTitle"
@@ -376,7 +418,7 @@ const EditProfile = ({ user }: any) => {
                   htmlFor="educationMajor"
                   inputTitle="educationMajor"
                   inputValue={state.educationMajor}
-                  disabled={true}
+                  disabled={false}
                   inputType="text"
                   inputName="educationMajor"
                   inputId="educationMajor"
@@ -390,7 +432,7 @@ const EditProfile = ({ user }: any) => {
                   htmlFor="graduationYear"
                   inputTitle="graduationYear"
                   inputValue={state.graduationYear}
-                  disabled={true}
+                  disabled={false}
                   inputType="text"
                   inputName="graduationYear"
                   inputId="graduationYear"
@@ -400,25 +442,73 @@ const EditProfile = ({ user }: any) => {
                 />
               </div>
             </div>
-
             <WokrPhotoUpload
               label="PROFILE PHOTO"
-              htmlFor="profile-upload"
-              title="Upload a file"
+              htmlFor="profileImage"
+              title="Upload an image"
               inputName="profileImage"
               inputId="profileImage"
               inputType="file"
               classname="col-span-full"
+              accept="image/png, image/jpeg, image/gif, image/jpg"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 if (e.target.files != null) {
                   setProfileImage(e.target.files[0]);
                 }
               }}
+              value={profileImage != null}
+            />
+
+            <WokrDashboardUrlInput
+              classname="sm:col-span-3"
+              htmlFor="facebookLink"
+              label="FACEBOOK PROFILE"
+              title="facebookLink"
+              value={state.facebookLink}
+              disabled={false}
+              type="text"
+              name="facebookLink"
+              id="facebookLink"
+              autocomplete="your facebook link"
+              placeholder="facebookurl"
+              onChange={handleChange}
+              url="facebook.com/"
+            />
+            <WokrDashboardUrlInput
+              classname="sm:col-span-3"
+              htmlFor="xLink"
+              label="TWITTER HANDLE"
+              title="xLink"
+              value={state.xLink}
+              disabled={false}
+              type="text"
+              name="xLink"
+              id="xlink"
+              autocomplete="your twitter link"
+              placeholder="twitter handle"
+              onChange={handleChange}
+              url="x.com/"
+            />
+            <WokrDashboardUrlInput
+              classname="sm:col-span-3"
+              htmlFor="discordLink"
+              label="DISCORD LINK"
+              title="discordLink"
+              value={state.discordLink}
+              disabled={false}
+              type="text"
+              name="discordLink"
+              id="discordLink"
+              autocomplete="your discord link"
+              placeholder="discord link"
+              onChange={handleChange}
+              url="discord.com/"
             />
           </div>
 
           <WokrDashboardButton
             cancel={handleCancel}
+            cancelText={"Cancel"}
             title="UpdateProfile"
             type="submit"
             disabled={false}

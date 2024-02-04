@@ -5,7 +5,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import localFont from "next/font/local";
-import { ReactQueryClientProvider } from "@/provider/ReactQueryClientProvider";
+import { Provider } from "@/utils/Provider";
 
 const pangram = localFont({
   src: [
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ReactQueryClientProvider>
+    <Provider>
       <html lang="en" className="h-full">
         <body
           className={`${pangram.variable} font-sans ${pangram.className} h-full`}
@@ -43,6 +43,6 @@ export default function RootLayout({
           <ToastContainer />
         </body>
       </html>
-    </ReactQueryClientProvider>
+    </Provider>
   );
 }

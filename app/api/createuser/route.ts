@@ -1,4 +1,3 @@
-import type { NextApiRequest, NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import { connectToDB } from "@/lib/mongoose";
 import { User } from "@/lib/models/user.model";

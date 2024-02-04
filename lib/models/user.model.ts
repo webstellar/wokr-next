@@ -11,7 +11,7 @@ const userSchema = new Schema(
     name: {
       type: String,
     },
-    bio: String,
+    description: String,
     phone: Number,
     email: {
       type: String,
@@ -30,14 +30,18 @@ const userSchema = new Schema(
       },
     ],
     profileImage: String,
-    skillset: [{ skill: String, experienceLevel: String }],
     facebookLink: String,
-    googleLink: String,
     xLink: String,
     discordLink: String,
     country: String,
+    universityCollege: String,
+    universityCountry: String,
+    educationTitle: String,
+    graduationYear: String,
     timeZone: String,
+    skillsets: [{ skill: String, skillLevel: String }],
     languages: [{ language: String, languageLevel: String }],
+    automationTools: [{ automation: String, automationLevel: String }],
     automations: [
       {
         type: mongoose.Schema.Types.ObjectId,

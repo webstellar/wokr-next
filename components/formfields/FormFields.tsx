@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { HiEye, HiEyeSlash } from "react-icons/hi2";
 import Spinner from "../spinner/Spinner";
-import { HiPhoto } from "react-icons/hi2";
+import { HiPhoto, HiCheckCircle } from "react-icons/hi2";
 import PhoneInput from "react-phone-input-2";
 
 export const WokrInput = ({ ...props }) => {
@@ -90,8 +90,38 @@ export const WokrDashboardInput = ({ ...props }) => {
           autoComplete={props.autoComplete}
           placeholder={props.inputPlaceholder}
           required={props.required}
-          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6 outline-none"
         />
+      </div>
+    </div>
+  );
+};
+export const WokrDashboardUrlInput = ({ ...props }) => {
+  return (
+    <div className={props.classname}>
+      <label
+        htmlFor={props.htmlFor}
+        className="block text-sm font-medium leading-6 text-gray-900"
+      >
+        {props.label}
+      </label>
+      <div className="mt-2">
+        <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-wokr-red-200 sm:max-w-md">
+          <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">
+            {props.url}
+          </span>
+          <input
+            onChange={props.onChange}
+            value={props.value}
+            title={props.title}
+            type={props.type}
+            name={props.name}
+            id={props.id}
+            autoComplete={props.autocomplete}
+            className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 outline-none"
+            placeholder={props.placeholder}
+          />
+        </div>
       </div>
     </div>
   );
@@ -144,21 +174,30 @@ export const WokrPhotoUpload = ({ ...props }) => {
           <div className="mt-4 flex text-sm leading-6 text-gray-600">
             <label
               htmlFor={props.htmlFor}
-              className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+              className="relative cursor-pointer rounded-md bg-white font-semibold text-wokr-red-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-wokr-red-100 focus-within:ring-offset-2 hover:text-wokr-red-100"
             >
               <span>{props.title}</span>
               <input
+                title={props.title}
+                onChange={props.onChange}
+                accept={props.accept}
                 id={props.inputId}
                 name={props.inputName}
                 type={props.inputType}
-                className="sr-only"
+                className="sr-only outline-none ring-0"
               />
             </label>
             <p className="pl-1">or drag and drop</p>
           </div>
-          <p className="text-xs leading-5 text-gray-600">
-            PNG, JPG, GIF up to 10MB
-          </p>
+          {!props.value ? (
+            <p className="text-xs leading-5 text-gray-600">
+              PNG, JPG, GIF up to 10MB
+            </p>
+          ) : (
+            <p className="text-2xl leading-5 text-green-600 text-center mt-2 flex justify-center items-center">
+              <HiCheckCircle />
+            </p>
+          )}
         </div>
       </div>
     </div>
@@ -169,12 +208,12 @@ export const WokrPhone = ({ ...props }) => {
   return (
     <div className="sm:col-span-3">
       <label
-        className="block text-grey-darker text-sm font-bold mb-2"
+        className="block text-grey-darker text-sm font-medium leading-6"
         htmlFor="PhoneNumber"
       >
         {props.label}
       </label>
-      <div className="relative w-full flex flex-col">
+      <div className="mt-2 relative w-full flex flex-col">
         <PhoneInput
           country={"us"}
           value={props.phoneNumber}
@@ -211,7 +250,7 @@ export const WokrDashboardDescription = ({ ...props }) => {
           onChange={props.onChange}
           value={props.value}
           rows={props.row}
-          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 sm:text-sm sm:leading-6 px-2"
           defaultValue={""}
         />
       </div>
@@ -228,12 +267,12 @@ export const WokrDashboardButton = ({ ...props }) => {
         className="text-sm font-semibold leading-6 text-gray-900"
         onClick={props.cancel}
       >
-        Cancel
+        {props.cancelText}
       </button>
       <button
         title={props.title}
         type={props.type}
-        className="rounded-md bg-wokr-red-200 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-wokr-red-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wokr-red-100"
+        className="flex items-center justify-center text-center rounded-md bg-wokr-red-200 px-5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-wokr-red-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wokr-red-100"
         disabled={props.disabled}
         onClick={props?.onClick}
       >
