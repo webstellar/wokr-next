@@ -1,6 +1,23 @@
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const ProtectedRoute = ({ ...props }) => {
+  const [countdown, setCountdown] = useState(10);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (countdown === 0) {
+      router.push(props.url);
+    }
+
+    const timerId = setTimeout(() => {
+      setCountdown(countdown - 1);
+    }, 1000);
+
+    return () => clearTimeout(timerId);
+  }, [countdown, props.url, router]);
+
   return (
     <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
       <div className="text-center">
@@ -13,6 +30,12 @@ const ProtectedRoute = ({ ...props }) => {
         <p className="mt-6 text-base leading-7 text-gray-600">
           {props.description}
         </p>
+
+        {countdown > 0 && (
+          <p className="mt-4 text-base text-gray-500">
+            You will be redirected in {countdown}s
+          </p>
+        )}
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <Link
             href={props.url}

@@ -24,6 +24,7 @@ import {
   WokrPhotoUpload,
 } from "../formfields/FormFields";
 import { updateUser } from "@/utils/api";
+import PhoneInput from "react-phone-input-2";
 
 type valueProps = {
   [key: string]: string;
@@ -40,6 +41,7 @@ const initState: valueProps = {
   xLink: "",
   discordLink: "",
   facebookLink: "",
+  phone: "",
 };
 
 const EditProfile = ({ user }: any) => {
@@ -130,6 +132,7 @@ const EditProfile = ({ user }: any) => {
           username: state.displayName,
           name: fullname,
           description: state.description,
+          phoneNumber: phoneNumber,
           universityCollege: state.universityCollege,
           universityCountry: state.universityCountry,
           educationTitle: state.educationTitle,
@@ -171,6 +174,7 @@ const EditProfile = ({ user }: any) => {
       fullname,
       language,
       languageLevel,
+      phoneNumber,
       profileImage,
       router,
       skill,
@@ -227,6 +231,7 @@ const EditProfile = ({ user }: any) => {
               onChange={handlePhoneChange}
               valid={valid}
             />
+
             <WokrDashboardInput
               classname="sm:col-span-3"
               htmlFor="fullname"

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useContext, useEffect, Fragment } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "@/context/authContext";
 import classNames from "classnames";
 import Sidebar from "@/components/sidebar/Sidebar";
@@ -16,23 +16,24 @@ const DashboardLayoutProvider = ({
   const [collapsed, setSidebarCollapsed] = useState(true);
   const [showSidebar, setShowSidebar] = useState(true);
   const { state } = useContext(AuthContext);
-  const { user } = state;
-  console.log(user);
-  const [loading, setLoading] = useState(true);
+  const { user, isAuthenticating } = state;
+
 
   useEffect(() => {
     const checkAuthentication = async () => {
       await new Promise((resolve) => setTimeout(resolve, 50));
-      setLoading(false);
+
     };
     checkAuthentication();
   }, [user]);
 
+  if (isAuthenticating) {
+    return <Spinner />;
+  }
+
   return (
     <>
-      {loading ? (
-        <Spinner />
-      ) : user ? (
+      {user ? (
         <div
           className={classNames({
             "grid min-h-screen": true,
@@ -46,7 +47,7 @@ const DashboardLayoutProvider = ({
               collapsed={collapsed}
               setCollapsed={() => setSidebarCollapsed((prev) => !prev)}
               shown={showSidebar}
-              user={user ?? {}} // Provide a default value for user prop
+              user={user ?? {}}
             />
           </div>
           <main>

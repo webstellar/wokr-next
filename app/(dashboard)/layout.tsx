@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import "../globals.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ReCaptchaProvider } from "next-recaptcha-v3";
 import localFont from "next/font/local";
 import DashboardLayoutProvider from "./DashboardLayoutProvider";
 import { AuthProvider } from "@/context/authContext";
@@ -37,7 +36,7 @@ export default function RootLayout({
 }>) {
   return (
     <AuthProvider>
-      <ReCaptchaProvider reCaptchaKey={process.env.RECAPTCHA_SITE_KEY}>
+
         <html lang="en" className="h-full">
           <body
             className={`${pangram.variable} font-sans ${pangram.className} h-full`}
@@ -46,7 +45,7 @@ export default function RootLayout({
             <ToastContainer />
           </body>
         </html>
-      </ReCaptchaProvider>
+
     </AuthProvider>
   );
 }

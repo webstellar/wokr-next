@@ -146,16 +146,17 @@ export const homeMenu = [
 ];
 
 export const profileLinks = [
-  { href: "/my-profile", label: "Profile" },
+  { href: "/my-profile", label: "My Profile" },
   { href: "/post-job", label: "Post a Job" },
 ];
 export const settinglinks = [
   { href: "/settings", label: "Settings" },
   { href: "/support", label: "Help & Support" },
-  { href: "/billing", label: "Billing" },
+  { href: "/settings", label: "Billing" },
 ];
 
 export const languages = [
+  { value: "No Value", label: "Select Language" },
   { value: "Mandarin Chinese", label: "Mandarin Chinese" },
   { value: "Spanish", label: "Spanish" },
   { value: "English", label: "English" },
@@ -179,26 +180,30 @@ export const languages = [
 ];
 
 export const languageLevels = [
-  { value: "beginner", label: "Beginner" },
-  { value: "intermediate", label: "Intermediate" },
-  { value: "proficient", label: "Proficient" },
-  { value: "native", label: "Native" },
+  { value: "No Value", label: "Select Level" },
+  { value: "Beginner", label: "Beginner" },
+  { value: "Intermediate", label: "Intermediate" },
+  { value: "Proficient", label: "Proficient" },
+  { value: "Native", label: "Native" },
 ];
 
 export const skillLevels = [
-  { value: "beginner", label: "Beginner" },
-  { value: "intermediate", label: "Intermediate" },
-  { value: "proficient", label: "Proficient" },
+  { value: "No Value", label: "Select Level" },
+  { value: "Beginner", label: "Beginner" },
+  { value: "Intermediate", label: "Intermediate" },
+  { value: "Proficient", label: "Proficient" },
 ];
 
 export const skills = [
-  { value: "socialm media management", label: "Social Media Management" },
-  { value: "digital marketing", label: "Digital Marketing" },
-  { value: "web scraping", label: "Web Scraping" },
-  { value: "web development", label: "Web Development" },
+  { value: "No Value", label: "Select Skill" },
+  { value: "Social media management", label: "Social Media Management" },
+  { value: "Digital marketing", label: "Digital Marketing" },
+  { value: "Web scraping", label: "Web Scraping" },
+  { value: "Web development", label: "Web Development" },
 ];
 
 export const automationTools = [
+  { value: "No Value", label: "Select Tool" },
   { value: "uipath", label: "UiPath" },
   { value: "blueprism", label: "Blue Prism" },
   { value: "automationanywhere", label: "Automation Anywhere" },
@@ -226,6 +231,7 @@ export const automationTools = [
 ];
 
 export const automationLevels = [
+  { value: "No Value", label: "Select Level" },
   { value: "beginner", label: "Beginner" },
   { value: "intermediate", label: "Intermediate" },
   { value: "proficient", label: "Proficient" },

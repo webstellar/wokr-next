@@ -29,6 +29,7 @@ const userSchema = new Schema(
         default: "Seller",
       },
     ],
+    phoneNumber: String,
     profileImage: String,
     facebookLink: String,
     xLink: String,

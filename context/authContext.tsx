@@ -17,6 +17,7 @@ type userType = {
 
 type stateType = {
   user: userType | null;
+  isAuthenticating: boolean;
 };
 
 type dispatchType = {
@@ -28,7 +29,7 @@ type dispatchType = {
 const firebaseReducer = (state: stateType, action: dispatchType) => {
   switch (action.type) {
     case "LOGGED_IN_USER":
-      return { ...state, user: action.payload };
+      return { ...state, user: action.payload, isAuthenticating: false };
     case "LOGGED_OUT":
       return { ...state, user: null };
     default:
@@ -39,6 +40,7 @@ const firebaseReducer = (state: stateType, action: dispatchType) => {
 //State
 const initialState = {
   user: null,
+  isAuthenticating: true,
 };
 
 //Create context

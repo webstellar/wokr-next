@@ -39,6 +39,7 @@ type feedbackProps = {
   universityCountry: string;
   educationTitle: string;
   graduationYear: string;
+  phoneNumber: string;
 };
 
 export async function PUT(request: Request) {

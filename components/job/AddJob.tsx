@@ -16,6 +16,7 @@ import {
   deliveryTimes,
 } from "../../data/data";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 type valueProps = {
   [key: string]: string;

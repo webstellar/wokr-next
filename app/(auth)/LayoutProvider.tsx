@@ -1,29 +1,27 @@
 "use client";
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "@/context/authContext";
 import Spinner from "@/components/spinner/Spinner";
-import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
 
 const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter();
   const { state } = useContext(AuthContext);
-  const { user } = state;
-  const [loading, setLoading] = useState(true);
+  const { user, isAuthenticating } = state;
 
   useEffect(() => {
     const checkAuthentication = async () => {
       await new Promise((resolve) => setTimeout(resolve, 50));
-      setLoading(false);
     };
     checkAuthentication();
   }, [user]);
 
+  if (isAuthenticating) {
+    return <Spinner />;
+  }
+
   return (
-    <div>
-      {loading ? (
-        <Spinner />
-      ) : !user ? (
+    <>
+      {!user ? (
         <>{children}</>
       ) : (
         <ProtectedRoute
@@ -34,7 +32,7 @@ const LayoutProvider = ({ children }: { children: React.ReactNode }) => {
           urlText="Access my profile"
         />
       )}
-    </div>
+    </>
   );
 };
 
