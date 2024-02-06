@@ -48,7 +48,7 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
   };
 
   const handleNext = async () => {
-    route.push("/setting");
+    route.push("/settings");
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

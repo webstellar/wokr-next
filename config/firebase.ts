@@ -3,17 +3,16 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 //import { getAnalytics } from "firebase/analytics";
 
-/*
 const firebaseConfig = {
-  apiKey: process.env.F_APIKEY,
-  authDomain: process.env.F_AUTHDOMAIN,
-  projectId: process.env.F_PROJECT_ID,
-  storageBucket: process.env.F_STORAGE_BUCKET,
-  appId: process.env.F_APP_ID,
-  measurementId: process.env.F_MEASUREMENT_ID,
-  type: process.env.F_TYPE,
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_APIKEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTHDOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  type: process.env.NEXT_PUBLIC_FIREBASE_TYPE,
 };
-*/
+/*
 
 const firebaseConfig = {
   apiKey: "AIzaSyDbo_cN1goy7sPWU1xnN5JmA05vn6GWjnM",
@@ -25,6 +24,7 @@ const firebaseConfig = {
   measurementId: "G-1P3V15SXE8",
   type: "service_account",
 };
+*/
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
@@ -33,7 +33,7 @@ const app = initializeApp(firebaseConfig);
 export const actionCodeSettings = {
   // url: "https://fascinating-lamington-d30913.netlify.app/complete-registration",
   url:
-    process.env.CONFIRMATION_EMAIL_REDIRECT ||
+    process.env.NEXT_PUBLIC_CONFIRMATION_EMAIL_REDIRECT ||
     "http://localhost:3000/complete-registration",
   handleCodeInApp: true,
 };

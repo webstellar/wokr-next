@@ -1,12 +1,10 @@
 "use client";
 
-import { useState, Fragment } from "react";
+import { useState, useEffect } from "react";
 import { storage } from "../../config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
-import { Menu, Transition } from "@headlessui/react";
-import { HiChevronDown, HiOutlinePlus } from "react-icons/hi";
 import {
   skillLevels,
   skills,
@@ -14,12 +12,27 @@ import {
   automationLevels,
   feeTypes,
   deliveryTimes,
+  taglists,
+  categorylists,
+  includedServices,
 } from "../../data/data";
 import { useRouter } from "next/navigation";
+import { createJob } from "@/utils/api";
+import {
+  WokrDashboardButton,
+  WokrDashboardDescription,
+  WokrDashboardInput,
+  WokrDashboardList,
+  WokrPhotoUpload,
+} from "../formfields/FormFields";
 import Image from "next/image";
 
 type valueProps = {
   [key: string]: string;
+};
+
+type Props = {
+  onFilesChange(files: File[]): void;
 };
 
 const initState: valueProps = {
@@ -32,16 +45,32 @@ const initState: valueProps = {
 const AddJob = () => {
   const router = useRouter();
   const [state, setState] = useState(initState);
-  const [skill, setSkill] = useState("ADD SKILL");
-  const [skillLevel, setSkillLevel] = useState("EXPERIENCE LEVEL");
-  const [automation, setAutomation] = useState("ADD AUTOMATION TOOL");
-  const [automationLevel, setAutomationLevel] = useState("EXPERIENCE LEVEL");
-  const [feeType, setFeeType] = useState("FIXED PRICE");
-  const [deliveryTime, setDeliveryTime] = useState("1 day");
+  const [skill, setSkill] = useState(skills[0]);
+  const [skillLevel, setSkillLevel] = useState(skillLevels[0]);
+  const [automation, setAutomation] = useState(automationTools[0]);
+  const [automationLevel, setAutomationLevel] = useState(automationLevels[0]);
+  const [feeType, setFeeType] = useState(feeTypes[0]);
+  const [deliveryTime, setDeliveryTime] = useState(deliveryTimes[0]);
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const [videoUpload, setVideoUpload] = useState<File | null>(null);
-  const [entries, setEntries] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
+  const [servicesIncluded, setServicesIncluded] = useState([
+    includedServices[0],
+  ]);
+  const [categories, setCategories] = useState([categorylists[0]]); //array
+  const [tags, setTags] = useState([taglists[0]]); //array
+  const [images, setImages] = useState<File[]>([]);
+
+  const urls = images.map((file) => URL.createObjectURL(file));
+
+  let url = null;
+  if (imageUpload instanceof File) {
+    url = URL.createObjectURL(imageUpload);
+  }
+
+  const handleCancel = () => {
+    router.push("/dashboard");
+  };
 
   const handleChange = (
     e:
@@ -53,14 +82,27 @@ const AddJob = () => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
-
-    setEntries(true);
   };
+
+  /*
+  const handleImageUpload = (imageUpload: SetStateAction<File | null>) => {
+    setImageUpload(imageUpload);
+  };
+
+  const handleVideoUpload = (videoUpload: SetStateAction<File | null>) => {
+    setVideoUpload(videoUpload);
+  };
+
+  const handleImage = (images: SetStateAction<File[]>) => {
+    setImages(images);
+  };
+  */
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
+    const status = "published";
     if (imageUpload == null) return;
 
     try {
@@ -75,6 +117,14 @@ const AddJob = () => {
         await uploadBytes(videoRef, videoUpload);
       }
 
+      const uploadPromises = images.map(async (image) => {
+        const imageRef = ref(storage, `images/${image.name + v4()}`);
+        await uploadBytes(imageRef, image);
+        return getDownloadURL(imageRef);
+      });
+
+      const imageUrls = await Promise.all(uploadPromises);
+
       // Get download URLs
       const imageUrl = await getDownloadURL(imageRef);
       const videoUrl = videoUpload ? await getDownloadURL(videoRef) : null;
@@ -85,22 +135,29 @@ const AddJob = () => {
         price: state.price,
         deliveryTime: deliveryTime,
         maxRevisions: state.maxRevisions,
+        images: imageUrls,
         video: videoUrl,
-        image: imageUrl,
+        featuredImage: imageUrl,
         fee: feeType,
-        skill: skill,
-        skillLevel: skillLevel,
-        automation: automation,
-        automationLevel: automationLevel,
+        status: status,
+        skills: {
+          skill: skill,
+          skillLevel: skillLevel,
+        },
+        tools: automation,
       };
 
       console.log(formData);
-      toast("", {
+
+      await createJob(formData);
+
+      toast("Congrats your automation job is live!", {
         hideProgressBar: true,
         autoClose: 2000,
         type: "success",
+        position: "bottom-right",
       });
-      router.push("/profile");
+      router.push("/my-profile");
 
       // Continue with the rest of your code...
     } catch (error) {
@@ -109,381 +166,252 @@ const AddJob = () => {
   };
 
   return (
-    <section className="mx-auto">
+    <section className="mx-auto mb-20">
       <form onSubmit={handleSubmit}>
-        <div className="mx-auto grid grid-cols-3 justify-between items-start gap-10 max-w-screen-2xl px-6 lg:px-8">
-          <div className="col-span-2 w-full">
-            <div className="mb-8">
-              <label
-                className="block text-grey-darker text-sm font-bold mb-2.5 uppercase"
-                htmlFor="display-name"
-              >
-                Title
-              </label>
-              <input
-                className="block w-full rounded-md border border-gray-300 focus:border-wokr-red-100 focus:outline-none focus:ring-1 focus:ring-wokr-red-100 py-2 px-3 text-gray-500 outline-wokr-red-100"
-                id="title"
-                name="title"
-                type="text"
-                placeholder="Add Your Project Title"
-                onChange={handleChange}
-                value={state.title}
+        <div className="grid md:grid-cols-3 justify-start items-start gap-10 max-w-screen-xl px-6 lg:px-8">
+          <div className="col-span-2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+            <WokrDashboardInput
+              classname="col-span-full"
+              htmlFor="title"
+              label="TITLE"
+              inputTitle="title"
+              inputValue={state.title}
+              disabled={false}
+              inputType="text"
+              inputName="title"
+              inputId="title"
+              autocomplete="your automation title"
+              inputPlaceholder="Your automation title"
+              onChange={handleChange}
+            />
+
+            <WokrDashboardDescription
+              title="DESCRIPTION"
+              writeUp="Write a few sentences about automation job"
+              name="description"
+              id="description"
+              row={5}
+              onChange={handleChange}
+              value={state.description}
+            />
+
+            <div className="border-b border-gray-900/10 pb-12 col-span-full grid grid-cols-1 sm:grid-cols-6 gap-x-6 gap-y-8 ">
+              <WokrDashboardList
+                htmlFor="skill"
+                label="SKILL"
+                categories={skill}
+                setCategories={setSkill}
+                categorylist={skills}
+                multiple={false}
+              />
+
+              <WokrDashboardList
+                htmlFor="skillLevel"
+                label="SKILL LEVEL"
+                categories={skillLevel}
+                setCategories={setSkillLevel}
+                categorylist={skillLevels}
+                multiple={false}
               />
             </div>
-            <div className="mb-8">
-              <label
-                className="block text-grey-darker text-sm font-bold mb-2"
-                htmlFor="skills"
-              >
-                Skills
-              </label>
 
-              <div className="grid grid-cols-2 justify-around items-center w-full gap-x-2 mb-2">
-                <select
-                  required
-                  title="skill"
-                  name="skill"
-                  className="text-black bg-white px-3 py-2 transition-all cursor-pointer hover:border-wokr-red-100 border border-gray-200 rounded-lg outline-wokr-red-100 appearance-none invalid:text-black/30"
-                  onChange={(e) => setSkill(e.target.value)}
-                  value={skill}
-                >
-                  {skills.map((skill, i) => (
-                    <option key={i} value={skill.value}>
-                      {skill.label}
-                    </option>
-                  ))}
-                </select>
+            <div className="border-b border-gray-900/10 pb-12 col-span-full grid grid-cols-1 sm:grid-cols-6 gap-x-6 gap-y-8 ">
+              <WokrDashboardList
+                htmlFor="automation"
+                label="AUTOMATION"
+                categories={automation}
+                setCategories={setAutomation}
+                categorylist={automationTools}
+                multiple={false}
+              />
 
-                <select
-                  required
-                  title="skillLevel"
-                  name="skillLevel"
-                  className="text-black bg-white px-3 py-2 transition-all cursor-pointer hover:border-wokr-red-100 border border-gray-200 rounded-lg outline-wokr-red-100 appearance-none invalid:text-black/30"
-                  onChange={(e) => setSkillLevel(e.target.value)}
-                  value={skillLevel}
-                >
-                  {skillLevels.map((skillLevel, i) => (
-                    <option key={i} value={skillLevel.value}>
-                      {skillLevel.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <p className="text-sm font-pangram-light">
-                {`${skill} - ${skillLevel}`}
-              </p>
-            </div>
-            <div className="mb-8">
-              <label
-                className="block text-grey-darker text-sm font-bold mb-2"
-                htmlFor="automationTools"
-              >
-                Automation Tools
-              </label>
-
-              <div className="grid grid-cols-2 justify-around items-center w-full gap-x-2 mb-2">
-                <select
-                  required
-                  title="automationTools"
-                  name="automationTools"
-                  className="text-black bg-white px-3 py-2 transition-all cursor-pointer hover:border-wokr-red-100 border border-gray-200 rounded-lg outline-wokr-red-100 appearance-none invalid:text-black/30"
-                  onChange={(e) => setAutomation(e.target.value)}
-                  value={automation}
-                >
-                  {automationTools.map((tool, i) => (
-                    <option key={i} value={tool.value}>
-                      {tool.label}
-                    </option>
-                  ))}
-                </select>
-
-                <select
-                  required
-                  title="automationLevel"
-                  name="automationLevel"
-                  className="text-black bg-white px-3 py-2 transition-all cursor-pointer hover:border-wokr-red-100 border border-gray-200 rounded-lg outline-wokr-red-100 appearance-none invalid:text-black/30"
-                  onChange={(e) => setAutomationLevel(e.target.value)}
-                  value={automationLevel}
-                >
-                  {automationLevels.map((automationLevel, i) => (
-                    <option key={i} value={automationLevel.value}>
-                      {automationLevel.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <p className="text-sm font-pangram-light">
-                {`${automation} - ${automationLevel}`}
-              </p>
-            </div>
-
-            <div className="mb-8">
-              <label
-                className="block text-grey-darker text-sm font-bold mb-2 "
-                htmlFor="description"
-              >
-                Description
-              </label>
-              <textarea
-                className="block w-full rounded-md border border-gray-300 focus:border-wokr-red-100 focus:outline-none focus:ring-1 focus:ring-wokr-red-100 py-1 px-1.5 text-gray-500 outline-wokr-red-100"
-                name="description"
-                id="description"
-                rows={10}
-                placeholder="Add Your Description Here"
-                onChange={handleChange}
-                value={state.description}
+              <WokrDashboardList
+                htmlFor="automationLevel"
+                label="AUTOMATION LEVEL"
+                categories={automationLevel}
+                setCategories={setAutomationLevel}
+                categorylist={automationLevels}
+                multiple={false}
               />
             </div>
-            <div className="mb-8">
-              <label
-                className="block text-grey-darker text-sm font-bold mb-2"
-                htmlFor="automationTools"
-              >
-                Max Revisions
-              </label>
 
-              <div className="grid grid-cols-2 justify-around items-center w-full gap-x-2 mb-2">
-                <input
-                  className="block w-full rounded-md border border-gray-300 focus:border-wokr-red-100 focus:outline-none focus:ring-1 focus:ring-wokr-red-100 py-2 px-3 text-gray-500 outline-wokr-red-100"
-                  id="maxRevisions"
-                  name="maxRevisions"
-                  type="number"
-                  placeholder="0"
-                  onChange={handleChange}
-                  value={state.maxRevisions}
-                />
-              </div>
-            </div>
+            <WokrDashboardList
+              htmlFor="categories"
+              label="CATEGORY"
+              categories={categories}
+              setCategories={setCategories}
+              categorylist={categorylists}
+              multiple={true}
+            />
 
-            <div className="mb-8">
-              <label
-                className="block text-grey-darker text-sm font-bold mb-2"
-                htmlFor="automationTools"
-              >
-                Delivery Time
-              </label>
+            <WokrDashboardList
+              htmlFor="tags"
+              label="TAG"
+              categories={tags}
+              setCategories={setTags}
+              categorylist={taglists}
+              multiple={true}
+            />
 
-              <div className="grid grid-cols-2 justify-around items-center w-full gap-x-2 mb-2">
-                <select
-                  required
-                  title="deliveryTime"
-                  name="deliveryTime"
-                  className="text-black bg-white px-3 py-2 transition-all cursor-pointer hover:border-wokr-red-100 border border-gray-200 rounded-lg outline-wokr-red-100 appearance-none invalid:text-black/30"
-                  onChange={(e) => setDeliveryTime(e.target.value)}
-                  value={deliveryTime}
-                >
-                  {deliveryTimes.map((time) => (
-                    <option key={time.id} value={time.value}>
-                      {time.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            <WokrDashboardList
+              htmlFor="servicesIncluded"
+              label="SERVICE INCLUDED"
+              categories={servicesIncluded}
+              setCategories={setServicesIncluded}
+              categorylist={includedServices}
+              multiple={true}
+            />
 
-            <div className="mb-8">
-              <div>
-                <p className="text-grey-darker text-sm font-bold mb-2 ">
-                  Upload Image
-                </p>
-                <label
-                  className="inline-block text-grey-darker text-sm font-bold mb-2 border-2 p-20 rounded-lg backdrop-blur-0 bg-gray-100 cursor-pointer"
-                  htmlFor="images"
-                >
-                  <HiOutlinePlus className="text-4xl font-extralight" />
-                </label>
+            <WokrDashboardList
+              htmlFor="feeType"
+              label="FEE TYPE"
+              categories={feeType}
+              setCategories={setFeeType}
+              categorylist={feeTypes}
+              multiple={false}
+            />
 
-                <input
-                  className="hidden"
-                  title="images"
-                  name="images"
-                  id="images"
-                  type="file"
-                  accept="image/png, image/jpeg, image/webp, image/jpg"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    if (e.target.files != null) {
-                      setImageUpload(e.target.files[0]);
-                    }
-                  }}
-                />
-              </div>
-            </div>
+            <WokrDashboardList
+              htmlFor="deliveryTime"
+              label="DELIVERY TIME (DAYS)"
+              categories={deliveryTime}
+              setCategories={setDeliveryTime}
+              categorylist={deliveryTimes}
+              multiple={false}
+            />
+
+            <WokrDashboardInput
+              classname="sm:col-span-3"
+              htmlFor="maxRevisions"
+              label="MAX REVISIONS"
+              inputTitle="maxRevisions"
+              inputValue={state.maxRevisions}
+              disabled={false}
+              inputType="number"
+              inputName="maxRevisions"
+              inputId="maxRevisions"
+              autocomplete="no of maxRevisions"
+              inputPlaceholder="Max Revision"
+              onChange={handleChange}
+            />
           </div>
+          <div className="mt-10 space-y-6">
+            <WokrDashboardInput
+              classname="col-span-full"
+              htmlFor="price"
+              label="PRICE (STARTING AT $)"
+              inputTitle="maxRevisions"
+              inputValue={state.maxRevisions}
+              disabled={false}
+              inputType="number"
+              inputName="maxRevisions"
+              inputId="maxRevisions"
+              autocomplete="no of maxRevisions"
+              inputPlaceholder="Max Revision"
+              onChange={handleChange}
+            />
 
-          <div>
-            <div className="mb-8 w-full">
-              <label
-                className="block text-grey-darker text-sm font-bold mb-2"
-                htmlFor="skills"
-              >
-                Fee Type
-              </label>
-              <select
-                required
-                title="feeType"
-                name="feeType"
-                className="text-black bg-white px-3 py-2 transition-all cursor-pointer hover:border-wokr-red-100 border border-gray-200 rounded-lg outline-wokr-red-100 appearance-none invalid:text-black/30 w-full"
-                onChange={(e) => setFeeType(e.target.value)}
-                value={feeType}
-              >
-                {feeTypes.map((feeType, i) => (
-                  <option key={i} value={feeType.value}>
-                    {feeType.label}
-                  </option>
-                ))}
-              </select>
+            <WokrPhotoUpload
+              label="FEATURED IMAGE"
+              htmlFor="imageUpload"
+              title="Upload a featured image"
+              inputName="imageUpload"
+              inputId="imageUpload"
+              inputType="file"
+              multiple={false}
+              classname="col-span-full"
+              accept="image/png, image/jpeg, image/gif, image/jpg"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files != null) {
+                  setImageUpload(e.target.files[0]);
+                }
+              }}
+              value={imageUpload != null}
+            />
+
+            <div className="flex justify-start items-center gap-2 flex-wrap">
+              {url && (
+                <Image
+                  className="rounded-md h-auto w-auto"
+                  src={url}
+                  height={50}
+                  width={50}
+                  alt=""
+                />
+              )}
             </div>
 
-            <div className="mb-8 w-full">
-              <label
-                className="block text-grey-darker text-sm font-bold mb-2.5 uppercase"
-                htmlFor="display-name"
-              >
-                Price (staring at)
-              </label>
-              <input
-                className="block w-full rounded-md border border-gray-300 focus:border-wokr-red-100 focus:outline-none focus:ring-1 focus:ring-wokr-red-100 py-2 px-3 text-gray-500 outline-wokr-red-100"
-                id="price"
-                name="price"
-                type="text"
-                placeholder="$100"
-                onChange={handleChange}
-                value={state.price}
-              />
+            <WokrPhotoUpload
+              multiple={true}
+              label="GALLERY IMAGES"
+              htmlFor="images"
+              title="Upload gallery images"
+              inputName="images"
+              inputId="images"
+              inputType="file"
+              classname="col-span-full"
+              accept="image/png, image/jpeg, image/gif, image/jpg"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files != null) {
+                  const filesArray = Array.from(e.target.files);
+                  setImages(filesArray);
+                }
+              }}
+            />
+
+            <div className="flex justify-start items-center gap-2 flex-wrap">
+              {urls.map((url, i) => {
+                const filename = images[i].name;
+                return (
+                  <Image
+                    className="rounded-md h-16 w-16"
+                    src={url}
+                    height={50}
+                    width={50}
+                    key={i}
+                    alt={filename}
+                  />
+                );
+              })}
             </div>
 
-            <div className="mb-8">
-              <label
-                className="block text-grey-darker text-sm font-bold mb-2 "
-                htmlFor="video"
-              >
-                Upload Video
-              </label>
+            <WokrPhotoUpload
+              multiple={false}
+              label="VIDEO"
+              htmlFor="videoUpload"
+              title="Upload a video"
+              inputName="videoUpload"
+              inputId="videoUpload"
+              inputType="file"
+              classname="col-span-full"
+              accept="video/*"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.files != null) {
+                  setVideoUpload(e.target.files[0]);
+                }
+              }}
+              value={videoUpload != null}
+            />
+            <p className="text-sm">
+              {videoUpload ? (
+                <span className="text-green-600">
+                  File name: {videoUpload.name}
+                </span>
+              ) : (
+                "no files uploaded yet"
+              )}
+            </p>
 
-              <input
-                title="video"
-                name="video"
-                id="video"
-                type="file"
-                accept="video/*"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  if (e.target.files != null) {
-                    setVideoUpload(e.target.files[0]);
-                  }
-                }}
-              />
-            </div>
-
-            <div className="mb-8 flex justify-between items-center gap-x-5 w-full">
-              Cancel
-              <Menu as="div" className="relative inline-block text-left">
-                <div>
-                  <Menu.Button
-                    className={`${
-                      entries ? "bg-green-500" : "bg-black/20"
-                    }  inline-flex w-full justify-center rounded-md  px-4 py-2 text-sm font-medium text-white hover:bg-black/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75`}
-                  >
-                    Publish
-                    <HiChevronDown
-                      className="-mr-1 ml-2 h-5 w-5 text-violet-200 hover:text-violet-100"
-                      aria-hidden="true"
-                    />
-                  </Menu.Button>
-                </div>
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
-                    <div className="px-1 py-3">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            className={`${
-                              active && "bg-wokr-red-100"
-                            } group flex w-full rounded-md px-2 py-3 text-sm hover:text-white`}
-                            type="submit"
-                          >
-                            {loading ? (
-                              <>
-                                <svg
-                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M12 2C6.477 2 2 6.477 2 12c0 1.656.337 3.223 0.943 4.65C3.65 16.73 4.26 17 5 17c.74 0 1.35-.27 1.057-.35C7.663 15.223 8 13.656 8 12c0-2.21-.895-4.21-2.343-5.657C4.105 4.895 2.105 4 0 4"
-                                  ></path>
-                                </svg>
-                                Publishing...
-                              </>
-                            ) : (
-                              "Publish"
-                            )}
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            className={`${
-                              active && "bg-wokr-red-100"
-                            } group flex w-full rounded-md px-2 py-3 hover:text-white text-sm`}
-                            type="submit"
-                          >
-                            {loading ? (
-                              <>
-                                <svg
-                                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                >
-                                  <circle
-                                    className="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    strokeWidth="4"
-                                  ></circle>
-                                  <path
-                                    className="opacity-75"
-                                    fill="currentColor"
-                                    d="M12 2C6.477 2 2 6.477 2 12c0 1.656.337 3.223 0.943 4.65C3.65 16.73 4.26 17 5 17c.74 0 1.35-.27 1.057-.35C7.663 15.223 8 13.656 8 12c0-2.21-.895-4.21-2.343-5.657C4.105 4.895 2.105 4 0 4"
-                                  ></path>
-                                </svg>
-                                Saving to draft...
-                              </>
-                            ) : (
-                              "Save to draft"
-                            )}
-                          </button>
-                        )}
-                      </Menu.Item>
-                    </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-            </div>
+            <WokrDashboardButton
+              cancel={handleCancel}
+              cancelText={"Cancel"}
+              title="Publish"
+              type="submit"
+              disabled={false}
+              loading={loading}
+              loadingText="Publishing ..."
+              preLoadingText="Publish"
+            />
           </div>
         </div>
       </form>

@@ -152,7 +152,7 @@ export const profileLinks = [
 export const settinglinks = [
   { href: "/settings", label: "Settings" },
   { href: "/support", label: "Help & Support" },
-  { href: "/settings", label: "Billing" },
+  { href: "/settings#billing", label: "Billing" },
 ];
 
 export const languages = [
@@ -188,18 +188,18 @@ export const languageLevels = [
 ];
 
 export const skillLevels = [
-  { value: "No Value", label: "Select Level" },
-  { value: "Beginner", label: "Beginner" },
-  { value: "Intermediate", label: "Intermediate" },
-  { value: "Proficient", label: "Proficient" },
+  { id: 1, value: "No Value", label: "Select Level" },
+  { id: 2, value: "Beginner", label: "Beginner" },
+  { id: 3, value: "Intermediate", label: "Intermediate" },
+  { id: 4, value: "Proficient", label: "Proficient" },
 ];
 
 export const skills = [
-  { value: "No Value", label: "Select Skill" },
-  { value: "Social media management", label: "Social Media Management" },
-  { value: "Digital marketing", label: "Digital Marketing" },
-  { value: "Web scraping", label: "Web Scraping" },
-  { value: "Web development", label: "Web Development" },
+  { id: 1, value: "No Value", label: "Select Skill" },
+  { id: 2, value: "Social media management", label: "Social Media Management" },
+  { id: 3, value: "Digital marketing", label: "Digital Marketing" },
+  { id: 4, value: "Web scraping", label: "Web Scraping" },
+  { id: 5, value: "Web development", label: "Web Development" },
 ];
 
 export const automationTools = [
@@ -228,6 +228,7 @@ export const automationTools = [
   { value: "talend", label: "Talend" },
   { value: "zendesk", label: "Zendesk" },
   { value: "freshdesk", label: "Freshdesk" },
+  { value: "chatgpt", label: "ChatGPT" },
 ];
 
 export const automationLevels = [
@@ -279,7 +280,7 @@ export const feeTypes = [
   {
     id: 1,
     label: "One-time",
-    value: "one-time",
+    value: "One-time",
   },
   {
     id: 3,
@@ -320,4 +321,33 @@ export const deliveryTimes = [
   { id: 19, label: "19 days", value: "19" },
   { id: 20, label: "20 days", value: "20" },
   { id: 21, label: "21 days", value: "21" },
+];
+
+export const categorylists = [
+  { id: 1, label: "Web Development", value: "Web Development" },
+  { id: 2, label: "Mobile Development", value: "Mobile Development" },
+  { id: 3, label: "Data Science", value: "Data Science" },
+  { id: 4, label: "Machine Learning", value: "Machine Learning" },
+  { id: 5, label: "Artificial Intelligence", value: "Artificial Intelligence" },
+  { id: 6, label: "Blockchain", value: "Blockchain" },
+  { id: 7, label: "Cybersecurity", value: "Cybersecurity" },
+  { id: 8, label: "DevOps", value: "DevOps" },
+  { id: 9, label: "Game Development", value: "Game Development" },
+  { id: 10, label: "IoT", value: "IoT" },
+];
+
+export const taglists = [
+  { id: 1, value: "AI" },
+  { id: 2, value: "automation" },
+  { id: 3, value: "blockchain" },
+  { id: 4, value: "cloud" },
+  { id: 5, value: "cybersecurity" },
+  { id: 6, value: "data" },
+  { id: 7, value: "devops" },
+];
+
+export const includedServices = [
+  { id: 1, value: "Setup and Installation" },
+  { id: 2, value: "Maintenance" },
+  { id: 4, value: "Customer support" },
 ];

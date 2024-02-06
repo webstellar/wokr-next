@@ -20,11 +20,9 @@ import {
   WokrDashboardDescription,
   WokrDashboardInput,
   WokrDashboardSelect,
-  WokrPhone,
   WokrPhotoUpload,
 } from "../formfields/FormFields";
 import { updateUser } from "@/utils/api";
-import PhoneInput from "react-phone-input-2";
 
 type valueProps = {
   [key: string]: string;
@@ -57,10 +55,9 @@ const EditProfile = ({ user }: any) => {
   const [automationLevel, setAutomationLevel] = useState(
     "ADD AUTOMATION LEVEL"
   );
-  const [phoneNumber, setPhoneNumber] = useState("");
+
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-  const [valid, setValid] = useState(true);
 
   const handleCancel = () => {
     setState({});
@@ -69,15 +66,6 @@ const EditProfile = ({ user }: any) => {
     setSkill("");
     setProfileImage(null);
     setLoading(false);
-  };
-
-  const handleEmail = (
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLSelectElement>
-      | React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setEmail(e.target.value);
   };
 
   const handleFullName = (
@@ -99,16 +87,6 @@ const EditProfile = ({ user }: any) => {
       ...prev,
       [e.target.name]: e.target.value,
     }));
-
-  const handlePhoneChange = (value: string) => {
-    setPhoneNumber(value);
-    setValid(validatePhoneNumber(value));
-  };
-
-  const validatePhoneNumber = (phoneNumber: string) => {
-    const phoneNumberPattern = /^\d{13}$/; // Validates a 10-digit phone number
-    return phoneNumberPattern.test(phoneNumber);
-  };
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent<HTMLFormElement>) => {
@@ -132,7 +110,7 @@ const EditProfile = ({ user }: any) => {
           username: state.displayName,
           name: fullname,
           description: state.description,
-          phoneNumber: phoneNumber,
+
           universityCollege: state.universityCollege,
           universityCountry: state.universityCountry,
           educationTitle: state.educationTitle,
@@ -174,7 +152,6 @@ const EditProfile = ({ user }: any) => {
       fullname,
       language,
       languageLevel,
-      phoneNumber,
       profileImage,
       router,
       skill,
@@ -210,26 +187,6 @@ const EditProfile = ({ user }: any) => {
               placeholder="jonn_wick"
               onChange={handleChange}
               url="wokr.io/"
-            />
-            <WokrDashboardInput
-              classname="sm:col-span-3"
-              htmlFor="email"
-              label="EMAIL"
-              inputTitle="email"
-              inputValue={email}
-              disabled={true}
-              inputType="email"
-              inputName="email"
-              inputId="email"
-              autocomplete="your email"
-              inputPlaceholder="Your Email"
-              onChange={handleEmail}
-            />
-            <WokrPhone
-              label="PHONE"
-              phoneNumber={phoneNumber}
-              onChange={handlePhoneChange}
-              valid={valid}
             />
 
             <WokrDashboardInput

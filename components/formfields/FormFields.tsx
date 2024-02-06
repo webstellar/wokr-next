@@ -1,10 +1,90 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { HiEye, HiEyeSlash } from "react-icons/hi2";
 import Spinner from "../spinner/Spinner";
-import { HiPhoto, HiCheckCircle } from "react-icons/hi2";
+import {
+  HiPhoto,
+  HiCheckCircle,
+  HiChevronUpDown,
+  HiCheck,
+} from "react-icons/hi2";
 import PhoneInput from "react-phone-input-2";
+import { Transition, Listbox } from "@headlessui/react";
+
+export const WokrDashboardList = ({ ...props }) => {
+  return (
+    <div className="sm:col-span-3">
+      <label
+        htmlFor={props.htmlFor}
+        className="block text-sm font-medium leading-6 text-gray-900"
+      >
+        {props.label}
+      </label>
+      <Listbox
+        value={props.categories}
+        onChange={props.setCategories}
+        multiple={props.multiple}
+      >
+        <div className="relative mt-2">
+          <Listbox.Button className="bg-white relative w-full cursor-default rounded-md shadow-sm border-0 text-left py-1.5 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6 outline-none">
+            <span className="block truncate">
+              {Array.isArray(props.categories)
+                ? props.categories.map((person: any) => person.value).join(", ")
+                : props.categories.value}
+            </span>
+            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+              <HiChevronUpDown
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            </span>
+          </Listbox.Button>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options className="z-10 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+              {props.categorylist &&
+                props.categorylist.map((person: any) => (
+                  <Listbox.Option
+                    key={person.id}
+                    value={person}
+                    className={({ active }) =>
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                        active
+                          ? "bg-wokr-red-50 text-amber-900"
+                          : "text-gray-900"
+                      }`
+                    }
+                  >
+                    {({ selected }) => (
+                      <>
+                        <span
+                          className={`block truncate ${
+                            selected ? "font-medium" : "font-normal"
+                          }`}
+                        >
+                          {person?.value}
+                        </span>
+                        {selected ? (
+                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-wokr-red-100">
+                            <HiCheck className="h-5 w-5" aria-hidden="true" />
+                          </span>
+                        ) : null}
+                      </>
+                    )}
+                  </Listbox.Option>
+                ))}
+            </Listbox.Options>
+          </Transition>
+        </div>
+      </Listbox>
+    </div>
+  );
+};
 
 export const WokrInput = ({ ...props }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -174,10 +254,11 @@ export const WokrPhotoUpload = ({ ...props }) => {
           <div className="mt-4 flex text-sm leading-6 text-gray-600">
             <label
               htmlFor={props.htmlFor}
-              className="relative cursor-pointer rounded-md bg-white font-semibold text-wokr-red-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-wokr-red-100 focus-within:ring-offset-2 hover:text-wokr-red-100"
+              className="relative cursor-pointer rounded-md bg-white font-semibold text-wokr-red-100 focus-within:outline-none focus-within:ring-2 focus-within:ring-wokr-red-100 focus-within:ring-offset-2 hover:text-wokr-red-100 text-center"
             >
               <span>{props.title}</span>
               <input
+                multiple={props.multiple}
                 title={props.title}
                 onChange={props.onChange}
                 accept={props.accept}
@@ -187,7 +268,7 @@ export const WokrPhotoUpload = ({ ...props }) => {
                 className="sr-only outline-none ring-0"
               />
             </label>
-            <p className="pl-1">or drag and drop</p>
+            {/*<p className="pl-1">or drag and drop</p>*/}
           </div>
           {!props.value ? (
             <p className="text-xs leading-5 text-gray-600">
@@ -278,7 +359,26 @@ export const WokrDashboardButton = ({ ...props }) => {
       >
         {props.loading ? (
           <>
-            <Spinner />
+            <svg
+              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M12 2C6.477 2 2 6.477 2 12c0 1.656.337 3.223 0.943 4.65C3.65 16.73 4.26 17 5 17c.74 0 1.35-.27 1.057-.35C7.663 15.223 8 13.656 8 12c0-2.21-.895-4.21-2.343-5.657C4.105 4.895 2.105 4 0 4"
+              ></path>
+            </svg>
             {props.loadingText}
           </>
         ) : (

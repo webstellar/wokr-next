@@ -13,9 +13,9 @@ function classNames(...classes: string[]) {
 }
 
 const tabs = [
-  { title: "My Details" },
-  { title: "Billing" },
-  { title: "Password and Security" },
+  { title: "My Details", id: "details" },
+  { title: "Billing", id: "billing" },
+  { title: "Password and Security", id: "security" },
 ];
 
 const Setting = () => {
@@ -32,6 +32,7 @@ const Setting = () => {
           <Tab.List className="flex space-x-10 text-sm font-medium border-b border-black/20">
             {tabs.map((tab, i) => (
               <Tab
+                id={tab.id}
                 key={i}
                 className={({ selected }) =>
                   classNames(
@@ -48,7 +49,7 @@ const Setting = () => {
             <Tab.Panel>
               <EditProfile user={user} />
             </Tab.Panel>
-            <Tab.Panel>Content 2</Tab.Panel>
+            <Tab.Panel>Billing information</Tab.Panel>
             <Tab.Panel>
               <div className="justify-start w-full max-w-screen-md rounded-2xl bg-white p-2">
                 <Disclosure>

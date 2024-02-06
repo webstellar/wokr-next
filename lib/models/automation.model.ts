@@ -28,17 +28,7 @@ const automationSchema = new Schema(
       type: Number,
       required: true,
     },
-    tools: [
-      {
-        type: {
-          id: Schema.ObjectId,
-          name: String,
-          image: {
-            url: String,
-          },
-        },
-      },
-    ],
+    tools: [{ String }],
     deliveryTime: {
       type: String,
       required: true,
