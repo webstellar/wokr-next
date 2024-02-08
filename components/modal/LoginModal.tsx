@@ -16,6 +16,7 @@ import google from "../../public/images/google_icon.png";
 import { WokrButton, WokrInput } from "../formfields/FormFields";
 import { AuthContext } from "@/context/authContext";
 import { useRouter } from "next/navigation";
+import { registerUser } from "@/utils/api";
 
 type ModalProps = {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -57,6 +58,8 @@ const LoginModal = ({ setOpen, open }: ModalProps) => {
         const user = userCredential.user;
         const idTokenResult = await getIdToken(user);
 
+        await registerUser({ email: user.email });
+
         dispatch({
           type: "LOGGED_IN_USER",
           payload: { email: String(user.email), token: idTokenResult },
@@ -88,6 +91,8 @@ const LoginModal = ({ setOpen, open }: ModalProps) => {
       .then(async (result) => {
         const idTokenResult = await getIdToken(result.user);
         const user = result.user;
+
+        await registerUser({ email: user.email });
 
         dispatch({
           type: "LOGGED_IN_USER",

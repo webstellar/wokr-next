@@ -10,7 +10,7 @@ import {
 } from "firebase/auth";
 import { auth } from "@/config/firebase";
 
-const UpdatePassword = ({ user }: any) => {
+const UpdatePassword = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [oldPassword, setOldPassword] = useState("");

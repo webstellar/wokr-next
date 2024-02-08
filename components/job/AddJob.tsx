@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { storage } from "../../config/firebase";
+import { useState } from "react";
+import { auth, storage } from "@/config/firebase";
+import { getIdToken } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
@@ -40,11 +41,13 @@ const initState: valueProps = {
   description: "",
   price: "",
   maxRevisions: "",
+  videoUrl: "",
 };
 
 const AddJob = () => {
   const router = useRouter();
-  const [state, setState] = useState(initState);
+
+  const [formState, setFormState] = useState(initState);
   const [skill, setSkill] = useState(skills[0]);
   const [skillLevel, setSkillLevel] = useState(skillLevels[0]);
   const [automation, setAutomation] = useState(automationTools[0]);
@@ -52,7 +55,6 @@ const AddJob = () => {
   const [feeType, setFeeType] = useState(feeTypes[0]);
   const [deliveryTime, setDeliveryTime] = useState(deliveryTimes[0]);
   const [imageUpload, setImageUpload] = useState<File | null>(null);
-  const [videoUpload, setVideoUpload] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [servicesIncluded, setServicesIncluded] = useState([
     includedServices[0],
@@ -78,25 +80,11 @@ const AddJob = () => {
       | React.ChangeEvent<HTMLSelectElement>
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    setState((prev) => ({
+    setFormState((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
-
-  /*
-  const handleImageUpload = (imageUpload: SetStateAction<File | null>) => {
-    setImageUpload(imageUpload);
-  };
-
-  const handleVideoUpload = (videoUpload: SetStateAction<File | null>) => {
-    setVideoUpload(videoUpload);
-  };
-
-  const handleImage = (images: SetStateAction<File[]>) => {
-    setImages(images);
-  };
-  */
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -106,58 +94,70 @@ const AddJob = () => {
     if (imageUpload == null) return;
 
     try {
-      const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
-      const videoRef = ref(storage, `videos/${videoUpload?.name + v4()}`);
+      const currentUser = auth.currentUser;
+      const token = await getIdToken(currentUser!, true);
 
-      // Upload image to firebase
-      await uploadBytes(imageRef, imageUpload);
+      if (currentUser) {
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+        headers.append("Authorization", `Bearer ${token}`);
 
-      // Upload video to firebase if videoUpload is not null
-      if (videoUpload) {
-        await uploadBytes(videoRef, videoUpload);
+        const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+
+        // Upload image to firebase
+        await uploadBytes(imageRef, imageUpload);
+
+        // Upload video to firebase if videoUpload is not null
+
+        const uploadPromises = images.map(async (image) => {
+          const imageRef = ref(storage, `images/${image.name + v4()}`);
+          await uploadBytes(imageRef, image);
+          return getDownloadURL(imageRef);
+        });
+
+        const imageUrls = await Promise.all(uploadPromises);
+
+        // Get download URLs
+        const imageUrl = await getDownloadURL(imageRef);
+
+        const formData = {
+          servicesIncluded: servicesIncluded.map((service) => ({
+            name: service.value,
+          })),
+          categories: categories.map((category) => ({ name: category.value })),
+          tags: tags.map((tag) => ({ name: tag.value })),
+          email: currentUser?.email,
+          title: formState.title,
+          description: formState.description,
+          price: formState.price,
+          deliveryTime: deliveryTime.label,
+          maxRevisions: formState.maxRevisions,
+          images: imageUrls.map((url) => ({ url })), // Adjust based on actual structure
+          video: formState.videoUrl,
+          featuredImage: imageUrl,
+          fee: feeType.label,
+          status: status,
+          skills: [
+            {
+              skill: skill.label,
+              skillLevel: skillLevel.label,
+            },
+          ],
+          tools: automation.value,
+        };
+
+        console.log(formData);
+
+        await createJob(formData, headers);
+
+        toast("Congrats your automation job is live!", {
+          hideProgressBar: true,
+          autoClose: 2000,
+          type: "success",
+          position: "bottom-right",
+        });
+        router.push("/my-profile");
       }
-
-      const uploadPromises = images.map(async (image) => {
-        const imageRef = ref(storage, `images/${image.name + v4()}`);
-        await uploadBytes(imageRef, image);
-        return getDownloadURL(imageRef);
-      });
-
-      const imageUrls = await Promise.all(uploadPromises);
-
-      // Get download URLs
-      const imageUrl = await getDownloadURL(imageRef);
-      const videoUrl = videoUpload ? await getDownloadURL(videoRef) : null;
-
-      const formData = {
-        title: state.title,
-        description: state.description,
-        price: state.price,
-        deliveryTime: deliveryTime,
-        maxRevisions: state.maxRevisions,
-        images: imageUrls,
-        video: videoUrl,
-        featuredImage: imageUrl,
-        fee: feeType,
-        status: status,
-        skills: {
-          skill: skill,
-          skillLevel: skillLevel,
-        },
-        tools: automation,
-      };
-
-      console.log(formData);
-
-      await createJob(formData);
-
-      toast("Congrats your automation job is live!", {
-        hideProgressBar: true,
-        autoClose: 2000,
-        type: "success",
-        position: "bottom-right",
-      });
-      router.push("/my-profile");
 
       // Continue with the rest of your code...
     } catch (error) {
@@ -175,7 +175,7 @@ const AddJob = () => {
               htmlFor="title"
               label="TITLE"
               inputTitle="title"
-              inputValue={state.title}
+              inputValue={formState.title}
               disabled={false}
               inputType="text"
               inputName="title"
@@ -192,7 +192,7 @@ const AddJob = () => {
               id="description"
               row={5}
               onChange={handleChange}
-              value={state.description}
+              value={formState.description}
             />
 
             <div className="border-b border-gray-900/10 pb-12 col-span-full grid grid-cols-1 sm:grid-cols-6 gap-x-6 gap-y-8 ">
@@ -285,7 +285,7 @@ const AddJob = () => {
               htmlFor="maxRevisions"
               label="MAX REVISIONS"
               inputTitle="maxRevisions"
-              inputValue={state.maxRevisions}
+              inputValue={formState.maxRevisions}
               disabled={false}
               inputType="number"
               inputName="maxRevisions"
@@ -300,14 +300,14 @@ const AddJob = () => {
               classname="col-span-full"
               htmlFor="price"
               label="PRICE (STARTING AT $)"
-              inputTitle="maxRevisions"
-              inputValue={state.maxRevisions}
+              inputTitle="price"
+              inputValue={formState.price}
               disabled={false}
               inputType="number"
-              inputName="maxRevisions"
-              inputId="maxRevisions"
-              autocomplete="no of maxRevisions"
-              inputPlaceholder="Max Revision"
+              inputName="price"
+              inputId="price"
+              autocomplete="value for job"
+              inputPlaceholder="Price"
               onChange={handleChange}
             />
 
@@ -375,32 +375,20 @@ const AddJob = () => {
               })}
             </div>
 
-            <WokrPhotoUpload
-              multiple={false}
-              label="VIDEO"
-              htmlFor="videoUpload"
-              title="Upload a video"
-              inputName="videoUpload"
-              inputId="videoUpload"
-              inputType="file"
+            <WokrDashboardInput
               classname="col-span-full"
-              accept="video/*"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.files != null) {
-                  setVideoUpload(e.target.files[0]);
-                }
-              }}
-              value={videoUpload != null}
+              htmlFor="videoUrl"
+              label="VIDEO URL"
+              inputTitle="videoUrl"
+              inputValue={formState.videoUrl}
+              disabled={false}
+              inputType="text"
+              inputName="videoUrl"
+              inputId="videoUrl"
+              autocomplete="video url"
+              inputPlaceholder="Video url"
+              onChange={handleChange}
             />
-            <p className="text-sm">
-              {videoUpload ? (
-                <span className="text-green-600">
-                  File name: {videoUpload.name}
-                </span>
-              ) : (
-                "no files uploaded yet"
-              )}
-            </p>
 
             <WokrDashboardButton
               cancel={handleCancel}

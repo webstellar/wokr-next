@@ -15,6 +15,7 @@ import google from "../../../public/images/google_icon.png";
 import { WokrButton, WokrInput } from "@/components/formfields/FormFields";
 import { AuthContext } from "@/context/authContext";
 import { useRouter } from "next/navigation";
+import { registerUser } from "@/utils/api";
 
 const Login = () => {
   const router = useRouter();
@@ -54,6 +55,8 @@ const Login = () => {
           payload: { email: String(user.email), token: idTokenResult },
         });
 
+        await registerUser({ email: user.email });
+
         setTimeout(function () {
           router.push("/post-job");
         }, 2000);
@@ -85,6 +88,8 @@ const Login = () => {
           type: "LOGGED_IN_USER",
           payload: { email: String(user.email), token: idTokenResult },
         });
+
+        await registerUser({ email: user.email });
 
         setTimeout(function () {
           router.push("/post-job");

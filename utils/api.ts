@@ -33,16 +33,38 @@ export const getUser = async (data: object) => {
 
 //get all users
 //create job
-export const createJob = async (data: object) => {
+/* export const createJob = async (data: object, headers: string) => {
   fetch("/api/createjob", {
     method: "POST",
     body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    headers: headers,
   }).then((res) => {
     if (!res.ok) throw new Error("Error registering user");
     return res.json();
   });
+}; */
+
+export const createJob = async (data: object, headers: any) => {
+  try {
+    const response = await fetch("/api/createjob", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: headers,
+    });
+
+    if (!response.ok) {
+      // If the server response is not ok, throw an error
+      const errorData = await response.json();
+      throw new Error(errorData.error || "Error creating job");
+    }
+
+    // If the response is ok, return the response data
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
 };
+
 //get single job
 //get all jobs
 //create single order

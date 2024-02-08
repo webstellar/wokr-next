@@ -21,14 +21,14 @@ const automationSchema = new Schema(
         },
       },
     ],
-    tags: [{ type: String, default: "All" }],
-    categories: [{ type: String, default: "All" }],
+    tags: [{ name: String }],
+    categories: [{ name: String }],
     feeType: String,
     price: {
       type: Number,
       required: true,
     },
-    tools: [{ String }],
+    tools: [String],
     deliveryTime: {
       type: String,
       required: true,
@@ -39,12 +39,12 @@ const automationSchema = new Schema(
     },
     servicesIncluded: [
       {
-        type: String,
+        name: String,
       },
     ],
     featuredImage: String,
     images: [{ url: String }],
-    video: [{ url: String }],
+    video: String,
     reviews: [{ body: String, date: Date }],
     owner: {
       type: mongoose.Schema.Types.ObjectId,
