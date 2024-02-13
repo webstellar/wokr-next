@@ -8,7 +8,13 @@ const userSchema = new Schema(
       index: true,
       unique: true,
     },
-    name: {
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    middledName: {
       type: String,
     },
     description: String,
@@ -31,14 +37,7 @@ const userSchema = new Schema(
     ],
     phoneNumber: String,
     profileImage: String,
-    facebookLink: String,
-    xLink: String,
-    discordLink: String,
     country: String,
-    universityCollege: String,
-    universityCountry: String,
-    educationTitle: String,
-    graduationYear: String,
     timeZone: String,
     skillsets: [{ skill: String, skillLevel: String }],
     languages: [{ language: String, languageLevel: String }],

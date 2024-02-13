@@ -9,11 +9,11 @@ export const registerUser = async (data: object) => {
   });
 };
 
-export const updateUser = async (data: object) => {
+export const updateUser = async (data: object, headers: any) => {
   fetch("/api/updateuser", {
     method: "PUT",
     body: JSON.stringify(data),
-    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    headers: headers,
   }).then((res) => {
     if (!res.ok) throw new Error("Error updating user");
     return res.json();

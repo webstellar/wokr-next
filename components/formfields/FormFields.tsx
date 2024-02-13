@@ -209,14 +209,14 @@ export const WokrDashboardUrlInput = ({ ...props }) => {
 
 export const WokrDashboardSelect = ({ ...props }) => {
   return (
-    <div className="sm:col-span-3">
+    <div className="sm:col-span-5 w-full">
       <label
         htmlFor={props.htmlFor}
         className="block text-sm font-medium leading-6 text-gray-900"
       >
         {props.label}
       </label>
-      <div className="mt-2">
+      <div className="mt-2 w-full">
         <select
           title={props.title}
           id={props.id}
@@ -335,7 +335,9 @@ export const WokrDashboardDescription = ({ ...props }) => {
           defaultValue={""}
         />
       </div>
-      <p className="mt-3 text-sm leading-6 text-gray-600">{props.writeUp}</p>
+      <p className="mt-3 text-sm font-light leading-6 text-gray-600">
+        {props.writeUp}
+      </p>
     </div>
   );
 };

@@ -31,7 +31,10 @@ export async function POST(request: Request) {
       user.markModified("automations");
       await user.save();
 
-      return NextResponse.json({ message: "Job created successfully" });
+      return NextResponse.json(
+        { message: "Job created successfully" },
+        automationJob
+      );
     } catch (error) {
       console.error(error);
       return NextResponse.json({ error: error }, { status: 400 });

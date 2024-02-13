@@ -185,6 +185,7 @@ export const languageLevels = [
   { value: "Intermediate", label: "Intermediate" },
   { value: "Proficient", label: "Proficient" },
   { value: "Native", label: "Native" },
+  { value: "Conversational", label: "Conversational" },
 ];
 
 export const skillLevels = [

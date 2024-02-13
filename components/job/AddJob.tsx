@@ -32,10 +32,6 @@ type valueProps = {
   [key: string]: string;
 };
 
-type Props = {
-  onFilesChange(files: File[]): void;
-};
-
 const initState: valueProps = {
   title: "",
   description: "",
