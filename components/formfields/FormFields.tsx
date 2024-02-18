@@ -86,6 +86,80 @@ export const WokrDashboardList = ({ ...props }) => {
   );
 };
 
+export const WokrList = ({ ...props }) => {
+  return (
+    <div className="sm:col-span-3">
+      <label
+        htmlFor={props.htmlFor}
+        className="block text-sm font-medium leading-6 text-gray-900"
+      >
+        {props.label}
+      </label>
+      <Listbox
+        value={props.categories}
+        onChange={props.setCategories}
+        multiple={props.multiple}
+      >
+        <div className="relative mt-2">
+          <Listbox.Button className="bg-white relative w-full cursor-default rounded-md shadow-sm border-0 text-left py-1.5 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6 outline-none">
+            <span className="block truncate">
+              {Array.isArray(props.categories)
+                ? props.categories.map((person: any) => person.value).join(", ")
+                : props.categories.value}
+            </span>
+            <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+              <HiChevronUpDown
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            </span>
+          </Listbox.Button>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Listbox.Options className="z-10 absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+              {props.categorylist &&
+                props.categorylist.map((person: any) => (
+                  <Listbox.Option
+                    key={person.id}
+                    value={person}
+                    className={({ active }) =>
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                        active
+                          ? "bg-wokr-red-50 text-amber-900"
+                          : "text-gray-900"
+                      }`
+                    }
+                  >
+                    {({ selected }) => (
+                      <>
+                        <span
+                          className={`block truncate ${
+                            selected ? "font-medium" : "font-normal"
+                          }`}
+                        >
+                          {person?.value}
+                        </span>
+                        {selected ? (
+                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-wokr-red-100">
+                            <HiCheck className="h-5 w-5" aria-hidden="true" />
+                          </span>
+                        ) : null}
+                      </>
+                    )}
+                  </Listbox.Option>
+                ))}
+            </Listbox.Options>
+          </Transition>
+        </div>
+      </Listbox>
+    </div>
+  );
+};
+
 export const WokrInput = ({ ...props }) => {
   const [showPassword, setShowPassword] = useState(false);
 

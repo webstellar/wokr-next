@@ -7,6 +7,8 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import SidebarHeader from "@/components/header/SidebarHeader";
 import Spinner from "@/components/spinner/Spinner";
 import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
+import { useQuery } from "@tanstack/react-query";
+import { getUser } from "@/utils/api";
 
 const DashboardLayoutProvider = ({
   children,
@@ -18,11 +20,16 @@ const DashboardLayoutProvider = ({
   const { state } = useContext(AuthContext);
   const { user, isAuthenticating } = state;
 
+  const userQuery = useQuery({
+    queryKey: ["loggedUser", user?.email],
+    queryFn: () => getUser({ email: user?.email }),
+  });
+
+  console.log(userQuery.data);
 
   useEffect(() => {
     const checkAuthentication = async () => {
       await new Promise((resolve) => setTimeout(resolve, 50));
-
     };
     checkAuthentication();
   }, [user]);

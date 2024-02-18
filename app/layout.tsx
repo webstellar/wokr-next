@@ -34,15 +34,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <Provider>
+    <>
       <html lang="en" className="h-full">
         <body
           className={`${pangram.variable} font-sans ${pangram.className} h-full`}
         >
-          {children}
+          <Provider>{children}</Provider>
           <ToastContainer />
         </body>
       </html>
-    </Provider>
+    </>
   );
 }

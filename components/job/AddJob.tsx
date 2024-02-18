@@ -13,9 +13,9 @@ import {
   automationLevels,
   feeTypes,
   deliveryTimes,
-  taglists,
   categorylists,
   includedServices,
+  tagOptions,
 } from "../../data/data";
 import { useRouter } from "next/navigation";
 import { createJob } from "@/utils/api";
@@ -24,9 +24,11 @@ import {
   WokrDashboardDescription,
   WokrDashboardInput,
   WokrDashboardList,
+  WokrDashboardSelect,
   WokrPhotoUpload,
 } from "../formfields/FormFields";
 import Image from "next/image";
+import CreatableSelect from "react-select/creatable";
 
 type valueProps = {
   [key: string]: string;
@@ -44,10 +46,6 @@ const AddJob = () => {
   const router = useRouter();
 
   const [formState, setFormState] = useState(initState);
-  const [skill, setSkill] = useState(skills[0]);
-  const [skillLevel, setSkillLevel] = useState(skillLevels[0]);
-  const [automation, setAutomation] = useState(automationTools[0]);
-  const [automationLevel, setAutomationLevel] = useState(automationLevels[0]);
   const [feeType, setFeeType] = useState(feeTypes[0]);
   const [deliveryTime, setDeliveryTime] = useState(deliveryTimes[0]);
   const [imageUpload, setImageUpload] = useState<File | null>(null);
@@ -56,8 +54,95 @@ const AddJob = () => {
     includedServices[0],
   ]);
   const [categories, setCategories] = useState([categorylists[0]]); //array
-  const [tags, setTags] = useState([taglists[0]]); //array
+  const [tags, setTags] = useState([tagOptions[0]]); //array
   const [images, setImages] = useState<File[]>([]);
+  const [skillLists, setSkillLists] = useState([
+    { skill: skills[0], skillLevel: skillLevels[0] },
+  ]);
+  const [automationLists, setAutomationLists] = useState([
+    { automation: automationTools[0], automationLevel: automationLevels[0] },
+  ]);
+
+  const handleSkillChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+
+    setSkillLists((currentSkills) => {
+      return currentSkills.map((item, i) => {
+        if (i === index) {
+          // Check if the target name is 'skill' or 'skillLevel', then update accordingly
+          if (name === "skill" || name === "skillLevel") {
+            // Assuming value is the identifier to find in skills or skillLevels array
+            const updatedValue =
+              name === "skill"
+                ? skills.find((skill) => skill.value === value)
+                : skillLevels.find((level) => level.value === value);
+            return { ...item, [name]: updatedValue || item[name] };
+          }
+        }
+        return item;
+      });
+    });
+  };
+
+  const addSkillField = () => {
+    setSkillLists((currentSkillLists) => [
+      ...currentSkillLists,
+      {
+        skill: { id: 0, value: "", label: "Select a skill" }, // Example default structure
+        skillLevel: { id: 0, value: "", label: "Select skill level" }, // Example default structure
+      },
+    ]);
+  };
+
+  const subtractSkillField = (indexToRemove: number) => {
+    setSkillLists((currentSkillLists) =>
+      currentSkillLists.filter((_, index) => index !== indexToRemove)
+    );
+  };
+
+  //automation tools
+  const handleAutomationChange = (
+    index: number,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+
+    setAutomationLists((currentTools) => {
+      return currentTools.map((item, i) => {
+        if (i === index) {
+          if (name === "automation" || name === "automationLevel") {
+            const updatedValue =
+              name === "automation"
+                ? automationTools.find(
+                    (automation) => automation.value === value
+                  )
+                : automationLevels.find((level) => level.value === value);
+            return { ...item, [name]: updatedValue || item[name] };
+          }
+        }
+        return item;
+      });
+    });
+  };
+
+  const addAutomationField = () => {
+    setAutomationLists((currentTools) => [
+      ...currentTools,
+      {
+        automation: { id: 0, value: "", label: "Select an automation tool" }, // Example default structure
+        automationLevel: { id: 0, value: "", label: "Select automation level" }, // Example default structure
+      },
+    ]);
+  };
+
+  const subtractAutomationField = (indexToRemove: number) => {
+    setAutomationLists((currentTools) =>
+      currentTools.filter((_, index) => index !== indexToRemove)
+    );
+  };
 
   const urls = images.map((file) => URL.createObjectURL(file));
 
@@ -116,6 +201,18 @@ const AddJob = () => {
         // Get download URLs
         const imageUrl = await getDownloadURL(imageRef);
 
+        const transformedSkills = skillLists.map(({ skill, skillLevel }) => ({
+          skill: skill.value,
+          skillLevel: skillLevel.value,
+        }));
+
+        const tranformedTools = automationLists.map(
+          ({ automation, automationLevel }) => ({
+            automation: automation.value,
+            automationLevel: automationLevel.value,
+          })
+        );
+
         const formData = {
           servicesIncluded: servicesIncluded.map((service) => ({
             name: service.value,
@@ -128,18 +225,12 @@ const AddJob = () => {
           price: formState.price,
           deliveryTime: deliveryTime.label,
           maxRevisions: formState.maxRevisions,
-          images: imageUrls.map((url) => ({ url })), // Adjust based on actual structure
+          images: imageUrls.map((url) => ({ url })),
           video: formState.videoUrl,
           featuredImage: imageUrl,
           fee: feeType.label,
-          status: status,
-          skills: [
-            {
-              skill: skill.label,
-              skillLevel: skillLevel.label,
-            },
-          ],
-          tools: automation.value,
+          skills: transformedSkills,
+          tools: tranformedTools,
         };
 
         console.log(formData);
@@ -165,7 +256,7 @@ const AddJob = () => {
     <section className="mx-auto mb-20">
       <form onSubmit={handleSubmit}>
         <div className="grid md:grid-cols-3 justify-start items-start gap-10 max-w-screen-xl px-6 lg:px-8">
-          <div className="col-span-2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="md:col-span-2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <WokrDashboardInput
               classname="col-span-full"
               htmlFor="title"
@@ -191,44 +282,188 @@ const AddJob = () => {
               value={formState.description}
             />
 
-            <div className="border-b border-gray-900/10 pb-12 col-span-full grid grid-cols-1 sm:grid-cols-6 gap-x-6 gap-y-8 ">
-              <WokrDashboardList
-                htmlFor="skill"
-                label="SKILL"
-                categories={skill}
-                setCategories={setSkill}
-                categorylist={skills}
-                multiple={false}
-              />
+            <div className="border-b border-gray-900/10 pb-12 col-span-full">
+              <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
+                SKILL INFORMATION
+              </h2>
 
-              <WokrDashboardList
-                htmlFor="skillLevel"
-                label="SKILL LEVEL"
-                categories={skillLevel}
-                setCategories={setSkillLevel}
-                categorylist={skillLevels}
-                multiple={false}
-              />
+              <div>
+                {skillLists.map((field, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
+                  >
+                    <WokrDashboardSelect
+                      id="skill"
+                      title="skill"
+                      name="skill"
+                      options={skills}
+                      label="Skill"
+                      value={field.skill.value}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleSkillChange(index, e)
+                      }
+                    />
+                    <WokrDashboardSelect
+                      id="skillLevel"
+                      title="skillLevel"
+                      name="skillLevel"
+                      options={skillLevels}
+                      label="Skill Level"
+                      value={field.skillLevel.value}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleSkillChange(index, e)
+                      }
+                    />
+
+                    <div className="flex md:justify-end items-center">
+                      <button
+                        title="remove"
+                        type="button"
+                        onClick={() => subtractSkillField(index)}
+                        className="mt-7"
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 45 45"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
+                          <path
+                            d="M32.0918 22.0464L11.9992 22.0464"
+                            stroke="#636363"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  title="add"
+                  type="button"
+                  onClick={addSkillField}
+                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500" // Add some margin-top for spacing from the list
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 45 45"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
+                    <path
+                      d="M22.0469 12L22.0469 32.0926"
+                      stroke="#636363"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M32.0918 22.0464L11.9992 22.0464"
+                      stroke="#636363"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Add Skill
+                </button>
+              </div>
             </div>
 
-            <div className="border-b border-gray-900/10 pb-12 col-span-full grid grid-cols-1 sm:grid-cols-6 gap-x-6 gap-y-8 ">
-              <WokrDashboardList
-                htmlFor="automation"
-                label="AUTOMATION"
-                categories={automation}
-                setCategories={setAutomation}
-                categorylist={automationTools}
-                multiple={false}
-              />
+            <div className="border-b border-gray-900/10 pb-12 col-span-full">
+              <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
+                AUTOMATION TOOLS
+              </h2>
 
-              <WokrDashboardList
-                htmlFor="automationLevel"
-                label="AUTOMATION LEVEL"
-                categories={automationLevel}
-                setCategories={setAutomationLevel}
-                categorylist={automationLevels}
-                multiple={false}
-              />
+              <div>
+                {automationLists.map((field, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
+                  >
+                    <WokrDashboardSelect
+                      id="automation"
+                      title="automation"
+                      name="automation"
+                      options={automationTools}
+                      label="Automation"
+                      value={field.automation.value}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleAutomationChange(index, e)
+                      }
+                    />
+                    <WokrDashboardSelect
+                      id="automationLevel"
+                      title="automationLevel"
+                      name="automationLevel"
+                      options={automationLevels}
+                      label="Automation Level"
+                      value={field.automationLevel.value}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleAutomationChange(index, e)
+                      }
+                    />
+
+                    <div className="flex md:justify-end items-center">
+                      <button
+                        title="removeAutomation"
+                        type="button"
+                        onClick={() => subtractAutomationField(index)}
+                        className="mt-7"
+                      >
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 45 45"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
+                          <path
+                            d="M32.0918 22.0464L11.9992 22.0464"
+                            stroke="#636363"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  title="addAutomation"
+                  type="button"
+                  onClick={addAutomationField}
+                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 45 45"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
+                    <path
+                      d="M22.0469 12L22.0469 32.0926"
+                      stroke="#636363"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                    <path
+                      d="M32.0918 22.0464L11.9992 22.0464"
+                      stroke="#636363"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                    />
+                  </svg>
+                  Add Automation Tool
+                </button>
+              </div>
             </div>
 
             <WokrDashboardList
@@ -240,14 +475,22 @@ const AddJob = () => {
               multiple={true}
             />
 
-            <WokrDashboardList
-              htmlFor="tags"
-              label="TAG"
-              categories={tags}
-              setCategories={setTags}
-              categorylist={taglists}
-              multiple={true}
-            />
+            <div className="sm:col-span-3">
+              <label
+                htmlFor="tags"
+                className="block text-sm font-medium leading-6 text-gray-900"
+              >
+                Tags
+              </label>
+              <div className="relative mt-2">
+                <CreatableSelect
+                  isMulti
+                  options={tagOptions}
+                  defaultValue={tags}
+                  onChange={(e: any) => setTags(e)}
+                />
+              </div>
+            </div>
 
             <WokrDashboardList
               htmlFor="servicesIncluded"
@@ -257,7 +500,6 @@ const AddJob = () => {
               categorylist={includedServices}
               multiple={true}
             />
-
             <WokrDashboardList
               htmlFor="feeType"
               label="FEE TYPE"
@@ -291,7 +533,8 @@ const AddJob = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="mt-10 space-y-6">
+
+          <div className="mt-10 md:space-y-6">
             <WokrDashboardInput
               classname="col-span-full"
               htmlFor="price"

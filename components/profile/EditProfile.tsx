@@ -53,14 +53,6 @@ const initState: valueProps = {
 const EditProfile = () => {
   const router = useRouter();
   const [state, setState] = useState(initState);
-  const [language, setLanguage] = useState("ADD LANGUAGE");
-  const [languageLevel, setLanguageLevel] = useState("LANGUAGE LEVEL");
-  const [skill, setSkill] = useState("ADD SKILL");
-  const [skillLevel, setSkillLevel] = useState("EXPERIENCE LEVEL");
-  const [automation, setAutomation] = useState("ADD AUTOMATION TOOL");
-  const [automationLevel, setAutomationLevel] = useState(
-    "ADD AUTOMATION LEVEL"
-  );
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -199,9 +191,6 @@ const EditProfile = () => {
 
   const handleCancel = () => {
     setState({});
-    setLanguage("");
-    setAutomation("");
-    setSkill("");
     setProfileImage(null);
     setLoading(false);
   };
@@ -242,6 +231,25 @@ const EditProfile = () => {
           // Get download URLs
           const profileUrl = await getDownloadURL(profileRef);
 
+          const transformedSkills = skillLists.map(({ skill, skillLevel }) => ({
+            skill: skill.value,
+            skillLevel: skillLevel.value,
+          }));
+
+          const transformedlanguages = languageLists.map(
+            ({ language, languageLevel }) => ({
+              language: language.value,
+              languageLevel: languageLevel.value,
+            })
+          );
+
+          const tranformedTools = automationLists.map(
+            ({ automation, automationLevel }) => ({
+              automation: automation.value,
+              automationLevel: automationLevel.value,
+            })
+          );
+
           const formData = {
             email: currentUser?.email,
             username: state.displayName,
@@ -250,18 +258,9 @@ const EditProfile = () => {
             lastName: state.lastName,
             description: state.description,
             profileImage: profileUrl || null,
-            automationTools: {
-              automation: automation,
-              automationLevel: automationLevel,
-            },
-            skillsets: {
-              skill: skill,
-              skillLevel: skillLevel,
-            },
-            languages: {
-              language: language,
-              languageLevel: languageLevel,
-            },
+            automationTools: tranformedTools,
+            skillsets: transformedSkills,
+            languages: transformedlanguages,
           };
 
           await updateUser(formData, headers);
@@ -278,14 +277,11 @@ const EditProfile = () => {
       }
     },
     [
-      automation,
-      automationLevel,
-      language,
-      languageLevel,
+      automationLists,
+      languageLists,
       profileImage,
       router,
-      skill,
-      skillLevel,
+      skillLists,
       state.description,
       state.displayName,
       state.firstName,
@@ -378,7 +374,7 @@ const EditProfile = () => {
                 {languageLists.map((field, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
+                    className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
                   >
                     <WokrDashboardSelect
                       id="language"
@@ -403,7 +399,7 @@ const EditProfile = () => {
                       }
                     />
 
-                    <div className="flex justify-end items-center">
+                    <div className="flex md:justify-end items-center">
                       <button
                         title="removeLanguage"
                         type="button"
@@ -433,7 +429,7 @@ const EditProfile = () => {
                   title="addLanguage"
                   type="button"
                   onClick={addLanguageField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500" // Add some margin-top for spacing from the list
+                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
                 >
                   <svg
                     width="20"
@@ -469,7 +465,7 @@ const EditProfile = () => {
                 {skillLists.map((field, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
+                    className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
                   >
                     <WokrDashboardSelect
                       id="skill"
@@ -494,7 +490,7 @@ const EditProfile = () => {
                       }
                     />
 
-                    <div className="flex justify-end items-center">
+                    <div className="flex md:justify-end items-center">
                       <button
                         title="remove"
                         type="button"
@@ -560,7 +556,7 @@ const EditProfile = () => {
                 {automationLists.map((field, index) => (
                   <div
                     key={index}
-                    className="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
+                    className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
                   >
                     <WokrDashboardSelect
                       id="automation"
@@ -585,7 +581,7 @@ const EditProfile = () => {
                       }
                     />
 
-                    <div className="flex justify-end items-center">
+                    <div className="flex md:justify-end items-center">
                       <button
                         title="removeAutomation"
                         type="button"
@@ -615,7 +611,7 @@ const EditProfile = () => {
                   title="addAutomation"
                   type="button"
                   onClick={addAutomationField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500" // Add some margin-top for spacing from the list
+                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
                 >
                   <svg
                     width="20"

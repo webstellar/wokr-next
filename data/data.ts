@@ -347,6 +347,14 @@ export const taglists = [
   { id: 7, value: "devops" },
 ];
 
+export const tagOptions = [
+  { id: 1, value: "AI", label: "AI" },
+  { id: 2, value: "automation", label: "automation" },
+  { id: 3, value: "blockchain", label: "blockchain" },
+  { id: 4, value: "cloud", label: "cloud" },
+  { id: 5, value: "cybersecurity", label: "cybersecurity" },
+];
+
 export const includedServices = [
   { id: 1, value: "Setup and Installation" },
   { id: 2, value: "Maintenance" },

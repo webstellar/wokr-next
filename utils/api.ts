@@ -1,5 +1,6 @@
+//registers new users when login
 export const registerUser = async (data: object) => {
-  fetch("/api/createuser", {
+  fetch("/api/user/register", {
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -9,8 +10,9 @@ export const registerUser = async (data: object) => {
   });
 };
 
+//updates a user's profile
 export const updateUser = async (data: object, headers: any) => {
-  fetch("/api/updateuser", {
+  fetch("/api/user/update", {
     method: "PUT",
     body: JSON.stringify(data),
     headers: headers,
@@ -20,8 +22,9 @@ export const updateUser = async (data: object, headers: any) => {
   });
 };
 
+//gets specific user based on their login status
 export const getUser = async (data: object) => {
-  fetch("/api/getuser", {
+  fetch("/api/user/get", {
     method: "GET",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -31,22 +34,10 @@ export const getUser = async (data: object) => {
   });
 };
 
-//get all users
-//create job
-/* export const createJob = async (data: object, headers: string) => {
-  fetch("/api/createjob", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: headers,
-  }).then((res) => {
-    if (!res.ok) throw new Error("Error registering user");
-    return res.json();
-  });
-}; */
-
+//create job/automation in the database
 export const createJob = async (data: object, headers: any) => {
   try {
-    const response = await fetch("/api/createjob", {
+    const response = await fetch("/api/automation/create", {
       method: "POST",
       body: JSON.stringify(data),
       headers: headers,
@@ -65,6 +56,7 @@ export const createJob = async (data: object, headers: any) => {
   }
 };
 
+//get all users
 //get single job
 //get all jobs
 //create single order

@@ -28,7 +28,12 @@ const automationSchema = new Schema(
       type: Number,
       required: true,
     },
-    tools: [String],
+    tools: [
+      {
+        automation: String,
+        automationLevel: String,
+      },
+    ],
     deliveryTime: {
       type: String,
       required: true,
@@ -50,11 +55,6 @@ const automationSchema = new Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
-    },
-    status: {
-      type: String,
-      enum: ["draft", "published"],
-      default: "draft",
     },
     buyers: [
       {
