@@ -14,7 +14,7 @@ const userSchema = new Schema(
     lastName: {
       type: String,
     },
-    middledName: {
+    middleName: {
       type: String,
     },
     description: String,

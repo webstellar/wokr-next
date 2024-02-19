@@ -58,7 +58,7 @@ export async function PUT(request: Request) {
         { new: true }
       ).exec();
 
-      return NextResponse.json({ message: "User updated" }, updatedUser);
+      return NextResponse.json(updatedUser);
     } catch (error) {
       console.error(error);
       return NextResponse.json({ error: error }, { status: 400 });

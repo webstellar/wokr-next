@@ -183,7 +183,7 @@ const AddJob = () => {
         headers.append("Content-Type", "application/json");
         headers.append("Authorization", `Bearer ${token}`);
 
-        const imageRef = ref(storage, `images/${imageUpload.name + v4()}`);
+        const imageRef = ref(storage, `images/${imageUpload?.name + v4()}`);
 
         // Upload image to firebase
         await uploadBytes(imageRef, imageUpload);
@@ -191,7 +191,7 @@ const AddJob = () => {
         // Upload video to firebase if videoUpload is not null
 
         const uploadPromises = images.map(async (image) => {
-          const imageRef = ref(storage, `images/${image.name + v4()}`);
+          const imageRef = ref(storage, `images/${image?.name + v4()}`);
           await uploadBytes(imageRef, image);
           return getDownloadURL(imageRef);
         });
@@ -214,26 +214,26 @@ const AddJob = () => {
         );
 
         const formData = {
-          servicesIncluded: servicesIncluded.map((service) => ({
-            name: service.value,
-          })),
-          categories: categories.map((category) => ({ name: category.value })),
-          tags: tags.map((tag) => ({ name: tag.value })),
+          servicesIncluded:
+            servicesIncluded.map((service) => ({
+              name: service.value,
+            })) || null,
+          categories:
+            categories.map((category) => ({ name: category.value })) || null,
+          tags: tags.map((tag) => ({ name: tag.value })) || null,
           email: currentUser?.email,
-          title: formState.title,
-          description: formState.description,
-          price: formState.price,
-          deliveryTime: deliveryTime.label,
-          maxRevisions: formState.maxRevisions,
-          images: imageUrls.map((url) => ({ url })),
-          video: formState.videoUrl,
-          featuredImage: imageUrl,
-          fee: feeType.label,
-          skills: transformedSkills,
-          tools: tranformedTools,
+          title: formState?.title,
+          description: formState?.description,
+          price: formState?.price,
+          deliveryTime: deliveryTime?.label,
+          maxRevisions: formState?.maxRevisions,
+          images: imageUrls.map((url) => ({ url })) || null,
+          video: formState?.videoUrl,
+          featuredImage: imageUrl || null,
+          fee: feeType?.label,
+          skills: transformedSkills || null,
+          tools: tranformedTools || null,
         };
-
-        console.log(formData);
 
         await createJob(formData, headers);
 

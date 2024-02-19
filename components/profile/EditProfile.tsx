@@ -24,6 +24,8 @@ import {
   WokrDashboardUrlInput,
 } from "../formfields/FormFields";
 import { updateUser } from "@/utils/api";
+import Image from "next/image";
+import { useGetCachedQueryData } from "@/hooks/useGetCachedQueryData";
 
 type valueProps = {
   [key: string]: string;
@@ -55,6 +57,15 @@ const EditProfile = () => {
   const [state, setState] = useState(initState);
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+
+  const userInfo = useGetCachedQueryData("loggedUser");
+
+  console.log("user", userInfo);
+
+  let url = null;
+  if (profileImage instanceof File) {
+    url = URL.createObjectURL(profileImage);
+  }
 
   //form fields
   const [skillLists, setSkillLists] = useState([
@@ -224,7 +235,7 @@ const EditProfile = () => {
 
           const profileRef = ref(
             storage,
-            `profiles/${profileImage!.name + v4()}`
+            `profiles/${profileImage?.name + v4()}`
           );
           await uploadBytes(profileRef, profileImage!);
 
@@ -252,15 +263,15 @@ const EditProfile = () => {
 
           const formData = {
             email: currentUser?.email,
-            username: state.displayName,
-            firstName: state.firstName,
-            middleName: state.middleName,
-            lastName: state.lastName,
-            description: state.description,
+            username: state?.displayName,
+            firstName: state?.firstName,
+            middleName: state?.middleName,
+            lastName: state?.lastName,
+            description: state?.description,
             profileImage: profileUrl || null,
-            automationTools: tranformedTools,
-            skillsets: transformedSkills,
-            languages: transformedlanguages,
+            automationTools: tranformedTools || null,
+            skillsets: transformedSkills || null,
+            languages: transformedlanguages || null,
           };
 
           await updateUser(formData, headers);
@@ -417,8 +428,8 @@ const EditProfile = () => {
                           <path
                             d="M32.0918 22.0464L11.9992 22.0464"
                             stroke="#636363"
-                            stroke-width="2"
-                            stroke-linecap="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
                           />
                         </svg>
                       </button>
@@ -429,29 +440,8 @@ const EditProfile = () => {
                   title="addLanguage"
                   type="button"
                   onClick={addLanguageField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
+                  className="w-auto flex items-center justify-center text-center mt-4 px-4 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 45 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
-                    <path
-                      d="M22.0469 12L22.0469 32.0926"
-                      stroke="#636363"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                    <path
-                      d="M32.0918 22.0464L11.9992 22.0464"
-                      stroke="#636363"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                  </svg>
                   Add Language
                 </button>
               </div>
@@ -508,8 +498,8 @@ const EditProfile = () => {
                           <path
                             d="M32.0918 22.0464L11.9992 22.0464"
                             stroke="#636363"
-                            stroke-width="2"
-                            stroke-linecap="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
                           />
                         </svg>
                       </button>
@@ -520,29 +510,8 @@ const EditProfile = () => {
                   title="add"
                   type="button"
                   onClick={addSkillField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500" // Add some margin-top for spacing from the list
+                  className="w-auto flex items-center justify-center text-center mt-4 px-4 py-1.5 rounded-md bg-gray-300 text-gray-500" // Add some margin-top for spacing from the list
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 45 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
-                    <path
-                      d="M22.0469 12L22.0469 32.0926"
-                      stroke="#636363"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                    <path
-                      d="M32.0918 22.0464L11.9992 22.0464"
-                      stroke="#636363"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                  </svg>
                   Add Skill
                 </button>
               </div>
@@ -599,8 +568,8 @@ const EditProfile = () => {
                           <path
                             d="M32.0918 22.0464L11.9992 22.0464"
                             stroke="#636363"
-                            stroke-width="2"
-                            stroke-linecap="round"
+                            strokeWidth="2"
+                            strokeLinecap="round"
                           />
                         </svg>
                       </button>
@@ -611,29 +580,8 @@ const EditProfile = () => {
                   title="addAutomation"
                   type="button"
                   onClick={addAutomationField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
+                  className="w-auto flex items-center justify-center text-center mt-4 px-4 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 45 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
-                    <path
-                      d="M22.0469 12L22.0469 32.0926"
-                      stroke="#636363"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                    <path
-                      d="M32.0918 22.0464L11.9992 22.0464"
-                      stroke="#636363"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                  </svg>
                   Add Automation Tool
                 </button>
               </div>
@@ -654,6 +602,18 @@ const EditProfile = () => {
               }}
               value={profileImage != null}
             />
+
+            <div className="flex justify-start items-center gap-2">
+              {url && (
+                <Image
+                  className="rounded-md h-auto w-auto"
+                  src={url}
+                  height={100}
+                  width={100}
+                  alt=""
+                />
+              )}
+            </div>
           </div>
 
           <WokrDashboardButton

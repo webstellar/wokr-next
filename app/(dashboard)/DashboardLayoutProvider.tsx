@@ -20,12 +20,13 @@ const DashboardLayoutProvider = ({
   const { state } = useContext(AuthContext);
   const { user, isAuthenticating } = state;
 
-  const userQuery = useQuery({
-    queryKey: ["loggedUser", user?.email],
-    queryFn: () => getUser({ email: user?.email }),
-  });
+  const email = String(user?.email);
+  const token = String(user?.token);
 
-  console.log(userQuery.data);
+  const userQuery = useQuery({
+    queryKey: ["loggedUser", email],
+    queryFn: () => getUser(token),
+  });
 
   useEffect(() => {
     const checkAuthentication = async () => {
