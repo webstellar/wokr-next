@@ -38,7 +38,7 @@ const Register = () => {
   };
 
   const handleNext = async () => {
-    route.push("/setting");
+    route.push("/settings");
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

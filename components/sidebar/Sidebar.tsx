@@ -122,7 +122,7 @@ const Sidebar = ({
         >
           <div className="flex gap-4 items-center h-11 overflow-hidden">
             <Image
-              src="https://unsplash.it/640/425"
+              src={user && user.profileImage}
               alt="profile image"
               className="rounded-full w-8 h-8"
               width="100"
@@ -132,7 +132,7 @@ const Sidebar = ({
               <div className="flex flex-col ">
                 <span className="text-gray-600 my-0">
                   {user &&
-                    (user.name || (user.email && user.email.split("@")[0]))}
+                    (user.username || (user.email && user.email.split("@")[0]))}
                 </span>
                 <Link href="/my-profile" className="text-wokr-red-100 text-sm">
                   View Profile

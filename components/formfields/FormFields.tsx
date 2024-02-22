@@ -265,6 +265,7 @@ export const WokrDashboardUrlInput = ({ ...props }) => {
             {props.url}
           </span>
           <input
+            disabled={props.disabled}
             onChange={props.onChange}
             value={props.value}
             title={props.title}
@@ -272,10 +273,40 @@ export const WokrDashboardUrlInput = ({ ...props }) => {
             name={props.name}
             id={props.id}
             autoComplete={props.autocomplete}
-            className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 outline-none"
+            className="block flex-1 border-0 bg-transparent py-1.5 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 outline-none"
             placeholder={props.placeholder}
           />
         </div>
+      </div>
+    </div>
+  );
+};
+
+export const WokrDashboardSelector = ({ ...props }) => {
+  return (
+    <div className="sm:col-span-5 w-full">
+      <label
+        htmlFor={props.htmlFor}
+        className="block text-sm font-medium leading-6 text-gray-900"
+      >
+        {props.label}
+      </label>
+      <div className="mt-2 w-full">
+        <select
+          title={props.title}
+          id={props.id}
+          name={props.name}
+          onChange={props.onChange}
+          required={props.required}
+          value={props.value}
+          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6 outline-none"
+        >
+          {props.options.map((option: any, i: any) => (
+            <option key={i} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
       </div>
     </div>
   );

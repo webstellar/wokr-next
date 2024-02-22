@@ -7,8 +7,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import SidebarHeader from "@/components/header/SidebarHeader";
 import Spinner from "@/components/spinner/Spinner";
 import ProtectedRoute from "@/components/protectedRoute/ProtectedRoute";
-import { useQuery } from "@tanstack/react-query";
-import { getUser } from "@/utils/api";
+import { useUserQuery } from "@/hooks/useUserQuery";
 
 const DashboardLayoutProvider = ({
   children,
@@ -20,13 +19,7 @@ const DashboardLayoutProvider = ({
   const { state } = useContext(AuthContext);
   const { user, isAuthenticating } = state;
 
-  const email = String(user?.email);
-  const token = String(user?.token);
-
-  const userQuery = useQuery({
-    queryKey: ["loggedUser", email],
-    queryFn: () => getUser(token),
-  });
+  const { data } = useUserQuery();
 
   useEffect(() => {
     const checkAuthentication = async () => {
@@ -55,11 +48,12 @@ const DashboardLayoutProvider = ({
               collapsed={collapsed}
               setCollapsed={() => setSidebarCollapsed((prev) => !prev)}
               shown={showSidebar}
-              user={user ?? {}}
+              user={data ?? {}}
             />
           </div>
           <main>
             <SidebarHeader
+              user={data ?? {}}
               onMenuButtonClick={() => setShowSidebar((prev) => !prev)}
             />
             {children}

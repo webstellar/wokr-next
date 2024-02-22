@@ -2,12 +2,12 @@
 
 import { useState, useCallback } from "react";
 import {
-  languages,
-  languageLevels,
-  skillLevels,
-  skills,
-  automationTools,
-  automationLevels,
+  languageLevelList,
+  languageList,
+  skillLevelList,
+  skillList,
+  toolList,
+  toolLevelList,
 } from "../../data/data";
 import { useRouter } from "next/navigation";
 import { auth, storage } from "@/config/firebase";
@@ -19,104 +19,110 @@ import {
   WokrDashboardButton,
   WokrDashboardDescription,
   WokrDashboardInput,
-  WokrDashboardSelect,
+  WokrDashboardSelector,
   WokrPhotoUpload,
   WokrDashboardUrlInput,
 } from "../formfields/FormFields";
 import { updateUser } from "@/utils/api";
 import Image from "next/image";
-import { useGetCachedQueryData } from "@/hooks/useGetCachedQueryData";
+import { useUserQuery } from "@/hooks/useUserQuery";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { userData } from "@/types/types";
 
 type valueProps = {
   [key: string]: string;
 };
 
-interface Skill {
-  id: number;
-  value: string;
-  label: string;
-}
-
-interface SkillList {
-  skill: Skill;
-  skillLevel: Skill;
-}
-
-const initState: valueProps = {
-  firstName: "",
-  lastName: "",
-  middleName: "",
-  displayName: "",
-  description: "",
-  graduationYear: "",
-  phone: "",
-};
-
 const EditProfile = () => {
+  const { data } = useUserQuery();
+  const queryClient = useQueryClient();
+  const userMutation = useMutation({
+    mutationFn: ({ formData, token }: { formData: userData; token: string }) =>
+      updateUser(formData, token),
+    onSuccess: (data) => {
+      queryClient.setQueryData(["loggedUser", data.email], data);
+
+      toast("Thanks for setting up your profile", {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "success",
+      });
+      router.push("/my-profile");
+    },
+  });
+
+  const initialSkillSets = data.skillsets.map(
+    (set: { skill: string; skillLevel: string }) => ({
+      skill: skillList.includes(set.skill) ? set.skill : "Select Skill",
+      skillLevel: skillLevelList.includes(set.skillLevel)
+        ? set.skillLevel
+        : "Select Level",
+    })
+  );
+
+  const initialToolSets = data.automationTools.map(
+    (set: { automation: string; automationLevel: string }) => ({
+      automation: toolList.includes(set.automation)
+        ? set.automation
+        : "Select Automation",
+      automationLevel: toolLevelList.includes(set.automationLevel)
+        ? set.automationLevel
+        : "Select Level",
+    })
+  );
+
+  const initialLanguageSets = data.languages.map(
+    (set: { language: string; languageLevel: string }) => ({
+      language: languageList.includes(set.language)
+        ? set.language
+        : "Select Language",
+      languageLevel: languageLevelList.includes(set.languageLevel)
+        ? set.languageLevel
+        : "Select Level",
+    })
+  );
+
   const router = useRouter();
-  const [state, setState] = useState(initState);
+  const [state, setState] = useState<valueProps>({
+    firstName: data?.firstName,
+    lastName: data?.lastName,
+    middleName: data?.middleName,
+    displayName: data?.username,
+    description: data?.description,
+  });
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
+  const [skillLists, setSkillLists] = useState(initialSkillSets);
+  const [languageLists, setLanguageLists] = useState(initialLanguageSets);
+  const [automationLists, setAutomationLists] = useState(initialToolSets);
 
-  const userInfo = useGetCachedQueryData("loggedUser");
-
-  console.log("user", userInfo);
+  let originalUrl = data?.profileImage;
 
   let url = null;
   if (profileImage instanceof File) {
     url = URL.createObjectURL(profileImage);
   }
 
-  //form fields
-  const [skillLists, setSkillLists] = useState([
-    { skill: skills[0], skillLevel: skillLevels[0] },
-  ]);
-
-  const [languageLists, setLanguageLists] = useState([
-    { language: languages[0], languageLevel: languageLevels[0] },
-  ]);
-
-  const [automationLists, setAutomationLists] = useState([
-    { automation: automationTools[0], automationLevel: automationLevels[0] },
-  ]);
-
   const handleSkillChange = (
     index: number,
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-
-    setSkillLists((currentSkills) => {
-      return currentSkills.map((item, i) => {
-        if (i === index) {
-          // Check if the target name is 'skill' or 'skillLevel', then update accordingly
-          if (name === "skill" || name === "skillLevel") {
-            // Assuming value is the identifier to find in skills or skillLevels array
-            const updatedValue =
-              name === "skill"
-                ? skills.find((skill) => skill.value === value)
-                : skillLevels.find((level) => level.value === value);
-            return { ...item, [name]: updatedValue || item[name] };
-          }
-        }
-        return item;
-      });
-    });
+    const newSkillSets = [...skillLists];
+    newSkillSets[index][name] = value;
+    setSkillLists(newSkillSets);
   };
 
   const addSkillField = () => {
-    setSkillLists((currentSkillLists) => [
+    setSkillLists((currentSkillLists: any) => [
       ...currentSkillLists,
-      {
-        skill: { id: 0, value: "", label: "Select a skill" }, // Example default structure
-        skillLevel: { id: 0, value: "", label: "Select skill level" }, // Example default structure
-      },
+      { skill: "Select Skill", skillLevel: "Select Level" },
     ]);
   };
 
   const subtractSkillField = (indexToRemove: number) => {
-    setSkillLists((currentSkillLists) =>
-      currentSkillLists.filter((_, index) => index !== indexToRemove)
+    setSkillLists((currentSkillLists: any) =>
+      currentSkillLists.filter((_: any, index: any) => index !== indexToRemove)
     );
   };
 
@@ -126,36 +132,23 @@ const EditProfile = () => {
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-
-    setLanguageLists((currentLanguages) => {
-      return currentLanguages.map((item, i) => {
-        if (i === index) {
-          if (name === "language" || name === "languageLevel") {
-            const updatedValue =
-              name === "language"
-                ? languages.find((language) => language.value === value)
-                : languageLevels.find((level) => level.value === value);
-            return { ...item, [name]: updatedValue || item[name] };
-          }
-        }
-        return item;
-      });
-    });
+    const newLanguageSets = [...languageLists];
+    newLanguageSets[index][name] = value;
+    setLanguageLists(newLanguageSets);
   };
 
   const addLanguageField = () => {
-    setLanguageLists((currentLanguageLists) => [
+    setLanguageLists((currentLanguageLists: any) => [
       ...currentLanguageLists,
-      {
-        language: { id: 0, value: "", label: "Select a language" }, // Example default structure
-        languageLevel: { id: 0, value: "", label: "Select language level" }, // Example default structure
-      },
+      { language: "Select Language", languageLevel: "Select Level" },
     ]);
   };
 
   const subtractLanguageField = (indexToRemove: number) => {
-    setLanguageLists((currentLanguageLists) =>
-      currentLanguageLists.filter((_, index) => index !== indexToRemove)
+    setLanguageLists((currentLanguageLists: any) =>
+      currentLanguageLists.filter(
+        (_: any, index: any) => index !== indexToRemove
+      )
     );
   };
 
@@ -165,38 +158,24 @@ const EditProfile = () => {
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-
-    setAutomationLists((currentTools) => {
-      return currentTools.map((item, i) => {
-        if (i === index) {
-          if (name === "automation" || name === "automationLevel") {
-            const updatedValue =
-              name === "automation"
-                ? automationTools.find(
-                    (automation) => automation.value === value
-                  )
-                : automationLevels.find((level) => level.value === value);
-            return { ...item, [name]: updatedValue || item[name] };
-          }
-        }
-        return item;
-      });
-    });
+    const newAutomationSets = [...automationLists];
+    newAutomationSets[index][name] = value;
+    setAutomationLists(newAutomationSets);
   };
 
   const addAutomationField = () => {
-    setAutomationLists((currentTools) => [
+    setAutomationLists((currentTools: any) => [
       ...currentTools,
       {
-        automation: { id: 0, value: "", label: "Select an automation tool" }, // Example default structure
-        automationLevel: { id: 0, value: "", label: "Select automation level" }, // Example default structure
+        automation: "Select an automation tool",
+        automationLevel: "Select automation level",
       },
     ]);
   };
 
   const subtractAutomationField = (indexToRemove: number) => {
-    setAutomationLists((currentTools) =>
-      currentTools.filter((_, index) => index !== indexToRemove)
+    setAutomationLists((currentTools: any) =>
+      currentTools.filter((_: any, index: any) => index !== indexToRemove)
     );
   };
 
@@ -226,13 +205,9 @@ const EditProfile = () => {
 
       try {
         const currentUser = auth.currentUser;
-        const token = await getIdToken(currentUser!, true);
+        const token: string = await getIdToken(currentUser!, true);
 
         if (currentUser) {
-          const headers = new Headers();
-          headers.append("Content-Type", "application/json");
-          headers.append("Authorization", `Bearer ${token}`);
-
           const profileRef = ref(
             storage,
             `profiles/${profileImage?.name + v4()}`
@@ -242,46 +217,21 @@ const EditProfile = () => {
           // Get download URLs
           const profileUrl = await getDownloadURL(profileRef);
 
-          const transformedSkills = skillLists.map(({ skill, skillLevel }) => ({
-            skill: skill.value,
-            skillLevel: skillLevel.value,
-          }));
-
-          const transformedlanguages = languageLists.map(
-            ({ language, languageLevel }) => ({
-              language: language.value,
-              languageLevel: languageLevel.value,
-            })
-          );
-
-          const tranformedTools = automationLists.map(
-            ({ automation, automationLevel }) => ({
-              automation: automation.value,
-              automationLevel: automationLevel.value,
-            })
-          );
-
-          const formData = {
+          const formData: userData = {
             email: currentUser?.email,
             username: state?.displayName,
             firstName: state?.firstName,
             middleName: state?.middleName,
             lastName: state?.lastName,
             description: state?.description,
-            profileImage: profileUrl || null,
-            automationTools: tranformedTools || null,
-            skillsets: transformedSkills || null,
-            languages: transformedlanguages || null,
+            profileImage: profileImage == null ? originalUrl : profileUrl,
+            automationTools: automationLists || null,
+            skillsets: skillLists || null,
+            languages: languageLists || null,
           };
 
-          await updateUser(formData, headers);
-
-          toast("Thanks for setting up your profile", {
-            hideProgressBar: true,
-            autoClose: 2000,
-            type: "success",
-          });
-          router.push("/my-profile");
+          //await updateUser(formData, token);
+          userMutation.mutate({ formData, token });
         }
       } catch (error) {
         console.log(error);
@@ -290,19 +240,20 @@ const EditProfile = () => {
     [
       automationLists,
       languageLists,
+      originalUrl,
       profileImage,
-      router,
       skillLists,
-      state.description,
-      state.displayName,
-      state.firstName,
-      state.lastName,
-      state.middleName,
+      state?.description,
+      state?.displayName,
+      state?.firstName,
+      state?.lastName,
+      state?.middleName,
+      userMutation,
     ]
   );
 
   return (
-    <section className="mx-auto">
+    <section className="mx-auto mb-40">
       <div className="grid grid-cols-1 justify-start items-center max-w-screen-md">
         <form onSubmit={handleSubmit} className="mb-10">
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -312,14 +263,14 @@ const EditProfile = () => {
               label="DISPLAY NAME"
               title="displayName"
               value={state.displayName}
-              disabled={false}
+              disabled={data?.username ? true : false}
               type="text"
               name="displayName"
               id="displayName"
               autocomplete="display name"
               placeholder="jonn_wick"
               onChange={handleChange}
-              url="wokr.io/"
+              url="wokr.io/in/"
             />
 
             <div className="col-span-full grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
@@ -369,7 +320,7 @@ const EditProfile = () => {
 
             <WokrDashboardDescription
               title="ABOUT"
-              writeUp="Share with us your hobbies, any extra qualifications, or naything else you wish to provide"
+              writeUp="Share with us your hobbies, any extra qualifications, or anything else you wish to provide"
               name="description"
               id="description"
               row={5}
@@ -382,30 +333,30 @@ const EditProfile = () => {
               </h2>
 
               <div>
-                {languageLists.map((field, index) => (
+                {languageLists.map((field: any, index: any) => (
                   <div
                     key={index}
                     className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
                   >
-                    <WokrDashboardSelect
+                    <WokrDashboardSelector
                       id="language"
                       title="language"
                       name="language"
-                      options={languages}
+                      options={languageList}
                       label="Language"
-                      value={field.language.value}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      value={field.language}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         handleLanguageChange(index, e)
                       }
                     />
-                    <WokrDashboardSelect
+                    <WokrDashboardSelector
                       id="languageLevel"
                       title="languageLevel"
                       name="languageLevel"
-                      options={languageLevels}
+                      options={languageLevelList}
                       label="Language Level"
-                      value={field.languageLevel.value}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      value={field.languageLevel}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         handleLanguageChange(index, e)
                       }
                     />
@@ -452,30 +403,30 @@ const EditProfile = () => {
               </h2>
 
               <div>
-                {skillLists.map((field, index) => (
+                {skillLists.map((field: any, index: any) => (
                   <div
                     key={index}
                     className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
                   >
-                    <WokrDashboardSelect
+                    <WokrDashboardSelector
                       id="skill"
                       title="skill"
                       name="skill"
-                      options={skills}
+                      options={skillList}
                       label="Skill"
-                      value={field.skill.value}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      value={field.skill}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         handleSkillChange(index, e)
                       }
                     />
-                    <WokrDashboardSelect
+                    <WokrDashboardSelector
                       id="skillLevel"
                       title="skillLevel"
                       name="skillLevel"
-                      options={skillLevels}
+                      options={skillLevelList}
                       label="Skill Level"
-                      value={field.skillLevel.value}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      value={field.skillLevel}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         handleSkillChange(index, e)
                       }
                     />
@@ -522,30 +473,30 @@ const EditProfile = () => {
               </h2>
 
               <div>
-                {automationLists.map((field, index) => (
+                {automationLists.map((field: any, index: any) => (
                   <div
                     key={index}
                     className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
                   >
-                    <WokrDashboardSelect
+                    <WokrDashboardSelector
                       id="automation"
                       title="automation"
                       name="automation"
-                      options={automationTools}
+                      options={toolList}
                       label="Automation"
-                      value={field.automation.value}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      value={field.automation}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         handleAutomationChange(index, e)
                       }
                     />
-                    <WokrDashboardSelect
+                    <WokrDashboardSelector
                       id="automationLevel"
                       title="automationLevel"
                       name="automationLevel"
-                      options={automationLevels}
+                      options={toolLevelList}
                       label="Automation Level"
-                      value={field.automationLevel.value}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      value={field.automationLevel}
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                         handleAutomationChange(index, e)
                       }
                     />
@@ -604,10 +555,18 @@ const EditProfile = () => {
             />
 
             <div className="flex justify-start items-center gap-2">
-              {url && (
+              {url ? (
                 <Image
                   className="rounded-md h-auto w-auto"
                   src={url}
+                  height={100}
+                  width={100}
+                  alt=""
+                />
+              ) : (
+                <Image
+                  className="rounded-md h-auto w-auto"
+                  src={originalUrl}
                   height={100}
                   width={100}
                   alt=""

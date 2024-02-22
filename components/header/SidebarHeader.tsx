@@ -14,16 +14,20 @@ import {
 import { profileLinks, settinglinks } from "../../data/data";
 import Image from "next/image";
 
+type userProfile = {
+  [key: string]: string;
+};
+
 type Props = {
   onMenuButtonClick(): void;
+  user: userProfile;
 };
 
 const SidebarHeader = (props: Props) => {
-  const { state, dispatch } = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
   const router = useRouter();
   const pathname = usePathname();
   const auth = getAuth();
-  const { user } = state;
 
   const logOut = () => {
     signOut(auth)
@@ -114,13 +118,13 @@ const SidebarHeader = (props: Props) => {
         <Popover.Group className="hidden lg:flex lg:gap-x-6 justify-center items-center">
           <HiOutlineBell className="text-2xl text-gray-500" />
 
-          {user && (
+          {props.user && (
             <Menu as="div" className="relative inline-block text-left">
               <div>
                 <Menu.Button className="inline-flex justify-center items-center px-4 py-2 w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
                   <Image
-                    src="https://unsplash.it/640/425"
-                    alt="image"
+                    src={props.user.profileImage}
+                    alt={props.user.firstName}
                     width={100}
                     height={100}
                     className="rounded-full w-8 h-8"

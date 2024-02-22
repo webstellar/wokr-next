@@ -140,7 +140,7 @@ export const homeMenu = [
   },
   {
     id: 2,
-    url: "/my-rofile",
+    url: "/my-profile",
     title: "Switch to Selling",
   },
 ];
@@ -156,7 +156,6 @@ export const settinglinks = [
 ];
 
 export const languages = [
-  { value: "No Value", label: "Select Language" },
   { value: "Mandarin Chinese", label: "Mandarin Chinese" },
   { value: "Spanish", label: "Spanish" },
   { value: "English", label: "English" },
@@ -180,7 +179,6 @@ export const languages = [
 ];
 
 export const languageLevels = [
-  { value: "No Value", label: "Select Level" },
   { value: "Beginner", label: "Beginner" },
   { value: "Intermediate", label: "Intermediate" },
   { value: "Proficient", label: "Proficient" },
@@ -189,22 +187,19 @@ export const languageLevels = [
 ];
 
 export const skillLevels = [
-  { id: 1, value: "No Value", label: "Select Level" },
-  { id: 2, value: "Beginner", label: "Beginner" },
-  { id: 3, value: "Intermediate", label: "Intermediate" },
-  { id: 4, value: "Proficient", label: "Proficient" },
+  { id: 1, value: "Beginner", label: "Beginner" },
+  { id: 2, value: "Intermediate", label: "Intermediate" },
+  { id: 3, value: "Proficient", label: "Proficient" },
 ];
 
 export const skills = [
-  { id: 1, value: "No Value", label: "Select Skill" },
-  { id: 2, value: "Social media management", label: "Social Media Management" },
-  { id: 3, value: "Digital marketing", label: "Digital Marketing" },
-  { id: 4, value: "Web scraping", label: "Web Scraping" },
-  { id: 5, value: "Web development", label: "Web Development" },
+  { id: 1, value: "Social media management", label: "Social Media Management" },
+  { id: 2, value: "Digital marketing", label: "Digital Marketing" },
+  { id: 3, value: "Web scraping", label: "Web Scraping" },
+  { id: 4, value: "Web development", label: "Web Development" },
 ];
 
 export const automationTools = [
-  { value: "No Value", label: "Select Tool" },
   { value: "uipath", label: "UiPath" },
   { value: "blueprism", label: "Blue Prism" },
   { value: "automationanywhere", label: "Automation Anywhere" },
@@ -233,7 +228,6 @@ export const automationTools = [
 ];
 
 export const automationLevels = [
-  { value: "No Value", label: "Select Level" },
   { value: "beginner", label: "Beginner" },
   { value: "intermediate", label: "Intermediate" },
   { value: "proficient", label: "Proficient" },
@@ -359,4 +353,70 @@ export const includedServices = [
   { id: 1, value: "Setup and Installation" },
   { id: 2, value: "Maintenance" },
   { id: 4, value: "Customer support" },
+];
+
+export const skillLevelList = ["Beginner", "Intermediate", "Proficient"];
+
+export const skillList = [
+  "Social media management",
+  "Digital marketing",
+  "Web scraping",
+  "Web development",
+];
+
+export const toolLevelList = ["beginner", "intermediate", "proficient"];
+export const toolList = [
+  "uipath",
+  "blueprism",
+  "automationanywhere",
+  "ansible",
+  "chef",
+  "jenkins",
+  "gitlabci",
+  "circleci",
+  "nintex",
+  "zapier",
+  "powerautomate",
+  "terraform",
+  "cloudformation",
+  "selenium",
+  "appium",
+  "cypress",
+  "hubspot",
+  "marketo",
+  "informatica",
+  "apachenifi",
+  "talend",
+  "zendesk",
+  "freshdesk",
+  "chatgpt",
+];
+
+export const languageList = [
+  "Mandarin Chinese",
+  "Spanish",
+  "English",
+  "Hindi",
+  "Bengali",
+  "Portuguese",
+  "Russian",
+  "Japanese",
+  "Western Punjabi",
+  "Marathi",
+  "Telugu",
+  "Wu Chinese",
+  "Turkish",
+  "Korean",
+  "French",
+  "German",
+  "Vietnamese",
+  "Tamil",
+  "Yue Chinese",
+  "Urdu",
+];
+export const languageLevelList = [
+  "Beginner",
+  "Intermediate",
+  "Proficient",
+  "Conversational",
 ];

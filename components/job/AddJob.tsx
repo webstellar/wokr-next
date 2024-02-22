@@ -29,6 +29,8 @@ import {
 } from "../formfields/FormFields";
 import Image from "next/image";
 import CreatableSelect from "react-select/creatable";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { jobData } from "@/types/types";
 
 type valueProps = {
   [key: string]: string;
@@ -44,7 +46,22 @@ const initState: valueProps = {
 
 const AddJob = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const postMutation = useMutation({
+    mutationFn: ({ formData, token }: { formData: jobData; token: string }) =>
+      createJob(formData, token),
+    onSuccess: (data) => {
+      queryClient.setQueryData(["automationJob", data._id], data);
 
+      toast("Congrats your automation job is live!", {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "success",
+        position: "bottom-right",
+      });
+      router.push(`/automations/${data._id}`); //dynamic routing
+    },
+  });
   const [formState, setFormState] = useState(initState);
   const [feeType, setFeeType] = useState(feeTypes[0]);
   const [deliveryTime, setDeliveryTime] = useState(deliveryTimes[0]);
@@ -171,24 +188,17 @@ const AddJob = () => {
     e.preventDefault();
     setLoading(true);
 
-    const status = "published";
-    if (imageUpload == null) return;
+    if (imageUpload == null) return; //image is compulsory
 
     try {
       const currentUser = auth.currentUser;
-      const token = await getIdToken(currentUser!, true);
+      const token: string = await getIdToken(currentUser!, true);
 
       if (currentUser) {
-        const headers = new Headers();
-        headers.append("Content-Type", "application/json");
-        headers.append("Authorization", `Bearer ${token}`);
-
         const imageRef = ref(storage, `images/${imageUpload?.name + v4()}`);
 
         // Upload image to firebase
         await uploadBytes(imageRef, imageUpload);
-
-        // Upload video to firebase if videoUpload is not null
 
         const uploadPromises = images.map(async (image) => {
           const imageRef = ref(storage, `images/${image?.name + v4()}`);
@@ -197,10 +207,7 @@ const AddJob = () => {
         });
 
         const imageUrls = await Promise.all(uploadPromises);
-
-        // Get download URLs
         const imageUrl = await getDownloadURL(imageRef);
-
         const transformedSkills = skillLists.map(({ skill, skillLevel }) => ({
           skill: skill.value,
           skillLevel: skillLevel.value,
@@ -213,7 +220,7 @@ const AddJob = () => {
           })
         );
 
-        const formData = {
+        const formData: jobData = {
           servicesIncluded:
             servicesIncluded.map((service) => ({
               name: service.value,
@@ -235,18 +242,10 @@ const AddJob = () => {
           tools: tranformedTools || null,
         };
 
-        await createJob(formData, headers);
+        //await createJob(formData, headers);
 
-        toast("Congrats your automation job is live!", {
-          hideProgressBar: true,
-          autoClose: 2000,
-          type: "success",
-          position: "bottom-right",
-        });
-        router.push("/my-profile");
+        postMutation.mutate({ formData, token });
       }
-
-      // Continue with the rest of your code...
     } catch (error) {
       console.log(error);
     }
