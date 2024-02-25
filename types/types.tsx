@@ -20,6 +20,7 @@ export type ProcessBlurb = {
 };
 
 export type jobData = {
+  _id?: string;
   categories: any;
   tags: any;
   servicesIncluded: any;
@@ -35,16 +36,18 @@ export type jobData = {
   fee?: string;
   skills?: any;
   tools?: any;
+  owner?: string;
 };
 
 export type userData = {
+  _id?: string;
   email?: string | any;
   username?: string;
-  firstName?: string;
+  firstName: string;
   middleName?: string;
   lastName?: string;
   description?: string;
-  profileImage?: string;
+  profileImage: string;
   automationTools?: any;
   skillsets?: any;
   languages?: any;

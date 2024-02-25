@@ -191,6 +191,7 @@ const SidebarHeader = (props: Props) => {
                     <Menu.Item>
                       {({ active }) => (
                         <button
+                          type="button"
                           onClick={logOut}
                           id="logout"
                           title="logout"

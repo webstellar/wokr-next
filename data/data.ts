@@ -235,8 +235,8 @@ export const automationLevels = [
 
 export const sidebarNavItems: NavItem[] = [
   {
-    label: "Dashboard",
-    href: "/dashboard",
+    label: "Overview",
+    href: "/overview",
     icon: dashboard,
   },
   {

@@ -52,7 +52,6 @@ const AddJob = () => {
       createJob(formData, token),
     onSuccess: (data) => {
       queryClient.setQueryData(["automationJob", data._id], data);
-
       toast("Congrats your automation job is live!", {
         hideProgressBar: true,
         autoClose: 2000,
@@ -254,7 +253,7 @@ const AddJob = () => {
   return (
     <section className="mx-auto mb-20">
       <form onSubmit={handleSubmit}>
-        <div className="grid md:grid-cols-3 justify-start items-start gap-10 max-w-screen-xl px-6 lg:px-8">
+        <div className="mx-auto grid md:grid-cols-3 justify-start items-start gap-10 max-w-screen-2xl px-6 lg:px-8">
           <div className="md:col-span-2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <WokrDashboardInput
               classname="col-span-full"
@@ -437,7 +436,7 @@ const AddJob = () => {
                   title="addAutomation"
                   type="button"
                   onClick={addAutomationField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
+                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm"
                 >
                   <svg
                     width="20"
