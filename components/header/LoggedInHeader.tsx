@@ -17,7 +17,15 @@ import { homeMenu, profileLinks, settinglinks } from "../../data/data";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 
-const LoggedInHeader = () => {
+type userProfile = {
+  [key: string]: string;
+};
+
+type Props = {
+  user: userProfile;
+};
+
+const LoggedInHeader = (props: Props) => {
   const { state, dispatch } = useContext(AuthContext);
   const router = useRouter();
   const pathname = usePathname();
@@ -135,7 +143,7 @@ const LoggedInHeader = () => {
 
           <HiOutlineBell className="text-2xl text-gray-500" />
 
-          {user && (
+          {props.user && (
             <Menu as="div" className="relative inline-block text-left">
               <div>
                 <Menu.Button>
@@ -144,11 +152,11 @@ const LoggedInHeader = () => {
                     href="/overview"
                   >
                     <Image
-                      src="https://unsplash.it/640/425"
-                      alt="image"
+                      src={props.user.profileImage}
+                      alt={props.user.firstName}
+                      width={100}
+                      height={100}
                       className="rounded-full w-8 h-8"
-                      width="100"
-                      height="100"
                     />
                     <HiOutlineChevronDown
                       className="-mr-1 ml-2 h-5 w-5 text-wokr-red-100 hover:text-wokr-red-200"
