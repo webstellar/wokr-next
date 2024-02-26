@@ -131,7 +131,7 @@ export const createJob = async (data: jobData, token: string) => {
 
 export const getJob = async (data: string) => {
   try {
-    const response = await axios.get("/api/automation/get", {
+    const response = await axios.get(`/api/automation/get`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

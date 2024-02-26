@@ -68,7 +68,7 @@ const SidebarHeader = (props: Props) => {
     <header
       className={`${
         pathname == currentUrl ? "absolute" : "'"
-      } bg-transparent w-full`}
+      } bg-gray-50 w-full`}
     >
       <nav
         className="mx-auto flex max-w-screen-2xl items-center justify-end md:justify-between p-6 lg:px-8"
@@ -91,7 +91,7 @@ const SidebarHeader = (props: Props) => {
               <input
                 type="search"
                 name="domain"
-                className="w-full md:w-[700px] backdrop-blur-sm bg-gray-200 py-2 pl-10 pr-4 rounded-full focus:outline-none border-2 border-white focus:border-wokr-red-100/5 transition-colors duration-300"
+                className="w-full md:w-[700px] backdrop-blur-sm bg-gray-200 py-2 pl-10 pr-4 rounded-full focus:outline-none border-2 border-gray-100 focus:border-wokr-red-100/5 transition-colors duration-300"
                 placeholder="Search"
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">

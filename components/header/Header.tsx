@@ -74,6 +74,8 @@ const Header = () => {
         </Popover.Group>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center gap-x-5">
           <button
+            type="button"
+            title="searchbar"
             onClick={() => setReveal(!reveal)}
             className="text-base font-pangram-normal leading-6 text-gray-900 border border-gray-950 bg-transparent py-2 px-5 flex justify-center items-center gap-x-3 rounded-lg"
           >

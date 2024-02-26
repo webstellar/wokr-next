@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { getJob } from "@/utils/api";
 
-export const useUserQuery = () => {
-  const userQuery = useQuery({
-    queryKey: ["automationJob"],
-    queryFn: (data: any) => getJob(data?._id),
+export const useJobQuery = (data: string) => {
+  const jobQuery = useQuery({
+    queryKey: ["automation", data],
+    queryFn: () => getJob(data),
   });
 
-  return userQuery;
+  return jobQuery;
 };

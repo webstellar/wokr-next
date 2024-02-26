@@ -1,9 +1,7 @@
 "use client";
 
-import { useContext } from "react";
 import { Tab, Disclosure } from "@headlessui/react";
 import EditProfile from "@/components/profile/EditProfile";
-import { AuthContext } from "@/context/authContext";
 import { HiChevronUp } from "react-icons/hi2";
 import UpdatePassword from "@/components/auth/UpdatePassword";
 import DeleteProfile from "@/components/auth/DeleteProfile";
@@ -19,9 +17,6 @@ const tabs = [
 ];
 
 const Setting = () => {
-  const { state } = useContext(AuthContext);
-  const { user } = state;
-
   return (
     <div className="mx-auto">
       <div className="grid grid-cols-1 justify-start items-center mx-auto max-w-screen-2xl px-6 lg:px-8">
@@ -47,7 +42,7 @@ const Setting = () => {
           </Tab.List>
           <Tab.Panels className="mt-6">
             <Tab.Panel>
-              <EditProfile user={user} />
+              <EditProfile />
             </Tab.Panel>
             <Tab.Panel>Billing information</Tab.Panel>
             <Tab.Panel>
@@ -64,7 +59,7 @@ const Setting = () => {
                         />
                       </Disclosure.Button>
                       <Disclosure.Panel className="px-4 text-sm text-gray-500 w-full">
-                        <UpdatePassword user={user} />
+                        <UpdatePassword />
                       </Disclosure.Panel>
                     </>
                   )}
