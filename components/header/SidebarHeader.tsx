@@ -121,11 +121,8 @@ const SidebarHeader = (props: Props) => {
           {props.user && (
             <Menu as="div" className="relative inline-block text-left">
               <div>
-                <Menu.Button>
-                  <Link
-                    className="inline-flex justify-center items-center px-4 py-2 w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
-                    href="/overview"
-                  >
+                <Menu.Button className="inline-flex justify-center items-center px-4 py-2 w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
+                  <Link href="/overview">
                     <Image
                       src={props.user.profileImage}
                       alt={props.user.firstName}
@@ -133,11 +130,11 @@ const SidebarHeader = (props: Props) => {
                       height={100}
                       className="rounded-full w-8 h-8"
                     />
-                    <HiOutlineChevronDown
-                      className="-mr-1 ml-2 h-5 w-5 text-wokr-red-100 hover:text-wokr-red-200"
-                      aria-hidden="true"
-                    />
                   </Link>
+                  <HiOutlineChevronDown
+                    className="-mr-1 ml-2 h-5 w-5 text-wokr-red-100 hover:text-wokr-red-200"
+                    aria-hidden="true"
+                  />
                 </Menu.Button>
               </div>
               <Transition
