@@ -29,7 +29,7 @@ export type jobData = {
   deliveryTime: string;
   maxRevisions: string;
   description: string;
-  featuredImage: string | null;
+  featuredImage: string;
   images: any;
   video: string;
   email?: any;
@@ -42,7 +42,7 @@ export type jobData = {
 export type userData = {
   _id?: string;
   email?: string | any;
-  username?: string;
+  username: string;
   firstName: string;
   middleName?: string;
   lastName?: string;

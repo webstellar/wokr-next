@@ -3,6 +3,7 @@
 import React, { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import decodeURIComponent from "next/router";
 
 type TBreadCrumbProps = {
   homeElement: ReactNode;
@@ -36,13 +37,19 @@ const Breadcrumb = ({
           let itemClasses =
             paths === href ? `${listClasses} ${activeClasses}` : listClasses;
           let itemLink = capitalizeLinks
-            ? link[0].toUpperCase() + link.slice(1, link.length)
-            : link;
+            ? decodeURI(link)[0].toUpperCase() + decodeURI(link).slice(1)
+            : decodeURI(link);
+
+          let itemComponent =
+            paths === href ? (
+              <span className={itemClasses}>{itemLink}</span> // No link, just text
+            ) : (
+              <Link href={href}>{itemLink}</Link>
+            );
+
           return (
             <React.Fragment key={index}>
-              <li className={itemClasses}>
-                <Link href={href}>{itemLink}</Link>
-              </li>
+              <li className={itemClasses}>{itemComponent}</li>
               {pathNames.length !== index + 1 && separator}
             </React.Fragment>
           );

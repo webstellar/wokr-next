@@ -76,17 +76,6 @@ const MiniProfileCard: React.FC<userProps> = ({ data }) => {
         <Link href={`/in/${data?.username}`}></Link>
         View my portfolio
       </button>
-
-      <div className="flex flex-col items-center justify-center gap-y-2">
-        <span className="text-xs tracking-widest">RATE</span>
-        <button
-          title="get in touch"
-          type="button"
-          className="w-full flex gap-x-4 items-center justify-center text-center mt-4 px-2 py-3 rounded-3xl border text-gray-100 bg-wokr-red-100 text-lg font-normal"
-        >
-          $25-$20/hr
-        </button>
-      </div>
     </div>
   );
 };

@@ -38,7 +38,7 @@ const DashboardProfileCard: React.FC<userProps> = ({ data }) => {
           src={data && data?.profileImage}
           alt={data && data?.firstName}
           height="100"
-          className="rounded-full w-20 h-20 "
+          className="rounded-full w-20 h-20"
           width="100"
         />
         <div className="text-gray-900 capitalize text-lg py-1 px-3">

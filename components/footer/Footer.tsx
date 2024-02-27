@@ -23,7 +23,7 @@ const Footer = () => {
   return (
     <footer className="bg-white my-12">
       <section
-        className="mx-auto flex flex-grow flex-wrap max-w-screen-2xl items-center justify-between p-6 lg:px-8 lg:gap-0 gap-y-20"
+        className="mx-auto flex flex-grow flex-wrap max-w-screen-2xl items-center justify-between p-6 lg:px-8 lg:gap-0 gap-y-8 md:gap-y-20"
         style={myStyle}
         aria-label="Global"
       >
@@ -39,7 +39,7 @@ const Footer = () => {
           </Link>
 
           <p className="text-base">&#169; Wokr International Ltd, {year}</p>
-          <p className="mt-10 text-base">Follow Us:</p>
+          <p className="mt-10 text-sm md:text-base">Follow Us:</p>
           <Socials />
         </div>
 
@@ -51,15 +51,15 @@ const Footer = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-y-5 basis-full lg:basis-1/4">
-          <h3 className="text-3xl lg:text-4xl">
+        <div className="flex flex-col gap-y-2 md:gap-y-5 basis-full lg:basis-1/4">
+          <h3 className="md:text-3xl lg:text-4xl">
             Stay updated On The Latest Wokr News
           </h3>
-          <p className="font-pangram-light">
+          <p className="font-pangram-light text-sm md:text-base">
             Add Your Email Below To Keep Up With the Latest Announcements
           </p>
 
-          <div className="pt-2 relative mx-auto text-gray-600 w-full">
+          <div className="text-sm md:text-base pt-2 relative mx-auto text-gray-600 w-full">
             <input
               className="font-pangram-light border-0 border-b-2 rounded-none w-full ring-transparent"
               type="email"

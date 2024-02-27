@@ -86,6 +86,24 @@ export const getUser = async (token: string) => {
   }
 };
 
+export const getAllUsers = async () => {
+  try {
+    const response = await axios.get("/api/user/getall", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error finding automation job");
+    } else {
+      throw error;
+    }
+  }
+};
+
 //create job/automation in the database
 /*
 export const createJob = async (data: object, headers: any) => {

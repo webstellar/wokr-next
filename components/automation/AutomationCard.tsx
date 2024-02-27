@@ -29,7 +29,10 @@ const AutomationCard: React.FC<jobProps> = ({ data }) => {
           title="view detail"
           className="rounded-3xl border py-2 px-5 w-full text-nowrap hover:bg-wokr-red-100 hover:text-white"
         >
-          <Link href={`/automations/${data._id}`} className="text-base">
+          <Link
+            href={`/automations/${data.title}?_id=${data._id}`}
+            className="text-base"
+          >
             View Details
           </Link>
         </button>

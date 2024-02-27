@@ -146,7 +146,8 @@ export const homeMenu = [
 ];
 
 export const profileLinks = [
-  { href: "/my-profile", label: "My Profile" },
+  { href: "/my-orders", label: "My Orders" },
+  { href: "/my-jobs", label: "My Jobs" },
   { href: "/post-job", label: "Post a Job" },
 ];
 export const settinglinks = [

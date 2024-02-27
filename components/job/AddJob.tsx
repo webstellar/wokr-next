@@ -235,7 +235,7 @@ const AddJob = () => {
           maxRevisions: formState?.maxRevisions,
           images: imageUrls.map((url) => ({ url })) || null,
           video: formState?.videoUrl,
-          featuredImage: imageUrl || null,
+          featuredImage: imageUrl,
           fee: feeType?.label,
           skills: transformedSkills || null,
           tools: tranformedTools || null,
