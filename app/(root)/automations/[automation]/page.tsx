@@ -35,9 +35,9 @@ export default function Automation({ params }: Props) {
 
   if (status === "pending")
     return (
-      <section className="mx-auto max-w-screen-2xl px-6 lg:px-8">
+      <div className="mx-auto max-w-screen-2xl px-6 lg:px-8">
         Loading...
-      </section>
+      </div>
     );
   if (status === "error") {
     return <h1>{JSON.stringify(error)}</h1>;
