@@ -5,8 +5,8 @@ import { Dialog, Popover } from "@headlessui/react";
 import Link from "next/link";
 import { HiMenuAlt1, HiOutlinePlusCircle, HiOutlineX } from "react-icons/hi";
 
-import RegisterModal from "../modal/RegisterModal";
-import LoginModal from "../modal/LoginModal";
+import RegisterModal from "../auth/modal/RegisterModal";
+import LoginModal from "../auth/modal/LoginModal";
 import Image from "next/image";
 import logo from "../../public/images/wokri_logo.png";
 

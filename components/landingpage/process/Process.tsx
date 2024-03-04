@@ -1,4 +1,4 @@
-import { processes } from "../../data/data";
+import { processes } from "../../../data/data";
 import ProcessCard from "./ProcessCard";
 
 const Process = () => {

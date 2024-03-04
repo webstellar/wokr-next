@@ -1,9 +1,9 @@
-import HomeHero from "@/components/hero/HomeHero";
-import Services from "@/components/services/Services";
-import Integrations from "@/components/integration/Integrations";
-import Process from "@/components/process/Process";
-import Statement from "@/components/statement/Statement";
-import GetStarted from "@/components/getstarted/GetStarted";
+import HomeHero from "@/components/landingpage/hero/HomeHero";
+import Services from "@/components/landingpage/services/Services";
+import Integrations from "@/components/landingpage/integration/Integrations";
+import Process from "@/components/landingpage/process/Process";
+import Statement from "@/components/landingpage/statement/Statement";
+import GetStarted from "@/components/landingpage/getstarted/GetStarted";
 
 export default function Home() {
   return (

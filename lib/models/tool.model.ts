@@ -3,9 +3,7 @@ import mongoose, { Schema } from "mongoose";
 const toolSchema = new Schema(
   {
     title: String,
-    image: {
-      url: String,
-    },
+    imageUrl: String,
   },
   { timestamps: true }
 );

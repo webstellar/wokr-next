@@ -1,25 +1,21 @@
 "use client";
 
-import { Fragment, useRef, useState, useContext, useEffect } from "react";
+import { Fragment, useRef, useState, useContext } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import Link from "next/link.js";
-import { useRouter } from "next/navigation";
-import Image from "next/image.js";
 import {
+  signInWithEmailAndPassword,
   signInWithPopup,
-  GoogleAuthProvider,
-  sendSignInLinkToEmail,
   getIdToken,
 } from "firebase/auth";
-import google from "../../public/images/google_icon.png";
-import {
-  auth,
-  googleProvider,
-  actionCodeSettings,
-} from "../../config/firebase";
+
+import { auth, googleProvider } from "../../../config/firebase";
 import { toast } from "react-toastify";
-import { WokrButton, WokrInput } from "../formfields/FormFields";
+import Image from "next/image.js";
+import Link from "next/link.js";
+import google from "../../public/images/google_icon.png";
+import { WokrButton, WokrInput } from "../../formfields/FormFields";
 import { AuthContext } from "@/context/authContext";
+import { useRouter } from "next/navigation";
 import { registerUser } from "@/utils/api";
 
 type ModalProps = {
@@ -27,16 +23,14 @@ type ModalProps = {
   open: boolean;
 };
 
-const RegisterModal = ({ setOpen, open }: ModalProps) => {
+const LoginModal = ({ setOpen, open }: ModalProps) => {
+  const router = useRouter();
   const { dispatch } = useContext(AuthContext);
-  const route = useRouter();
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const cancelButtonRef = useRef(null);
 
-  useEffect(() => {
-    setEmail(window.localStorage.getItem("emailForSignIn")!);
-  }, []);
+  const cancelButtonRef = useRef(null);
 
   const handleEmail = (
     e:
@@ -47,20 +41,35 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
     setEmail(e.target.value);
   };
 
-  const handleNext = async () => {
-    route.push("/settings");
+  const handlePassword = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setPassword(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        const user = userCredential.user;
+        const idTokenResult = await getIdToken(user);
 
-    sendSignInLinkToEmail(auth, email, actionCodeSettings)
-      .then(() => {
-        window.localStorage.setItem("emailForSignIn", email);
-        setEmail("");
-        setLoading(false);
-        toast("Please check your email to complete registration", {
+        await registerUser({ email: user.email });
+
+        dispatch({
+          type: "LOGGED_IN_USER",
+          payload: { email: String(user.email), token: idTokenResult },
+        });
+
+        setTimeout(function () {
+          router.push("/post-job");
+        }, 2000);
+
+        toast("Logged in successfully", {
           hideProgressBar: true,
           autoClose: 2000,
           type: "success",
@@ -70,23 +79,18 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-
-        toast(errorMessage, {
-          hideProgressBar: true,
-          autoClose: 2000,
-          type: "error",
-          position: "bottom-right",
-        });
-
-        console.log(errorCode);
+        console.log(errorCode, errorMessage);
+      })
+      .finally(async () => {
+        setLoading(false);
       });
   };
 
   const onGoogleLogin = async () => {
     await signInWithPopup(auth, googleProvider)
       .then(async (result) => {
-        const user = result.user;
         const idTokenResult = await getIdToken(result.user);
+        const user = result.user;
 
         await registerUser({ email: user.email });
 
@@ -95,19 +99,23 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
           payload: { email: String(user.email), token: idTokenResult },
         });
 
-        handleNext();
+        setTimeout(function () {
+          router.push("/post-job");
+        }, 2000);
+
+        toast("Logged in successfully", {
+          hideProgressBar: true,
+          autoClose: 2000,
+          type: "success",
+          position: "bottom-right",
+        });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-
-        console.log(errorCode);
-        console.log(errorMessage);
-        console.log(email);
-        console.log(credential);
-
+        console.log(errorCode, errorMessage);
+        //const email = error.customData.email;
+        //const credential = GoogleAuthProvider.credentialFromError(error);
         toast(errorMessage, {
           hideProgressBar: true,
           autoClose: 2000,
@@ -137,7 +145,7 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
         </Transition.Child>
 
         <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
+          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <Transition.Child
               as={Fragment}
               enter="ease-out duration-300"
@@ -155,10 +163,10 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
-                        Create a new account
+                        Login into your account
                       </Dialog.Title>
 
-                      <form className="mt-4" onSubmit={handleSubmit}>
+                      <form className="mt-4" onSubmit={onLogin}>
                         <WokrInput
                           htmlFor="email"
                           labelName="Email"
@@ -169,14 +177,33 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
                           onChange={handleEmail}
                           inputValue={email}
                         />
+                        <WokrInput
+                          htmlFor="password"
+                          labelName="Password"
+                          inputName="password"
+                          inputType="password"
+                          inputPlaceholder="Password"
+                          disabled={loading}
+                          onChange={handlePassword}
+                          inputValue={password}
+                        />
+
+                        <div className="mb-3 flex flex-wrap content-center">
+                          <Link
+                            href="/forgot-password"
+                            className="text-xs font-semibold text-wokr-red-100"
+                          >
+                            Forgot password?
+                          </Link>
+                        </div>
 
                         <WokrButton
-                          title={`signUp`}
+                          title={`signIn`}
                           type={`submit`}
-                          disabled={!email || loading}
+                          disabled={!email || !password || loading}
                           loading={loading}
-                          loadingText={`Signing up ...`}
-                          preLoadingText={`Sign up`}
+                          loadingText={`Signing in ...`}
+                          preLoadingText={`Sign in`}
                         />
                       </form>
 
@@ -187,24 +214,23 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
                           className="flex flex-wrap justify-center w-full border border-gray-300 hover:border-gray-500 px-2 py-1.5 rounded-md"
                         >
                           <Image className="w-5 mr-2" src={google} alt="" />
-                          Sign up with Google
+                          Sign in with Google
                         </button>
                       </div>
 
                       <div className="text-center">
                         <span className="text-xs text-gray-400 font-semibold">
-                          Already have an account?
+                          Don&apos;t have an account?
                         </span>
                         <Link
                           href="/register"
                           className="text-xs font-semibold text-wokr-red-100"
                         >
-                          {" Sign in"}
+                          Sign up
                         </Link>
                       </div>
                     </div>
                   </div>
-
                   <div className="hidden lg:flex flex-wrap content-center justify-center rounded-r-md bg-wokr-red-100 w-[24rem] h-[32rem]"></div>
                 </div>
               </Dialog.Panel>
@@ -216,4 +242,4 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
   );
 };
 
-export default RegisterModal;
+export default LoginModal;

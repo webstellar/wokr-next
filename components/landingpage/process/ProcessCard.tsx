@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ProcessBlurb } from "../../types/types";
+import { ProcessBlurb } from "../../../types/types";
 
 interface processProps {
   data: ProcessBlurb;

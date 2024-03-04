@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { IntegrationsAi } from "../../types/types";
+import { IntegrationsAi } from "../../../types/types";
 
 interface integrationProps {
   data: IntegrationsAi;

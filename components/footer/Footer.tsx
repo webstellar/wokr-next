@@ -4,7 +4,7 @@ import Link from "next/link";
 import logo from "../../public/images/wokri_logo.png";
 import glassLogo from "../../public/images/wokr_glass_logo.png";
 import lineLogo from "../../public/images/Wokr_line.png";
-import Socials from "../socials/Socials";
+import Socials from "../landingpage/socials/Socials";
 
 import { HiArrowNarrowRight } from "react-icons/hi";
 import Image from "next/image";

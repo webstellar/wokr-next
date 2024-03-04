@@ -13,21 +13,6 @@ export const registerUser = async (data: object) => {
   });
 };
 
-//updates a user's profile
-/*
-export const updateUser = async (data: object, headers: any) => {
-  fetch("/api/user/update", {
-    method: "PUT",
-    body: JSON.stringify(data),
-    headers: headers,
-  }).then((res) => {
-    if (!res.ok) throw new Error("Error updating user");
-    return res.json();
-  });
-};
-
-*/
-
 export const updateUser = async (data: userData, token: string) => {
   try {
     const response = await axios.put("/api/user/update", data, {
@@ -47,25 +32,6 @@ export const updateUser = async (data: userData, token: string) => {
   }
 };
 
-//gets specific user based on their login status
-/*
-export const getUser = async (data: string, token: string) => {
-  fetch("/api/user/get", {
-    method: "GET",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  }).then((res) => {
-    if (!res.ok) throw new Error("Error finding user");
-    return res.json();
-  });
-};
-
-*/
-
 export const getUser = async (token: string) => {
   try {
     const response = await axios.get("/api/user/get", {
@@ -80,7 +46,6 @@ export const getUser = async (token: string) => {
     if (axios.isAxiosError(error)) {
       throw new Error("Error finding user");
     } else {
-      // Handle non-Axios errors
       throw error;
     }
   }
@@ -104,33 +69,52 @@ export const getAllUsers = async () => {
   }
 };
 
-//create job/automation in the database
-/*
-export const createJob = async (data: object, headers: any) => {
+//api pending (not working)
+export const deleteUserByAdminProfile = async (id: string, token: string) => {
   try {
-    const response = await fetch("/api/automation/create", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: headers,
+    const response = await axios.delete(`/api/user/delete`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
     });
-
-    if (!response.ok) {
-      // If the server response is not ok, throw an error
-      const errorData = await response.json();
-      throw new Error(errorData.error || "Error creating job");
-    }
-
-    // If the response is ok, return the response data
-    return await response.json();
+    return response.data;
   } catch (error) {
-    throw error;
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error deleting user");
+    } else {
+      // Handle non-Axios errors
+      throw error;
+    }
   }
 };
-*/
 
+export const deleteProfile = async (userId: string) => {
+  try {
+    const response = await axios.delete(`/api/user/delete`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      params: { userId },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error deleting user");
+    } else {
+      // Handle non-Axios errors
+      throw error;
+    }
+  }
+};
+
+//Jobs
 export const createJob = async (data: jobData, token: string) => {
   try {
-    const response = await axios.put("/api/automation/create", data, {
+    const response = await axios.post("/api/automation/create", data, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -185,9 +169,363 @@ export const getAllJobs = async () => {
   }
 };
 
-//get all users
-//get single job
-//get all jobs
-//create single order
-//get single order
-//get all orders
+export const updateJob = async (id: string, data: jobData, token: string) => {
+  try {
+    const response = await axios.put("/api/automation/update", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error updating job");
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const deleteJob = async (id: string) => {
+  try {
+    const response = await axios.delete(`/api/automation/delete`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error deleting tool");
+    } else {
+      throw error;
+    }
+  }
+};
+
+//tools
+export const createTool = async (data: object, token: string) => {
+  try {
+    const response = await axios.post("/api/tool/create", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error creating tool");
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const deleteTool = async (id: string, token: string) => {
+  try {
+    const response = await axios.delete(`/api/tool/delete`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error deleting tool");
+    } else {
+      // Handle non-Axios errors
+      throw error;
+    }
+  }
+};
+
+export const getAllTools = async () => {
+  try {
+    const response = await axios.get("/api/tool/getall", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error getting all tools");
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const updateTool = async (id: string, data: object, token: string) => {
+  try {
+    const response = await axios.put("/api/tool/update", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error updating tool");
+    } else {
+      throw error;
+    }
+  }
+};
+
+//categories
+
+export const createCategory = async (data: object, token: string) => {
+  try {
+    const response = await axios.post("/api/category/create", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error creating tool");
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const deleteCategory = async (id: string, token: string) => {
+  try {
+    const response = await axios.delete(`/api/category/delete`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error deleting tool");
+    } else {
+      // Handle non-Axios errors
+      throw error;
+    }
+  }
+};
+
+export const getAllCategories = async () => {
+  try {
+    const response = await axios.get("/api/category/getall", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error getting all categories");
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const updateCategory = async (
+  id: string,
+  data: object,
+  token: string
+) => {
+  try {
+    const response = await axios.put("/api/category/update", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error updating tool");
+    } else {
+      throw error;
+    }
+  }
+};
+
+//skill
+export const createSkill = async (data: object, token: string) => {
+  try {
+    const response = await axios.post("/api/skill/create", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error creating skill");
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const deleteSkill = async (id: string, token: string) => {
+  try {
+    const response = await axios.delete(`/api/skill/delete`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error deleting skill");
+    } else {
+      // Handle non-Axios errors
+      throw error;
+    }
+  }
+};
+
+export const getAllSkills = async () => {
+  try {
+    const response = await axios.get("/api/skill/getall", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error getting all skills");
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const updateSkill = async (id: string, data: object, token: string) => {
+  try {
+    const response = await axios.put("/api/skill/update", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error updating skill");
+    } else {
+      throw error;
+    }
+  }
+};
+
+//tags
+export const createTag = async (data: object, token: string) => {
+  try {
+    const response = await axios.post("/api/tag/create", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error creating tag");
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const deleteTag = async (id: string, token: string) => {
+  try {
+    const response = await axios.delete(`/api/tag/delete`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error deleting tag");
+    } else {
+      // Handle non-Axios errors
+      throw error;
+    }
+  }
+};
+
+export const getAllTags = async () => {
+  try {
+    const response = await axios.get("/api/tag/getall", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error getting all tags");
+    } else {
+      throw error;
+    }
+  }
+};
+
+export const updateTag = async (id: string, data: object, token: string) => {
+  try {
+    const response = await axios.put("/api/tag/update", data, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error updating tag");
+    } else {
+      throw error;
+    }
+  }
+};
+//order

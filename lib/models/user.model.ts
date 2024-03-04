@@ -48,6 +48,7 @@ const userSchema = new Schema(
         ref: "Automation",
       },
     ],
+    isVerified: Boolean,
   },
   { timestamps: true }
 );

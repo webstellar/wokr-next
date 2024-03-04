@@ -1,7 +1,7 @@
 "use client";
 
 import { Tab, Disclosure } from "@headlessui/react";
-import EditProfile from "@/components/profile/EditProfile";
+import EditProfile from "@/components/auth/EditProfile";
 import { HiChevronUp } from "react-icons/hi2";
 import UpdatePassword from "@/components/auth/UpdatePassword";
 import DeleteProfile from "@/components/auth/DeleteProfile";

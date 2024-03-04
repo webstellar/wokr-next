@@ -1,4 +1,4 @@
-import { allIntegrations } from "../../data/data";
+import { allIntegrations } from "../../../data/data";
 import IntegrationCard from "./IntegrationCard";
 
 const Integrations = () => {

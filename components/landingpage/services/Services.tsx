@@ -1,4 +1,4 @@
-import { offerings } from "../../data/data";
+import { offerings } from "../../../data/data";
 
 const Services = () => {
   return (

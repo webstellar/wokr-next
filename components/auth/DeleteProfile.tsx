@@ -7,10 +7,25 @@ import { auth } from "@/config/firebase";
 import { useState } from "react";
 import { WokrButton, WokrInput } from "../formfields/FormFields";
 import { toast } from "react-toastify";
+import { deleteProfile } from "@/utils/api";
+import { useUserQuery } from "@/hooks/useUserQuery";
+
+//mutation
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const DeleteProfile = () => {
+  const { data } = useUserQuery();
+
+  const userId = data?._id;
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+  const deleteUserMutation = useMutation({
+    mutationFn: deleteProfile,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["loggedUser"] });
+    },
+  });
 
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -46,6 +61,8 @@ const DeleteProfile = () => {
           });
         })
         .finally(() => {
+          deleteUserMutation.mutate(userId);
+
           setPassword("");
         });
     });

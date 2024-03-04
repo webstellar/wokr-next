@@ -2,7 +2,7 @@ import Link from "next/link";
 import { HiOutlineSearch } from "react-icons/hi";
 import HeroImage from "../../public/images/heroImage.png";
 
-import { Categories } from "../../data/data";
+import { Categories } from "../../../data/data";
 import Image from "next/image";
 
 const HomeHero = () => {
