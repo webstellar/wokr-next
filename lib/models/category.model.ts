@@ -3,7 +3,7 @@ import mongoose, { Schema } from "mongoose";
 const categorySchema = new Schema(
   {
     name: String,
-    automation: [
+    automations: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Automation",
