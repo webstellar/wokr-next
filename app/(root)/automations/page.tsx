@@ -1,10 +1,12 @@
 "use client";
-
+import { useState } from "react";
 import AutomationStoreCard from "@/components/automation/AutomationStoreCard";
 import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
 import { useAllJobsQuery } from "@/hooks/useAllJobsQuery";
 import { useAllUsersQuery } from "@/hooks/useAllUsersQuery";
 import CreatableSelect from "react-select/creatable";
+import Select from "react-select";
+import { tagOptions } from "@/data/data";
 
 import { automationData, jobData, newJobData, userData } from "@/types/types";
 import { allTools } from "@/data/data";
@@ -13,7 +15,7 @@ const Automations = () => {
   const { data: jobs, status, error } = useAllJobsQuery();
   const { data: users } = useAllUsersQuery();
 
-    const [tags, setTags] = useState([tagOptions[0]]);
+  const [tags, setTags] = useState([tagOptions[0]]);
 
   const jobsArray = jobs?.automations?.map((job: jobData) => {
     const user = users?.find((user: userData) => user._id === job.owner);
@@ -49,14 +51,41 @@ const Automations = () => {
           {jobsArray.length} services available
         </span>
 
-        <div className="flex">
-          <div className="relative mt-2">
-            <CreatableSelect
-              isMulti
-              options={tagOptions}
-              defaultValue={tags}
-              onChange={(e: any) => setTags(e)}
-            />
+        <div className="flex flex-row justify-end items-center gap-4">
+          <div className="flex items-center gap-x-4">
+            <span>Tags</span>
+            <div className="relative mt-2">
+              <CreatableSelect
+                isMulti
+                options={tagOptions}
+                defaultValue={tags}
+                onChange={(e: any) => setTags(e)}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-x-4">
+            <span>Category</span>
+            <div className="relative mt-2">
+              <CreatableSelect
+                isMulti
+                options={tagOptions}
+                defaultValue={tags}
+                onChange={(e: any) => setTags(e)}
+              />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-x-4">
+            <span>Sort By</span>
+            <div className="relative mt-2">
+              <CreatableSelect
+                isMulti
+                options={tagOptions}
+                defaultValue={tags}
+                onChange={(e: any) => setTags(e)}
+              />
+            </div>
           </div>
         </div>
       </div>
