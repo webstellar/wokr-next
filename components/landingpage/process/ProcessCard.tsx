@@ -9,7 +9,13 @@ const ProcessCard: React.FC<processProps> = ({ data }) => {
   return (
     <div className="flex flex-col items-center gap-y-4 justify-around p-10">
       {data.icon && (
-        <Image alt={data.title} src={data.icon} className="h-full" />
+        <Image
+          alt={data.title}
+          src={data.icon}
+          className="h-full"
+          width={100}
+          height={100}
+        />
       )}
       <h4 className="font-pangram-medium text-lg text-center">{data.title}</h4>
 

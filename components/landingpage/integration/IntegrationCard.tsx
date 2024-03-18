@@ -8,7 +8,9 @@ interface integrationProps {
 const IntegrationCard: React.FC<integrationProps> = ({ data }) => {
   return (
     <div className="border rounded-xl flex flex-col items-center h-[30vh] md:w-[12vw] justify-around p-10">
-      {data.icon && <Image src={data.icon} alt={data.title} className="" />}
+      {data.icon && (
+        <Image src={data.icon} alt={data.title} width={100} height={100} />
+      )}
       <h5 className="font-pangram-medium text-lg">{data.title}</h5>
     </div>
   );
