@@ -22,7 +22,9 @@ const Services = () => {
   }
 
   //filter jobs based on user logged in
-  const filteredJobs = jobs.filter((job: jobData) => job.owner === user?._id);
+  const filteredJobs = jobs.automations.filter(
+    (job: jobData) => job.owner === user?._id
+  );
 
   return (
     <section className="mx-auto mb-20">

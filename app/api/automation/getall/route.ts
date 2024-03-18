@@ -13,7 +13,6 @@ export async function GET(
     pageSize = 20,
     sortBy = "desc",
   }: {
-    userId: string;
     searchString?: string;
     pageNumber?: number;
     pageSize?: number;
@@ -38,12 +37,18 @@ export async function GET(
 
     const sortOptions = { createdAt: sortBy };
 
-    const automations = await Automation.find()
+    const automationsQuery = Automation.find()
       .sort(sortOptions)
       .skip(skipAmount)
-      .limit(pageSize)
-      .exec();
-    return NextResponse.json(automations);
+      .limit(pageSize);
+
+    const totalAutomationCount = await Automation.countDocuments();
+    const automations = await automationsQuery.exec();
+
+    const isNext = totalAutomationCount > skipAmount + automations.length;
+
+    //make nextResponse.json return more than values
+    return NextResponse.json({ automations, isNext });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: error }, { status: 400 });

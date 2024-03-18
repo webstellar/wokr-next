@@ -1,5 +1,6 @@
 import { jobData, userData } from "@/types/types";
 import axios from "axios";
+import { SortOrder } from "mongoose";
 
 //registers new users when login
 export const registerUser = async (data: object) => {
@@ -146,6 +147,30 @@ export const getJob = async (data: string) => {
       throw new Error("Error finding automation job");
     } else {
       // Handle non-Axios errors
+      throw error;
+    }
+  }
+};
+
+export const getAllFilteredJobs = async (
+  query?: string,
+  pageNumber?: number,
+  pageSize?: number,
+  sortBy?: SortOrder
+) => {
+  try {
+    const response = await axios.get("/api/automation/getall", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      params: { query, pageNumber, pageSize, sortBy },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error finding automation job");
+    } else {
       throw error;
     }
   }

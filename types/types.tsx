@@ -9,14 +9,14 @@ export type NavItem = {
 export type IntegrationsAi = {
   id: string;
   title: string;
-  icon: StaticImageData;
+  icon: string;
 };
 
 export type ProcessBlurb = {
   id: string;
   title: string;
   description: string;
-  icon: StaticImageData;
+  icon: string;
 };
 
 export type jobData = {
@@ -47,7 +47,7 @@ export type userData = {
   middleName?: string;
   lastName?: string;
   description?: string;
-  profileImage: StaticImageData;
+  profileImage: string;
   automationTools?: any;
   skillsets?: any;
   languages?: any;

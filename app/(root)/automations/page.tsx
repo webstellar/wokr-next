@@ -4,24 +4,18 @@ import AutomationStoreCard from "@/components/automation/AutomationStoreCard";
 import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
 import { useAllJobsQuery } from "@/hooks/useAllJobsQuery";
 import { useAllUsersQuery } from "@/hooks/useAllUsersQuery";
+import CreatableSelect from "react-select/creatable";
 
-import {
-  automationData,
-  jobData,
-  newJobData,
-  toolData,
-  userData,
-} from "@/types/types";
+import { automationData, jobData, newJobData, userData } from "@/types/types";
 import { allTools } from "@/data/data";
 
 const Automations = () => {
   const { data: jobs, status, error } = useAllJobsQuery();
   const { data: users } = useAllUsersQuery();
 
-  //create new jobsArray where all users are fetched
-  //match their user id with the user id of the job
-  //and add the user to the job
-  const jobsArray = jobs?.map((job: jobData) => {
+    const [tags, setTags] = useState([tagOptions[0]]);
+
+  const jobsArray = jobs?.automations?.map((job: jobData) => {
     const user = users?.find((user: userData) => user._id === job.owner);
 
     const toolIcons = job.tools.map((automation: automationData) => {
@@ -52,8 +46,19 @@ const Automations = () => {
       />
       <div className="flex flex-row justify-between items-center">
         <span className="font-light text-xs md:text-sm">
-          208,807 services available
+          {jobsArray.length} services available
         </span>
+
+        <div className="flex">
+          <div className="relative mt-2">
+            <CreatableSelect
+              isMulti
+              options={tagOptions}
+              defaultValue={tags}
+              onChange={(e: any) => setTags(e)}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="my-6 grid grid-cols-1 md:grid-cols-4 justify-between gap-10">

@@ -1,7 +1,10 @@
 import { useState, FormEvent } from "react";
+import { useDebounce } from "@/hooks/useDedounce";
 
 const Search = () => {
   const [query, setQuery] = useState<string>("");
+
+  const debouncedSearchTerm = useDebounce(query, 200);
   const [results, setResults] = useState([]);
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
