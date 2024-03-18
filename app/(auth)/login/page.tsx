@@ -58,7 +58,7 @@ const Login = () => {
         await registerUser({ email: user.email });
 
         setTimeout(function () {
-          router.push("/post-job");
+          router.push("/post-service");
         }, 2000);
 
         toast("Logged in successfully", {
@@ -92,7 +92,7 @@ const Login = () => {
         await registerUser({ email: user.email });
 
         setTimeout(function () {
-          router.push("/post-job");
+          router.push("/post-service");
         }, 2000);
 
         toast("Logged in successfully", {
