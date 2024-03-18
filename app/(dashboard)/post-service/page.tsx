@@ -1,9 +1,9 @@
-import AddJob from "@/components/job/AddJob";
+import AddService from "@/components/service/AddService";
 
 const PostJob = () => {
   return (
     <>
-      <AddJob />
+      <AddService />
     </>
   );
 };

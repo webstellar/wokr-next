@@ -72,7 +72,7 @@ export type newJobData = {
   tools?: any;
   owner?: string;
   user: userData;
-  toolIcons: toolData;
+  toolIcons: toolData[];
 };
 
 export type toolData = {

@@ -158,11 +158,13 @@ export const homeMenu = [
 ];
 
 export const profileLinks = [
-  { href: "/my-orders", label: "My Orders" },
+  { href: "/my-services", label: "My Services" },
+  { href: "/post-service", label: "Post a Service" },
   { href: "/my-jobs", label: "My Jobs" },
   { href: "/post-job", label: "Post a Job" },
 ];
 export const settinglinks = [
+  { href: "/my-orders", label: "My Orders" },
   { href: "/settings", label: "Settings" },
   { href: "/support", label: "Help & Support" },
   { href: "/settings#billing", label: "Billing" },
@@ -256,6 +258,11 @@ export const sidebarNavItems: NavItem[] = [
     label: "Orders",
     href: "/my-orders",
     icon: "/images/orders.svg",
+  },
+  {
+    label: "Services",
+    href: "/my-services",
+    icon: "/images/services.svg",
   },
   {
     label: "Jobs",

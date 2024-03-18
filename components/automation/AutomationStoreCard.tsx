@@ -2,6 +2,7 @@ import Image from "next/image";
 import { newJobData, toolData } from "@/types/types";
 import Link from "next/link";
 import { HiMiniStar } from "react-icons/hi2";
+import { useRouter } from "next/navigation";
 
 interface jobProps {
   data: newJobData;
@@ -23,8 +24,18 @@ const icons: toolData[] = [
 ];
 
 const AutomationStoreCard = ({ data }: jobProps) => {
+  const router = useRouter();
+
+  const handleClick = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    router.push(`/automations/${data.title}?_id=${data._id}`);
+  };
+
   return (
-    <div className="flex flex-col gap-y-4 justify-start bg-gray-50 pb-5 rounded-b-md">
+    <div
+      className="flex flex-col gap-y-4 justify-start bg-gray-50 pb-5 rounded-b-md cursor-pointer"
+      onClick={handleClick}
+    >
       <Image
         src={data?.featuredImage}
         alt={data?.title}
@@ -87,7 +98,7 @@ const AutomationStoreCard = ({ data }: jobProps) => {
 
         <div className="flex justify-end items-center relative">
           {data?.toolIcons
-            ? data?.toolIcons?.map((icon: toolData, i: number) => (
+            ? data.toolIcons.map((icon: toolData, i: any) => (
                 <Image
                   key={i}
                   src={icon?.icon}

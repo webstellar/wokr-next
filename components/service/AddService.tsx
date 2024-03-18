@@ -44,7 +44,7 @@ const initState: valueProps = {
   videoUrl: "",
 };
 
-const AddJob = () => {
+const AddService = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const postMutation = useMutation({
@@ -644,4 +644,4 @@ const AddJob = () => {
   );
 };
 
-export default AddJob;
+export default AddService;
