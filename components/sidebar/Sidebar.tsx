@@ -71,12 +71,16 @@ const Sidebar = ({
                   className="h-14 w-auto"
                   src={logo}
                   alt="wokr marketplace logo"
+                  width={100}
+                  height={100}
                 />
               ) : (
                 <Image
                   className="h-10 w-auto"
                   src={iconLogo}
                   alt="wokr marketplace logo"
+                  width={100}
+                  height={100}
                 />
               )}
             </span>
@@ -106,6 +110,8 @@ const Sidebar = ({
                       src={item.icon}
                       alt="item.label"
                       className="w-6 h-6"
+                      width={100}
+                      height={100}
                     />
                     <span>{!collapsed && item.label}</span>
                   </Link>
@@ -153,12 +159,12 @@ const Sidebar = ({
             title="icon-button"
             type="button"
             className={classNames({
-              "grid place-content-center": true,
+              "grid md:grid-cols-2 place-content-center": true,
               "w-auto h-14 rounded-full": true,
             })}
             onClick={() => setCollapsed(!collapsed)}
           >
-            <Icon className="w-6 h-6" />
+            <Icon className="w-6 h-6" /> {!collapsed && "Collapse All"}
           </button>
         </div>
       </div>

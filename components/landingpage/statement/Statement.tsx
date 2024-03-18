@@ -1,17 +1,24 @@
 import Link from "next/link";
-
-import Logo from "../../public/images/wokri_logo.png";
-import statementImage from "../../public/images/wokrPro.png";
 import Image from "next/image";
 
 const Statement = () => {
   return (
     <div className="mx-auto flex flex-col lg:flex-row max-w-screen-2xl items-center justify-between lg:px-20 p-8 py-20 lg:p-20 gap-y-10">
       <div className="h-full w-full">
-        <Image src={statementImage} alt="woman standing" />
+        <Image
+          src="/images/wokrPro.png"
+          alt="woman standing"
+          width={600}
+          height={600}
+        />
       </div>
       <div className="flex flex-col items-start gap-10">
-        <Image src={Logo} alt="wokr official logo" />
+        <Image
+          src="/images/wokri_logo.png"
+          alt="wokr official logo"
+          width={100}
+          height={100}
+        />
         <h3 className="font-pangram-medium text-3xl md:text-4xl text-left">
           Advance solutions and professional talent for businesses
         </h3>

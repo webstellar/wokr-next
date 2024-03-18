@@ -5,22 +5,30 @@ import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
 import { useAllJobsQuery } from "@/hooks/useAllJobsQuery";
 import { useAllUsersQuery } from "@/hooks/useAllUsersQuery";
 
-import { jobData, userData } from "@/types/types";
-import Link from "next/link";
+import {
+  automationData,
+  jobData,
+  newJobData,
+  toolData,
+  userData,
+} from "@/types/types";
+import { allTools } from "@/data/data";
 
 const Automations = () => {
   const { data: jobs, status, error } = useAllJobsQuery();
-  const { data: users } = useAllUsersQuery;
+  const { data: users } = useAllUsersQuery();
 
   //create new jobsArray where all users are fetched
   //match their user id with the user id of the job
   //and add the user to the job
   const jobsArray = jobs?.map((job: jobData) => {
     const user = users?.find((user: userData) => user._id === job.owner);
-    return { ...job, user };
-  });
 
-  console.log(jobsArray);
+    const toolIcons = job.tools.map((automation: automationData) => {
+      return allTools.find((tool) => tool.name === automation.automation);
+    });
+    return { ...job, user, toolIcons };
+  });
 
   if (status === "pending")
     return (
@@ -48,9 +56,9 @@ const Automations = () => {
         </span>
       </div>
 
-      <div className="my-6 grid grid-cols-1 md:grid-cols-5  justify-between gap-10">
-        {jobs &&
-          jobs.map((job: jobData) => (
+      <div className="my-6 grid grid-cols-1 md:grid-cols-4 justify-between gap-10">
+        {jobsArray &&
+          jobsArray.map((job: newJobData) => (
             <AutomationStoreCard key={job._id} data={job} />
           ))}
       </div>

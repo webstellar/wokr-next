@@ -26,7 +26,7 @@ const Breadcrumb = ({
   const pathNames = paths.split("/").filter((path) => path);
 
   return (
-    <div>
+    <div className="-ml-2">
       <ul className={containerClasses}>
         <li className={listClasses}>
           <Link href={"/"}>{homeElement}</Link>

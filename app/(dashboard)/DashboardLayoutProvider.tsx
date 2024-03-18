@@ -14,7 +14,7 @@ const DashboardLayoutProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [collapsed, setSidebarCollapsed] = useState(true);
+  const [collapsed, setSidebarCollapsed] = useState(false);
   const [showSidebar, setShowSidebar] = useState(true);
   const { state } = useContext(AuthContext);
   const { user, isAuthenticating } = state;

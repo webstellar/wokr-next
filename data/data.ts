@@ -1,18 +1,3 @@
-import curipod from "../public/images/curipod.png";
-import chatgpt from "../public/images/chatgpt.png";
-import copilot from "../public/images/copilot.png";
-import perplexity from "../public/images/perplexity.png";
-import yippity from "../public/images/yippity.png";
-import processFace from "../public/images/process_face.png";
-import processPost from "../public/images/process_post.png";
-import processShare from "../public/images/process_share.png";
-import dashboard from "../public/images/dashboard.svg";
-import contacts from "../public/images/contacts.svg";
-import analytics from "../public/images/analytics.svg";
-import earnings from "../public/images/earnings.svg";
-import services from "../public/images/services.svg";
-import setting from "../public/images/settings.svg";
-import orders from "../public/images/orders.svg";
 import { NavItem } from "../types/types";
 
 export const offerings = [
@@ -63,29 +48,56 @@ export const Categories = [
 export const allIntegrations = [
   {
     id: "1",
-    title: "Chat GPT",
-    icon: chatgpt,
+    title: "chatgpt",
+    icon: "/images/chatgpt.png",
   },
   {
     id: "2",
-    title: "Perplexity",
-    icon: perplexity,
+    title: "perplexity",
+    icon: "/images/perplexity.png",
   },
   {
     id: "3",
-    title: "Curipod",
-    icon: curipod,
+    title: "curipod",
+    icon: "/images/curipod.png",
   },
   {
     id: "4",
-    title: "Copilot",
-    icon: copilot,
+    title: "copilot",
+    icon: "/images/copilot.png",
   },
   {
     id: "5",
-    title: "Yippity",
-    icon: yippity,
+    title: "yippity",
+    icon: "/images/yippity.png",
   },
+];
+
+export const allTools = [
+  { name: "uipath", icon: "/tools/uipath.png" },
+  { name: "blueprism", icon: "/tools/blue_prism.png" },
+  { name: "automationanywhere", icon: "/tools/automation_anywhere.png" },
+  { name: "ansible", icon: "/tools/ansible.png" },
+  { name: "chef", icon: "/tools/chef.png" },
+  { name: "jenkins", icon: "/tools/jenkins.png" },
+  { name: "gitlabci", icon: "/tools/gitlab.png" },
+  { name: "circleci", icon: "/tools/circleci.png" },
+  { name: "nintex", icon: "/tools/nintex.png" },
+  { name: "zapier", icon: "/tools/zapier.png" },
+  { name: "powerautomate", icon: "/tools/power_automate.png" },
+  { name: "terraform", icon: "/tools/terraform.png" },
+  { name: "cloudformation", icon: "/tools/aws_cloudformation.png" },
+  { name: "selenium", icon: "/tools/selenium.png" },
+  { name: "appium", icon: "/tools/appium.png" },
+  { name: "cypress", icon: "/tools/cypress.png" },
+  { name: "hubspot", icon: "/tools/hubspot.png" },
+  { name: "zendesk", icon: "/tools/zendesk.png" },
+  { name: "freshdesk", icon: "/tools/freshdesk.png" },
+  { name: "marketo", icon: "/tools/marketo.png" },
+  { name: "talend", icon: "/tools/talend.png" },
+  { name: "informatica", icon: "/tools/informatica_powercenter.png" },
+  { name: "apachenifi", icon: "/tools/apache_nifi.png" },
+  { name: "chatgpt", icon: "/tools/chatgpt.png" },
 ];
 
 export const responsive = {
@@ -114,21 +126,21 @@ export const processes = [
     title: "Register Your Account",
     description:
       "Start by signing up for an AI tool or platform of your choice. This usually involves providing basic information and setting up your preferences.",
-    icon: processFace,
+    icon: "/images/process_face.png",
   },
   {
     id: "2",
     title: "Post a Job",
     description:
       "Start by signing up for an AI tool or platform of your choice. This usually involves providing basic information and setting up your preferences.",
-    icon: processPost,
+    icon: "/images/process_post.png",
   },
   {
     id: "3",
     title: "Get the work done",
     description:
       "Start by signing up for an AI tool or platform of your choice. This usually involves providing basic information and setting up your preferences.",
-    icon: processShare,
+    icon: "/images/process_share.png",
   },
 ];
 
@@ -238,37 +250,37 @@ export const sidebarNavItems: NavItem[] = [
   {
     label: "Overview",
     href: "/overview",
-    icon: dashboard,
+    icon: "/images/dashboard.svg",
   },
   {
     label: "Orders",
     href: "/my-orders",
-    icon: orders,
+    icon: "/images/orders.svg",
   },
   {
     label: "Jobs",
     href: "/my-jobs",
-    icon: services,
+    icon: "/images/services.svg",
   },
   {
     label: "Analytics",
     href: "/my-analytics",
-    icon: analytics,
+    icon: "/images/analytics.svg",
   },
   {
     label: "Earnings",
     href: "/my-earnings",
-    icon: earnings,
+    icon: "/images/earnings.svg",
   },
   {
     label: "Contacts",
     href: "/my-contacts",
-    icon: contacts,
+    icon: "/images/contacts.svg",
   },
   {
     label: "Settings",
     href: "/settings",
-    icon: setting,
+    icon: "/images/settings.svg",
   },
 ];
 
@@ -391,6 +403,9 @@ export const toolList = [
   "zendesk",
   "freshdesk",
   "chatgpt",
+  "curipod",
+  "perplexity",
+  "yippity",
 ];
 
 export const languageList = [

@@ -62,7 +62,7 @@ export const getAllUsers = async () => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error("Error finding automation job");
+      throw new Error("Error finding users");
     } else {
       throw error;
     }

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { HiOutlineSearch } from "react-icons/hi";
-import HeroImage from "../../public/images/heroImage.png";
+import HeroImage from "/images/heroImage.png";
 
 import { Categories } from "../../../data/data";
 import Image from "next/image";
@@ -53,7 +53,12 @@ const HomeHero = () => {
         </div>
 
         <div className="hidden lg:flex justify-end items-center">
-          <Image src={HeroImage} alt="" />
+          <Image
+            src="/images/heroImage.png"
+            alt=""
+            width={1000}
+            height={1000}
+          />
         </div>
       </div>
     </section>

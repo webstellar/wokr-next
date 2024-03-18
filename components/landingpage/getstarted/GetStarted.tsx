@@ -1,5 +1,4 @@
 import Image from "next/image";
-import LadyImage from "../../public/images/woman_standing.png";
 
 const GetStarted = () => {
   return (
@@ -17,9 +16,11 @@ const GetStarted = () => {
 
         <div className="hidden lg:flex">
           <Image
-            src={LadyImage}
+            src="/images/woman_standing.png"
             alt="woman standing"
             className="w-full h-full"
+            width={1000}
+            height={1000}
           />
         </div>
       </div>
