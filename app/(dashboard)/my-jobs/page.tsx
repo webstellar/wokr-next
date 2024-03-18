@@ -21,6 +21,7 @@ const Automations = () => {
     return <h1>{JSON.stringify(error)}</h1>;
   }
 
+  //filter jobs based on user logged in
   const filteredJobs = jobs.filter((job: jobData) => job.owner === user?._id);
 
   return (

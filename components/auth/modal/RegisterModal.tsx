@@ -11,7 +11,6 @@ import {
   sendSignInLinkToEmail,
   getIdToken,
 } from "firebase/auth";
-import google from "../../public/images/google_icon.png";
 import {
   auth,
   googleProvider,
@@ -186,7 +185,13 @@ const RegisterModal = ({ setOpen, open }: ModalProps) => {
                           onClick={onGoogleLogin}
                           className="flex flex-wrap justify-center w-full border border-gray-300 hover:border-gray-500 px-2 py-1.5 rounded-md"
                         >
-                          <Image className="w-5 mr-2" src={google} alt="" />
+                          <Image
+                            className="w-5 mr-2"
+                            src="/images/google_icon.png"
+                            alt=""
+                            width={100}
+                            height={100}
+                          />
                           Sign up with Google
                         </button>
                       </div>

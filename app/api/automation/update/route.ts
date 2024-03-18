@@ -33,7 +33,7 @@ export async function PUT(req: NextRequest) {
       {
         ...data,
       },
-      { new: true }
+      { upsert: true }
     ).exec();
 
     return new NextResponse(JSON.stringify(updatedAutomation), {
