@@ -1,4 +1,4 @@
-import { useState, Fragment, useContext } from "react";
+import { useState, Fragment, useContext, Suspense } from "react";
 import { Dialog, Popover, Menu, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { getAuth, signOut } from "firebase/auth";
@@ -81,7 +81,9 @@ const LoggedInHeader = (props: Props) => {
           </button>
         </div>
 
-        <Search />
+        <Suspense>
+          <Search />
+        </Suspense>
 
         <Popover.Group className="hidden lg:flex lg:gap-x-6 justify-center items-center">
           {homeMenu.map((item) => (

@@ -9,7 +9,7 @@ import CreatableSelect from "react-select/creatable";
 
 import { automationData, jobData, newJobData, userData } from "@/types/types";
 import { allTools } from "@/data/data";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Select from "react-select";
 import Image from "next/image";
@@ -173,27 +173,29 @@ const Automations = () => {
         </div>
       </div>
 
-      {isLoading ? (
-        <div className="my-6 flex items-center justify-center">
-          <Image
-            src="/images/wokr-loader.gif"
-            alt="loading gif"
-            width={100}
-            height={100}
-          />
-        </div>
-      ) : filteredJobs.length > 0 ? (
-        <div className="my-6 grid grid-cols-1 md:grid-cols-4 justify-between gap-10">
-          {filteredJobs &&
-            filteredJobs.map((job: newJobData) => (
-              <AutomationStoreCard key={job._id} data={job} />
-            ))}
-        </div>
-      ) : (
-        <div className="my-6 text-center">
-          No jobs found matching your criteria
-        </div>
-      )}
+      <Suspense>
+        {isLoading ? (
+          <div className="my-6 flex items-center justify-center">
+            <Image
+              src="/images/wokr-loader.gif"
+              alt="loading gif"
+              width={100}
+              height={100}
+            />
+          </div>
+        ) : filteredJobs.length > 0 ? (
+          <div className="my-6 grid grid-cols-1 md:grid-cols-4 justify-between gap-10">
+            {filteredJobs &&
+              filteredJobs.map((job: newJobData) => (
+                <AutomationStoreCard key={job._id} data={job} />
+              ))}
+          </div>
+        ) : (
+          <div className="my-6 text-center">
+            No jobs found matching your criteria
+          </div>
+        )}
+      </Suspense>
     </div>
   );
 };

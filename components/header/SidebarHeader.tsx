@@ -14,6 +14,7 @@ import {
 //data
 import { profileLinks, settinglinks } from "../../data/data";
 import Image from "next/image";
+import { Suspense } from "react";
 import Search from "../search/Search";
 
 type userProfile = {
@@ -67,8 +68,9 @@ const SidebarHeader = (props: Props) => {
             <HiMenuAlt1 className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-
-        <Search />
+        <Suspense>
+          <Search />
+        </Suspense>
 
         <Popover.Group className="hidden lg:flex lg:gap-x-6 justify-center items-center">
           <HiOutlineBell className="text-2xl text-gray-500" />
