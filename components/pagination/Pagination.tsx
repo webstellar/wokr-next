@@ -10,6 +10,7 @@ interface Props {
 
 function Pagination({ pageNumber, isNext, path }: Props) {
   const router = useRouter();
+  // Add refetch
 
   const handleNavigation = (type: string) => {
     let nextPageNumber = pageNumber;

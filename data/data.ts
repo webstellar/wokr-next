@@ -338,6 +338,12 @@ export const deliveryTimes = [
   { id: 21, label: "21 days", value: "21" },
 ];
 
+export const sortBy = [
+  { id: 1, label: "Desc", value: "Desc" },
+  { id: 2, label: "Asc", value: "Asc" },
+
+];
+
 export const categorylists = [
   { id: 1, label: "Web Development", value: "Web Development" },
   { id: 2, label: "Mobile Development", value: "Mobile Development" },

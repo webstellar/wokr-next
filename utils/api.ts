@@ -146,18 +146,22 @@ export const getJob = async (data: string) => {
     if (axios.isAxiosError(error)) {
       throw new Error("Error finding automation job");
     } else {
-      // Handle non-Axios errors
       throw error;
     }
   }
 };
 
-export const getAllFilteredJobs = async (
-  query?: string,
-  pageNumber?: number,
-  pageSize?: number,
-  sortBy?: SortOrder
-) => {
+export const getAllFilteredJobs = async ({
+  query,
+  pageNumber,
+  pageSize,
+  sortBy,
+}: {
+  query?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+}) => {
   try {
     const response = await axios.get("/api/automation/getall", {
       headers: {
@@ -510,7 +514,6 @@ export const deleteTag = async (id: string, token: string) => {
     if (axios.isAxiosError(error)) {
       throw new Error("Error deleting tag");
     } else {
-      // Handle non-Axios errors
       throw error;
     }
   }

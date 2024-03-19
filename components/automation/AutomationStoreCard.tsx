@@ -87,12 +87,12 @@ const AutomationStoreCard = ({ data }: jobProps) => {
 
           <div className="flex gap-x-2 px-1">
             <HiMiniStar className="text-gray-800" />
-            <span className="text-sm text-gray-700">5.0</span>
-            <span className="text-sm text-gray-300">(100)</span>
+            <span className="text-xs text-gray-700">5.0</span>
+            <span className="text-xs text-gray-300">(100)</span>
           </div>
 
           <div className="flex gap-x-2 pl-2">
-            <span className="text-sm text-gray-700">From $100</span>
+            <span className="text-xs text-gray-700">From $100</span>
           </div>
         </div>
 
