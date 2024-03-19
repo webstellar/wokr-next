@@ -15,22 +15,31 @@ import Select from "react-select";
 import Image from "next/image";
 
 interface objectProps {
-  id: string;
+  id: number;
   value: string;
   label: string;
 }
 
-const Automations = () => {
-  const searchParams = useSearchParams();
+const Automations = ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  console.log("searchParams", searchParams);
   const { data: jobs, status, error } = useAllJobsQuery();
   const { data: users } = useAllUsersQuery();
 
-  const [sort, setSort] = useState<objectProps>();
+  const [sort, setSort] = useState<objectProps>({
+    id: 1,
+    label: "Asc",
+    value: "Asc",
+  });
   const [tags, setTags] = useState<objectProps[]>([]);
   const [categories, setCategories] = useState<objectProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const query = searchParams.get("query") || "";
+  //const searchParams = useSearchParams();
+  const query = searchParams.query;
 
   const jobsArray = jobs?.map((job: jobData) => {
     const user = users?.find((user: userData) => user._id === job.owner);
@@ -73,9 +82,9 @@ const Automations = () => {
     }
 
     if (sort?.value === "Desc") {
-      result.sort((a: any, b: any) => (a.createdAt < b.createdAt ? 1 : -1)); // Descending
+      result?.sort((a: any, b: any) => (a.createdAt < b.createdAt ? 1 : -1)); // Descending
     } else if (sort?.value === "Asc") {
-      result.sort((a: any, b: any) => (a.createdAt > b.createdAt ? 1 : -1)); // Ascending
+      result?.sort((a: any, b: any) => (a.createdAt > b.createdAt ? 1 : -1)); // Ascending
     }
 
     return result;
@@ -84,12 +93,13 @@ const Automations = () => {
   if (status === "pending")
     return (
       <section className="mx-auto max-w-screen-2xl px-6 lg:px-8">
-        <div className="my-6 flex items-center justify-center">
+        <div className="my-6 flex items-center justify-center h-min">
           <Image
             src="/images/wokr-loader.gif"
             alt="loading gif"
             width={100}
             height={100}
+            className="h-8 w-8"
           />
         </div>
       </section>

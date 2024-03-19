@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Suspense } from "react";
 
 const Search = () => {
   const router = useRouter();

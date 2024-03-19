@@ -54,21 +54,21 @@ const AutomationStoreCard = ({ data }: jobProps) => {
         </p>
 
         <div className="flex flex-row justify-between items-center md:divide-x">
-          <div className="flex flex-col item-center justify-between gap-y-4">
+          <div className="flex flex-col item-center justify-between gap-y-2">
             <div className="relative flex flex-row justify-start items-center">
               <Image
                 src={data?.user?.profileImage}
                 alt={data?.user?.firstName}
-                height="100"
+                height="70"
                 className="rounded-full w-8 h-8"
-                width="100"
+                width="70"
               />
               <Image
                 src="/images/check-sign.svg"
                 alt="verified"
-                className="rounded-full w-3 h-3 absolute bottom-2 left-6"
-                height="20"
-                width="20"
+                className="rounded-full w-3 h-3 absolute bottom-1 left-6"
+                height="15"
+                width="15"
               />
 
               <div className="text-gray-900 capitalize px-2">
@@ -76,7 +76,7 @@ const AutomationStoreCard = ({ data }: jobProps) => {
                   href={`/in/${data?.user?._id}`}
                   className="cursor-pointer flex flex-col"
                 >
-                  <span className="text-sm">{data?.user?.firstName}</span>
+                  <span className="text-xs">{data?.user?.firstName}</span>
                   <span className="text-[0.75rem] font-light">
                     @{data?.user?.username}
                   </span>
@@ -87,12 +87,16 @@ const AutomationStoreCard = ({ data }: jobProps) => {
 
           <div className="flex gap-x-2 px-1">
             <HiMiniStar className="text-gray-800" />
-            <span className="text-xs text-gray-700">5.0</span>
-            <span className="text-xs text-gray-300">(100)</span>
+            <span className="text-[0.5rem] lg:text-xs text-gray-700">5.0</span>
+            <span className="text-[0.5rem] lg:text-xs text-gray-300">
+              (100)
+            </span>
           </div>
 
           <div className="flex gap-x-2 pl-2">
-            <span className="text-xs text-gray-700">From $100</span>
+            <span className="text-[0.5rem] lg:text-xs text-gray-700">
+              From $100
+            </span>
           </div>
         </div>
 
@@ -103,9 +107,11 @@ const AutomationStoreCard = ({ data }: jobProps) => {
                   key={i}
                   src={icon?.icon}
                   alt={icon?.name}
-                  width={50}
-                  height={50}
-                  className="rounded-full shadow-md h-10 w-10 p-2"
+                  width={70}
+                  height={70}
+                  className={`${
+                    i !== 0 && "-ml-2"
+                  } rounded-full object-cover shadow-md h-10 w-10 p-1 bg-white`}
                 />
               ))
             : icons.map((icon: toolData, i: number) => (
@@ -113,8 +119,8 @@ const AutomationStoreCard = ({ data }: jobProps) => {
                   key={i}
                   src={icon?.icon}
                   alt={icon?.name}
-                  width={50}
-                  height={50}
+                  width={70}
+                  height={70}
                 />
               ))}
         </div>
