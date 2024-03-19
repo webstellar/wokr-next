@@ -1,6 +1,4 @@
 import classNames from "classnames";
-import logo from "../../public/images/wokri_logo.png";
-import iconLogo from "../../public/images//wokr_icon_only.png";
 import { sidebarNavItems } from "../../data/data";
 import { HiChevronDoubleLeft, HiChevronDoubleRight } from "react-icons/hi";
 
@@ -69,7 +67,7 @@ const Sidebar = ({
               {!collapsed ? (
                 <Image
                   className="h-14 w-auto"
-                  src={logo}
+                  src="/images/wokri_logo.png"
                   alt="wokr marketplace logo"
                   width={100}
                   height={100}
@@ -77,7 +75,7 @@ const Sidebar = ({
               ) : (
                 <Image
                   className="h-10 w-auto"
-                  src={iconLogo}
+                  src="/images//wokr_icon_only.png"
                   alt="wokr marketplace logo"
                   width={100}
                   height={100}
@@ -107,7 +105,7 @@ const Sidebar = ({
                 >
                   <Link href={item.href} className="flex gap-3">
                     <Image
-                      src={item.icon}
+                      src={item?.icon}
                       alt="item.label"
                       className="w-6 h-6"
                       width={100}
@@ -128,7 +126,7 @@ const Sidebar = ({
         >
           <div className="flex gap-4 items-center h-11 overflow-hidden">
             <Image
-              src={user && user.profileImage}
+              src={user ? user.profileImage : `/images/profile.svg`}
               alt="profile image"
               className="rounded-full w-8 h-8"
               width="100"

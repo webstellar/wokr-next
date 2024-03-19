@@ -34,7 +34,7 @@ type valueProps = {
 };
 
 const EditProfile = () => {
-  const { data } = useUserQuery();
+  const { data, isLoading } = useUserQuery();
   const queryClient = useQueryClient();
   const userMutation = useMutation({
     mutationFn: ({ formData, token }: { formData: userData; token: string }) =>
@@ -51,7 +51,7 @@ const EditProfile = () => {
     },
   });
 
-  const initialSkillSets = data.skillsets.map(
+  const initialSkillSets = data?.skillsets.map(
     (set: { skill: string; skillLevel: string }) => ({
       skill: skillList.includes(set.skill) ? set.skill : "Select Skill",
       skillLevel: skillLevelList.includes(set.skillLevel)
@@ -60,7 +60,7 @@ const EditProfile = () => {
     })
   );
 
-  const initialToolSets = data.automationTools.map(
+  const initialToolSets = data?.automationTools.map(
     (set: { automation: string; automationLevel: string }) => ({
       automation: toolList.includes(set.automation)
         ? set.automation
@@ -255,337 +255,356 @@ const EditProfile = () => {
   return (
     <section className="mx-auto mb-40">
       <div className="grid grid-cols-1 justify-start items-center max-w-screen-md">
-        <form onSubmit={handleSubmit} className="mb-10">
-          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-            <WokrDashboardUrlInput
-              classname="sm:col-span-3"
-              htmlFor="displayName"
-              label="DISPLAY NAME"
-              title="displayName"
-              value={state.displayName}
-              disabled={data?.username ? true : false}
-              type="text"
-              name="displayName"
-              id="displayName"
-              autocomplete="display name"
-              placeholder="jonn_wick"
-              onChange={handleChange}
-              url="wokr.io/in/"
-            />
-
-            <div className="col-span-full grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              <WokrDashboardInput
-                classname="sm:col-span-2 sm:col-start-1"
-                htmlFor="lastName"
-                label="LAST NAME"
-                inputTitle="lastName"
-                inputValue={state.lastName}
-                disabled={false}
-                inputType="text"
-                inputName="lastName"
-                inputId="lastName"
-                autocomplete="your last name"
-                inputPlaceholder="Last name"
+        {isLoading ? (
+          <div> Your Profile Loading</div>
+        ) : (
+          <form onSubmit={handleSubmit} className="mb-10">
+            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <WokrDashboardUrlInput
+                classname="sm:col-span-3"
+                htmlFor="displayName"
+                label="DISPLAY NAME"
+                title="displayName"
+                value={state.displayName}
+                disabled={data?.username ? true : false}
+                type="text"
+                name="displayName"
+                id="displayName"
+                autocomplete="display name"
+                placeholder="jonn_wick"
                 onChange={handleChange}
+                url="wokr.io/in/"
               />
-              <WokrDashboardInput
-                classname="sm:col-span-2"
-                htmlFor="firstName"
-                label="FIRST NAME"
-                inputTitle="firstName"
-                inputValue={state.firstName}
-                disabled={false}
-                inputType="text"
-                inputName="firstName"
-                inputId="firstName"
-                autocomplete="your firstname"
-                inputPlaceholder="First name"
-                onChange={handleChange}
-              />
-              <WokrDashboardInput
-                classname="sm:col-span-2"
-                htmlFor="middleName"
-                label="MIDDLE NAME"
-                inputTitle="middleName"
-                inputValue={state.middleName}
-                disabled={false}
-                inputType="text"
-                inputName="middleName"
-                inputId="middleName"
-                autocomplete="your middleName"
-                inputPlaceholder="Middle name"
-                onChange={handleChange}
-              />
-            </div>
 
-            <WokrDashboardDescription
-              title="ABOUT"
-              writeUp="Share with us your hobbies, any extra qualifications, or anything else you wish to provide"
-              name="description"
-              id="description"
-              row={5}
-              onChange={handleChange}
-              value={state.description}
-            />
-            <div className="border-b border-gray-900/10 pb-12 col-span-full">
-              <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
-                LANGUAGE INFORMATION
-              </h2>
-
-              <div>
-                {languageLists.map((field: any, index: any) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
-                  >
-                    <WokrDashboardSelector
-                      id="language"
-                      title="language"
-                      name="language"
-                      options={languageList}
-                      label="Language"
-                      value={field.language}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        handleLanguageChange(index, e)
-                      }
-                    />
-                    <WokrDashboardSelector
-                      id="languageLevel"
-                      title="languageLevel"
-                      name="languageLevel"
-                      options={languageLevelList}
-                      label="Language Level"
-                      value={field.languageLevel}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        handleLanguageChange(index, e)
-                      }
-                    />
-
-                    <div className="flex md:justify-end items-center">
-                      <button
-                        title="removeLanguage"
-                        type="button"
-                        onClick={() => subtractLanguageField(index)}
-                        className="mt-7"
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 45 45"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
-                          <path
-                            d="M32.0918 22.0464L11.9992 22.0464"
-                            stroke="#636363"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  title="addLanguage"
-                  type="button"
-                  onClick={addLanguageField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-4 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
-                >
-                  Add Language
-                </button>
-              </div>
-            </div>
-            <div className="border-b border-gray-900/10 pb-12 col-span-full">
-              <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
-                SKILL INFORMATION
-              </h2>
-
-              <div>
-                {skillLists.map((field: any, index: any) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
-                  >
-                    <WokrDashboardSelector
-                      id="skill"
-                      title="skill"
-                      name="skill"
-                      options={skillList}
-                      label="Skill"
-                      value={field.skill}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        handleSkillChange(index, e)
-                      }
-                    />
-                    <WokrDashboardSelector
-                      id="skillLevel"
-                      title="skillLevel"
-                      name="skillLevel"
-                      options={skillLevelList}
-                      label="Skill Level"
-                      value={field.skillLevel}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        handleSkillChange(index, e)
-                      }
-                    />
-
-                    <div className="flex md:justify-end items-center">
-                      <button
-                        title="remove"
-                        type="button"
-                        onClick={() => subtractSkillField(index)}
-                        className="mt-7"
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 45 45"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
-                          <path
-                            d="M32.0918 22.0464L11.9992 22.0464"
-                            stroke="#636363"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  title="add"
-                  type="button"
-                  onClick={addSkillField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-4 py-1.5 rounded-md bg-gray-300 text-gray-500" // Add some margin-top for spacing from the list
-                >
-                  Add Skill
-                </button>
-              </div>
-            </div>
-            <div className="border-b border-gray-900/10 pb-12 col-span-full">
-              <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
-                AUTOMATION TOOL INFORMATION
-              </h2>
-
-              <div>
-                {automationLists.map((field: any, index: any) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
-                  >
-                    <WokrDashboardSelector
-                      id="automation"
-                      title="automation"
-                      name="automation"
-                      options={toolList}
-                      label="Automation"
-                      value={field.automation}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        handleAutomationChange(index, e)
-                      }
-                    />
-                    <WokrDashboardSelector
-                      id="automationLevel"
-                      title="automationLevel"
-                      name="automationLevel"
-                      options={toolLevelList}
-                      label="Automation Level"
-                      value={field.automationLevel}
-                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                        handleAutomationChange(index, e)
-                      }
-                    />
-
-                    <div className="flex md:justify-end items-center">
-                      <button
-                        title="removeAutomation"
-                        type="button"
-                        onClick={() => subtractAutomationField(index)}
-                        className="mt-7"
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 45 45"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
-                          <path
-                            d="M32.0918 22.0464L11.9992 22.0464"
-                            stroke="#636363"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  title="addAutomation"
-                  type="button"
-                  onClick={addAutomationField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-4 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
-                >
-                  Add Automation Tool
-                </button>
-              </div>
-            </div>
-            <WokrPhotoUpload
-              label="PROFILE PHOTO"
-              htmlFor="profileImage"
-              title="Upload an image"
-              inputName="profileImage"
-              inputId="profileImage"
-              inputType="file"
-              classname="col-span-full"
-              accept="image/png, image/jpeg, image/gif, image/jpg"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.files != null) {
-                  setProfileImage(e.target.files[0]);
-                }
-              }}
-              value={profileImage != null}
-            />
-
-            <div className="flex justify-start items-center gap-2">
-              {url ? (
-                <Image
-                  className="rounded-md h-auto w-auto"
-                  src={url}
-                  height={100}
-                  width={100}
-                  alt=""
+              <div className="col-span-full grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <WokrDashboardInput
+                  classname="sm:col-span-2 sm:col-start-1"
+                  htmlFor="lastName"
+                  label="LAST NAME"
+                  inputTitle="lastName"
+                  inputValue={state.lastName}
+                  disabled={false}
+                  inputType="text"
+                  inputName="lastName"
+                  inputId="lastName"
+                  autocomplete="your last name"
+                  inputPlaceholder="Last name"
+                  onChange={handleChange}
                 />
-              ) : (
-                <Image
-                  className="rounded-md h-auto w-auto"
-                  src={originalUrl}
-                  height={100}
-                  width={100}
-                  alt=""
+                <WokrDashboardInput
+                  classname="sm:col-span-2"
+                  htmlFor="firstName"
+                  label="FIRST NAME"
+                  inputTitle="firstName"
+                  inputValue={state.firstName}
+                  disabled={false}
+                  inputType="text"
+                  inputName="firstName"
+                  inputId="firstName"
+                  autocomplete="your firstname"
+                  inputPlaceholder="First name"
+                  onChange={handleChange}
                 />
-              )}
-            </div>
-          </div>
+                <WokrDashboardInput
+                  classname="sm:col-span-2"
+                  htmlFor="middleName"
+                  label="MIDDLE NAME"
+                  inputTitle="middleName"
+                  inputValue={state.middleName}
+                  disabled={false}
+                  inputType="text"
+                  inputName="middleName"
+                  inputId="middleName"
+                  autocomplete="your middleName"
+                  inputPlaceholder="Middle name"
+                  onChange={handleChange}
+                />
+              </div>
 
-          <WokrDashboardButton
-            cancel={handleCancel}
-            cancelText={"Cancel"}
-            title="UpdateProfile"
-            type="submit"
-            disabled={false}
-            loading={loading}
-            loadingText="Updating ..."
-            preLoadingText="Update"
-          />
-        </form>
+              <WokrDashboardDescription
+                title="ABOUT"
+                writeUp="Share with us your hobbies, any extra qualifications, or anything else you wish to provide"
+                name="description"
+                id="description"
+                row={5}
+                onChange={handleChange}
+                value={state.description}
+              />
+              <div className="border-b border-gray-900/10 pb-12 col-span-full">
+                <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
+                  LANGUAGE INFORMATION
+                </h2>
+
+                <div>
+                  {languageLists.map((field: any, index: any) => (
+                    <div
+                      key={index}
+                      className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
+                    >
+                      <WokrDashboardSelector
+                        id="language"
+                        title="language"
+                        name="language"
+                        options={languageList}
+                        label="Language"
+                        value={field.language}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                          handleLanguageChange(index, e)
+                        }
+                      />
+                      <WokrDashboardSelector
+                        id="languageLevel"
+                        title="languageLevel"
+                        name="languageLevel"
+                        options={languageLevelList}
+                        label="Language Level"
+                        value={field.languageLevel}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                          handleLanguageChange(index, e)
+                        }
+                      />
+
+                      <div className="flex md:justify-end items-center">
+                        <button
+                          title="removeLanguage"
+                          type="button"
+                          onClick={() => subtractLanguageField(index)}
+                          className="mt-7"
+                        >
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 45 45"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <circle
+                              cx="22.5"
+                              cy="22.5"
+                              r="22.5"
+                              fill="#D9D9D9"
+                            />
+                            <path
+                              d="M32.0918 22.0464L11.9992 22.0464"
+                              stroke="#636363"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <button
+                    title="addLanguage"
+                    type="button"
+                    onClick={addLanguageField}
+                    className="w-auto flex items-center justify-center text-center mt-4 px-4 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
+                  >
+                    Add Language
+                  </button>
+                </div>
+              </div>
+              <div className="border-b border-gray-900/10 pb-12 col-span-full">
+                <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
+                  SKILL INFORMATION
+                </h2>
+
+                <div>
+                  {skillLists.map((field: any, index: any) => (
+                    <div
+                      key={index}
+                      className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
+                    >
+                      <WokrDashboardSelector
+                        id="skill"
+                        title="skill"
+                        name="skill"
+                        options={skillList}
+                        label="Skill"
+                        value={field.skill}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                          handleSkillChange(index, e)
+                        }
+                      />
+                      <WokrDashboardSelector
+                        id="skillLevel"
+                        title="skillLevel"
+                        name="skillLevel"
+                        options={skillLevelList}
+                        label="Skill Level"
+                        value={field.skillLevel}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                          handleSkillChange(index, e)
+                        }
+                      />
+
+                      <div className="flex md:justify-end items-center">
+                        <button
+                          title="remove"
+                          type="button"
+                          onClick={() => subtractSkillField(index)}
+                          className="mt-7"
+                        >
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 45 45"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <circle
+                              cx="22.5"
+                              cy="22.5"
+                              r="22.5"
+                              fill="#D9D9D9"
+                            />
+                            <path
+                              d="M32.0918 22.0464L11.9992 22.0464"
+                              stroke="#636363"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <button
+                    title="add"
+                    type="button"
+                    onClick={addSkillField}
+                    className="w-auto flex items-center justify-center text-center mt-4 px-4 py-1.5 rounded-md bg-gray-300 text-gray-500" // Add some margin-top for spacing from the list
+                  >
+                    Add Skill
+                  </button>
+                </div>
+              </div>
+              <div className="border-b border-gray-900/10 pb-12 col-span-full">
+                <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
+                  AUTOMATION TOOL INFORMATION
+                </h2>
+
+                <div>
+                  {automationLists.map((field: any, index: any) => (
+                    <div
+                      key={index}
+                      className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
+                    >
+                      <WokrDashboardSelector
+                        id="automation"
+                        title="automation"
+                        name="automation"
+                        options={toolList}
+                        label="Automation"
+                        value={field.automation}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                          handleAutomationChange(index, e)
+                        }
+                      />
+                      <WokrDashboardSelector
+                        id="automationLevel"
+                        title="automationLevel"
+                        name="automationLevel"
+                        options={toolLevelList}
+                        label="Automation Level"
+                        value={field.automationLevel}
+                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                          handleAutomationChange(index, e)
+                        }
+                      />
+
+                      <div className="flex md:justify-end items-center">
+                        <button
+                          title="removeAutomation"
+                          type="button"
+                          onClick={() => subtractAutomationField(index)}
+                          className="mt-7"
+                        >
+                          <svg
+                            width="20"
+                            height="20"
+                            viewBox="0 0 45 45"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <circle
+                              cx="22.5"
+                              cy="22.5"
+                              r="22.5"
+                              fill="#D9D9D9"
+                            />
+                            <path
+                              d="M32.0918 22.0464L11.9992 22.0464"
+                              stroke="#636363"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                  <button
+                    title="addAutomation"
+                    type="button"
+                    onClick={addAutomationField}
+                    className="w-auto flex items-center justify-center text-center mt-4 px-4 py-1.5 rounded-md bg-gray-300 text-gray-500 text-sm" // Add some margin-top for spacing from the list
+                  >
+                    Add Automation Tool
+                  </button>
+                </div>
+              </div>
+              <WokrPhotoUpload
+                label="PROFILE PHOTO"
+                htmlFor="profileImage"
+                title="Upload an image"
+                inputName="profileImage"
+                inputId="profileImage"
+                inputType="file"
+                classname="col-span-full"
+                accept="image/png, image/jpeg, image/gif, image/jpg"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  if (e.target.files != null) {
+                    setProfileImage(e.target.files[0]);
+                  }
+                }}
+                value={profileImage != null}
+              />
+
+              <div className="flex justify-start items-center gap-2">
+                {url ? (
+                  <Image
+                    className="rounded-md h-auto w-auto"
+                    src={url}
+                    height={100}
+                    width={100}
+                    alt=""
+                  />
+                ) : (
+                  <Image
+                    className="rounded-md h-auto w-auto"
+                    src={originalUrl}
+                    height={100}
+                    width={100}
+                    alt=""
+                  />
+                )}
+              </div>
+            </div>
+
+            <WokrDashboardButton
+              cancel={handleCancel}
+              cancelText={"Cancel"}
+              title="UpdateProfile"
+              type="submit"
+              disabled={false}
+              loading={loading}
+              loadingText="Updating ..."
+              preLoadingText="Update"
+            />
+          </form>
+        )}
       </div>
     </section>
   );

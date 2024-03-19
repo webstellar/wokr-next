@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Dialog, Popover } from "@headlessui/react";
 import Link from "next/link";
 import { HiMenuAlt1, HiOutlinePlusCircle, HiOutlineX } from "react-icons/hi";
-
+import { usePathname } from "next/navigation";
 import RegisterModal from "../auth/modal/RegisterModal";
 import LoginModal from "../auth/modal/LoginModal";
 import Image from "next/image";
@@ -29,12 +29,19 @@ const homeMenu = [
 ];
 
 const Header = () => {
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [open, setOpen] = useState(false);
   const [reveal, setReveal] = useState(false);
 
+  const currentUrl = "/";
+
   return (
-    <header className="bg-transparent absolute w-full">
+    <header
+      className={`${
+        pathname == currentUrl ? "absolute" : "'"
+      } bg-transparent w-full`}
+    >
       <nav
         className="mx-auto flex max-w-screen-2xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"

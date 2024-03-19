@@ -62,6 +62,7 @@ const automationSchema = new Schema(
         ref: "User",
       },
     ],
+    status: String,
   },
   { timestamps: true }
 );

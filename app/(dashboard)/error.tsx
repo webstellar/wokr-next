@@ -30,7 +30,7 @@ export default function Error({
   return (
     <div className="grid min-h-full place-items-center px-6 py-24 sm:py-32 lg:px-8">
       <div className="text-center">
-        <h2>Something went wrong!</h2>
+        <h2>Loading...</h2>
 
         {countdown > 0 && (
           <p className="mt-4 text-base text-gray-500">Retry in {countdown}s</p>
