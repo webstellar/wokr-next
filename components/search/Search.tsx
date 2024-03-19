@@ -1,19 +1,26 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useDebounce } from "use-debounce";
 
 const Search = () => {
   const router = useRouter();
-  const [search, setSearch] = useState<string>("");
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const initialQuery = searchParams.get("query") || "";
+  const [search, setSearch] = useState<string>();
+  const [query] = useDebounce(search, 500);
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (search.trim()) {
-        router.push(`/automations?query=${encodeURIComponent(search)}`);
-      }
-    }, 300);
+    if (pathname === "/automations") {
+      setSearch(initialQuery);
+    }
+  }, [initialQuery, pathname]);
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [router, search]);
+  useEffect(() => {
+    if (query?.trim()) {
+      router.push(`/automations?query=${encodeURIComponent(query)}`);
+    }
+  }, [router, query]);
 
   return (
     <div className="hidden lg:flex justify-center items-center">

@@ -52,9 +52,8 @@ const Automations = ({
 
   const filteredJobs = useMemo(() => {
     let result = jobsArray;
-
     if (query) {
-      result = result.filter(
+      result = result?.filter(
         (job: jobData) =>
           job.title.toLowerCase().includes(query.toLowerCase()) ||
           job.description.toLowerCase().includes(query.toLowerCase())
@@ -62,7 +61,7 @@ const Automations = ({
     }
 
     if (categories.length >= 1) {
-      result = result.filter((job: jobData) =>
+      result = result?.filter((job: jobData) =>
         categories.some(
           (cat) =>
             cat.value ===
@@ -74,7 +73,7 @@ const Automations = ({
     }
 
     if (tags.length >= 1) {
-      result = result.filter((job: jobData) =>
+      result = result?.filter((job: jobData) =>
         job.tags.some((jobTag: { name: string }) =>
           tags.some((t) => t.value === jobTag.name)
         )
@@ -99,7 +98,7 @@ const Automations = ({
             alt="loading gif"
             width={100}
             height={100}
-            className="h-8 w-8"
+            className="h-10 w-10"
           />
         </div>
       </section>
@@ -109,81 +108,94 @@ const Automations = ({
   }
 
   return (
-    <Suspense>
-      <div className="mx-auto flex flex-col max-w-screen-2xl item-center justify-start p-6 lg:px-8 gap-y-5">
-        <Breadcrumb
-          homeElement={"Home"}
-          separator={<span className="text-xs md:text-sm font-light"> | </span>}
-          activeClasses="text-gray-800 font-normal cursor-default"
-          containerClasses="flex flex-wrap gap-y-2"
-          listClasses="hover:underline mx-2 text-gray-500 text-xs md:text-sm font-light"
-          capitalizeLinks
-        />
-        {query && (
-          <div className="flex justify-start">
-            <h3 className="font-normal text-lg md:text-2xl">
-              Result for
-              <span className="ml-2 font-bold">{query}</span>
-            </h3>
+    <div className="mx-auto flex flex-col max-w-screen-2xl item-center justify-start p-6 lg:px-8 gap-y-5">
+      <Breadcrumb
+        homeElement={"Home"}
+        separator={<span className="text-xs md:text-sm font-light"> | </span>}
+        activeClasses="text-gray-800 font-normal cursor-default"
+        containerClasses="flex flex-wrap gap-y-2"
+        listClasses="hover:underline mx-2 text-gray-500 text-xs md:text-sm font-light"
+        capitalizeLinks
+      />
+      {query && (
+        <div className="flex justify-start">
+          <h3 className="font-normal text-lg md:text-2xl">
+            Result for
+            <span className="ml-2 font-bold">{query}</span>
+          </h3>
+        </div>
+      )}
+
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <span className="font-light text-xs md:text-sm">
+          {filteredJobs.length} services available
+        </span>
+
+        <div className="flex flex-row justify-between items-center gap-x-5">
+          <div className="flex items-center gap-x-4">
+            <label
+              htmlFor="tags"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Category
+            </label>
+            <div className="relative mt-2">
+              <CreatableSelect
+                isMulti
+                options={categorylists}
+                defaultValue={categories}
+                onChange={(e: any) => setCategories(e)}
+              />
+            </div>
           </div>
-        )}
-
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
-          <span className="font-light text-xs md:text-sm">
-            {filteredJobs.length} services available
-          </span>
-
-          <div className="flex flex-row justify-between items-center gap-x-5">
-            <div className="flex items-center gap-x-4">
-              <label
-                htmlFor="tags"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Category
-              </label>
-              <div className="relative mt-2">
-                <CreatableSelect
-                  isMulti
-                  options={categorylists}
-                  defaultValue={categories}
-                  onChange={(e: any) => setCategories(e)}
-                />
-              </div>
+          <div className="flex items-center gap-x-4">
+            <label
+              htmlFor="tags"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Tags
+            </label>
+            <div className="relative mt-2">
+              <CreatableSelect
+                isMulti
+                options={tagOptions}
+                defaultValue={tags}
+                onChange={(e: any) => setTags(e)}
+              />
             </div>
-            <div className="flex items-center gap-x-4">
-              <label
-                htmlFor="tags"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Tags
-              </label>
-              <div className="relative mt-2">
-                <CreatableSelect
-                  isMulti
-                  options={tagOptions}
-                  defaultValue={tags}
-                  onChange={(e: any) => setTags(e)}
-                />
-              </div>
-            </div>
-            <div className="flex items-center gap-x-4">
-              <label
-                htmlFor="tags"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Sort by
-              </label>
-              <div className="relative mt-2">
-                <Select
-                  options={sortBy}
-                  defaultValue={sort}
-                  onChange={(e: any) => setSort(e)}
-                />
-              </div>
+          </div>
+          <div className="flex items-center gap-x-4">
+            <label
+              htmlFor="tags"
+              className="block text-sm font-medium leading-6 text-gray-900"
+            >
+              Sort by
+            </label>
+            <div className="relative mt-2">
+              <Select
+                options={sortBy}
+                defaultValue={sort}
+                onChange={(e: any) => setSort(e)}
+              />
             </div>
           </div>
         </div>
+      </div>
 
+      <Suspense
+        key={searchParams.query}
+        fallback={
+          <div className="my-6 flex items-center justify-center">
+            <Image
+              src="/images/wokr-loader.gif"
+              alt="loading gif"
+              width={100}
+              height={100}
+              className="h-10 w-10"
+            />
+          </div>
+        }
+      >
         {isLoading ? (
           <div className="my-6 flex items-center justify-center">
             <Image
@@ -191,6 +203,7 @@ const Automations = ({
               alt="loading gif"
               width={100}
               height={100}
+              className="h-10 w-10"
             />
           </div>
         ) : filteredJobs.length > 0 ? (
@@ -205,8 +218,8 @@ const Automations = ({
             No jobs found matching your criteria
           </div>
         )}
-      </div>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 };
 
