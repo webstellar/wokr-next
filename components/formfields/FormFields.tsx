@@ -318,7 +318,7 @@ export const WokrDashboardSelect = ({ ...props }) => {
     <div className="sm:col-span-5 w-full">
       <label
         htmlFor={props.htmlFor}
-        className="block text-sm font-medium leading-6 text-gray-900"
+        className={`${props.labelclass} block text-sm font-medium leading-6 text-gray-900`}
       >
         {props.label}
       </label>

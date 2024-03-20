@@ -7,8 +7,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { toast } from "react-toastify";
 import { v4 } from "uuid";
 import {
-  skillLevels,
-  skills,
   automationTools,
   automationLevels,
   feeTypes,
@@ -72,50 +70,10 @@ const AddService = () => {
   const [categories, setCategories] = useState([categorylists[0]]); //array
   const [tags, setTags] = useState([tagOptions[0]]); //array
   const [images, setImages] = useState<File[]>([]);
-  const [skillLists, setSkillLists] = useState([
-    { skill: skills[0], skillLevel: skillLevels[0] },
-  ]);
+
   const [automationLists, setAutomationLists] = useState([
     { automation: automationTools[0], automationLevel: automationLevels[0] },
   ]);
-
-  const handleSkillChange = (
-    index: number,
-    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = event.target;
-
-    setSkillLists((currentSkills) => {
-      return currentSkills.map((item, i) => {
-        if (i === index) {
-          if (name === "skill" || name === "skillLevel") {
-            const updatedValue =
-              name === "skill"
-                ? skills.find((skill) => skill.value === value)
-                : skillLevels.find((level) => level.value === value);
-            return { ...item, [name]: updatedValue || item[name] };
-          }
-        }
-        return item;
-      });
-    });
-  };
-
-  const addSkillField = () => {
-    setSkillLists((currentSkillLists) => [
-      ...currentSkillLists,
-      {
-        skill: { id: 0, value: "", label: "Select a skill" },
-        skillLevel: { id: 0, value: "", label: "Select skill level" },
-      },
-    ]);
-  };
-
-  const subtractSkillField = (indexToRemove: number) => {
-    setSkillLists((currentSkillLists) =>
-      currentSkillLists.filter((_, index) => index !== indexToRemove)
-    );
-  };
 
   const handleAutomationChange = (
     index: number,
@@ -202,10 +160,6 @@ const AddService = () => {
 
         const imageUrls = await Promise.all(uploadPromises);
         const imageUrl = await getDownloadURL(imageRef);
-        const transformedSkills = skillLists.map(({ skill, skillLevel }) => ({
-          skill: skill.value,
-          skillLevel: skillLevel.value,
-        }));
 
         const tranformedTools = automationLists.map(
           ({ automation, automationLevel }) => ({
@@ -232,7 +186,6 @@ const AddService = () => {
           video: formState?.videoUrl,
           featuredImage: imageUrl,
           fee: feeType?.label,
-          skills: transformedSkills || null,
           tools: tranformedTools || null,
         };
 
@@ -251,9 +204,11 @@ const AddService = () => {
         <div className="mx-auto grid md:grid-cols-3 justify-start items-start gap-10 max-w-screen-2xl px-6 lg:px-8">
           <div className="md:col-span-2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <WokrDashboardInput
+              labelclass="required"
+              required={true}
               classname="col-span-full"
               htmlFor="title"
-              label="TITLE"
+              label="Title"
               inputTitle="title"
               inputValue={formState.title}
               disabled={false}
@@ -266,7 +221,9 @@ const AddService = () => {
             />
 
             <WokrDashboardDescription
-              title="DESCRIPTION"
+              labelclass="required"
+              required={true}
+              title="Description"
               writeUp="Write a few sentences about automation job"
               name="description"
               id="description"
@@ -274,98 +231,6 @@ const AddService = () => {
               onChange={handleChange}
               value={formState.description}
             />
-
-            <div className="border-b border-gray-900/10 pb-12 col-span-full">
-              <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
-                SKILL INFORMATION
-              </h2>
-
-              <div>
-                {skillLists.map((field, index) => (
-                  <div
-                    key={index}
-                    className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
-                  >
-                    <WokrDashboardSelect
-                      id="skill"
-                      title="skill"
-                      name="skill"
-                      options={skills}
-                      label="Skill"
-                      value={field.skill.value}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleSkillChange(index, e)
-                      }
-                    />
-                    <WokrDashboardSelect
-                      id="skillLevel"
-                      title="skillLevel"
-                      name="skillLevel"
-                      options={skillLevels}
-                      label="Skill Level"
-                      value={field.skillLevel.value}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleSkillChange(index, e)
-                      }
-                    />
-
-                    <div className="flex md:justify-end items-center">
-                      <button
-                        title="remove"
-                        type="button"
-                        onClick={() => subtractSkillField(index)}
-                        className="mt-7"
-                      >
-                        <svg
-                          width="20"
-                          height="20"
-                          viewBox="0 0 45 45"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
-                          <path
-                            d="M32.0918 22.0464L11.9992 22.0464"
-                            stroke="#636363"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                <button
-                  title="add"
-                  type="button"
-                  onClick={addSkillField}
-                  className="w-auto flex items-center justify-center text-center mt-4 px-2 py-1.5 rounded-md bg-gray-300 text-gray-500" // Add some margin-top for spacing from the list
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 45 45"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle cx="22.5" cy="22.5" r="22.5" fill="#D9D9D9" />
-                    <path
-                      d="M22.0469 12L22.0469 32.0926"
-                      stroke="#636363"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                    <path
-                      d="M32.0918 22.0464L11.9992 22.0464"
-                      stroke="#636363"
-                      stroke-width="2"
-                      stroke-linecap="round"
-                    />
-                  </svg>
-                  Add Skill
-                </button>
-              </div>
-            </div>
 
             <div className="border-b border-gray-900/10 pb-12 col-span-full">
               <h2 className="text-base font-semibold leading-7 mb-5 text-gray-900">
@@ -379,6 +244,8 @@ const AddService = () => {
                     className="grid grid-cols-1 gap-x-6 md:gap-y-8 sm:grid-cols-11 justify-between items-center w-full mb-4"
                   >
                     <WokrDashboardSelect
+                      labelclass="required"
+                      required={true}
                       id="automation"
                       title="automation"
                       name="automation"
@@ -390,6 +257,8 @@ const AddService = () => {
                       }
                     />
                     <WokrDashboardSelect
+                      labelclass="required"
+                      required={true}
                       id="automationLevel"
                       title="automationLevel"
                       name="automationLevel"
@@ -460,18 +329,20 @@ const AddService = () => {
             </div>
 
             <WokrDashboardList
+              labelclass="required"
               htmlFor="categories"
-              label="CATEGORY"
+              label="Category"
               categories={categories}
               setCategories={setCategories}
               categorylist={categorylists}
               multiple={true}
+              required={true}
             />
 
             <div className="sm:col-span-3">
               <label
                 htmlFor="tags"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="required block text-sm font-medium leading-6 text-gray-900"
               >
                 Tags
               </label>
@@ -487,7 +358,7 @@ const AddService = () => {
 
             <WokrDashboardList
               htmlFor="servicesIncluded"
-              label="SERVICE INCLUDED"
+              label="Service Included"
               categories={servicesIncluded}
               setCategories={setServicesIncluded}
               categorylist={includedServices}
@@ -495,7 +366,7 @@ const AddService = () => {
             />
             <WokrDashboardList
               htmlFor="feeType"
-              label="FEE TYPE"
+              label="Fee Type"
               categories={feeType}
               setCategories={setFeeType}
               categorylist={feeTypes}
@@ -504,7 +375,7 @@ const AddService = () => {
 
             <WokrDashboardList
               htmlFor="deliveryTime"
-              label="DELIVERY TIME (DAYS)"
+              label="Delivery Time (days)"
               categories={deliveryTime}
               setCategories={setDeliveryTime}
               categorylist={deliveryTimes}
@@ -514,7 +385,7 @@ const AddService = () => {
             <WokrDashboardInput
               classname="sm:col-span-3"
               htmlFor="maxRevisions"
-              label="MAX REVISIONS"
+              label="Max Revisions"
               inputTitle="maxRevisions"
               inputValue={formState.maxRevisions}
               disabled={false}
@@ -524,6 +395,8 @@ const AddService = () => {
               autocomplete="no of maxRevisions"
               inputPlaceholder="Max Revision"
               onChange={handleChange}
+              labelclass="required"
+              required={true}
             />
           </div>
 
@@ -531,7 +404,9 @@ const AddService = () => {
             <WokrDashboardInput
               classname="col-span-full"
               htmlFor="price"
-              label="PRICE (STARTING AT $)"
+              label="Price (Starting At $10)"
+              labelclass="required"
+              required={true}
               inputTitle="price"
               inputValue={formState.price}
               disabled={false}
@@ -539,12 +414,14 @@ const AddService = () => {
               inputName="price"
               inputId="price"
               autocomplete="value for job"
-              inputPlaceholder="Price"
+              inputPlaceholder="10"
               onChange={handleChange}
             />
 
             <WokrPhotoUpload
-              label="FEATURED IMAGE"
+              labelclass="required"
+              required={true}
+              label="Featured Image"
               htmlFor="imageUpload"
               title="Upload a featured image"
               inputName="imageUpload"
@@ -575,7 +452,7 @@ const AddService = () => {
 
             <WokrPhotoUpload
               multiple={true}
-              label="GALLERY IMAGES"
+              label="Gallery Images"
               htmlFor="images"
               title="Upload gallery images"
               inputName="images"
@@ -610,7 +487,7 @@ const AddService = () => {
             <WokrDashboardInput
               classname="col-span-full"
               htmlFor="videoUrl"
-              label="VIDEO URL"
+              label="Video Url"
               inputTitle="videoUrl"
               inputValue={formState.videoUrl}
               disabled={false}
