@@ -64,7 +64,7 @@ const LoggedInHeader = (props: Props) => {
             <span className="sr-only">Wokr Marketplace</span>
             <Image
               className="h-14 w-auto"
-              src={logo}
+              src="/images/wokri_logo.png"
               alt="wokr marketplace logo"
             />
           </Link>

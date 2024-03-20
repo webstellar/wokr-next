@@ -237,6 +237,25 @@ export const deleteService = async (id: string) => {
   }
 };
 
+export const duplicateService = async (id: string) => {
+  try {
+    const response = await axios.post(`/api/automation/duplicate`, {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      params: { id },
+    });
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      throw new Error("Error deleting job");
+    } else {
+      throw error;
+    }
+  }
+};
+
 //tools
 export const createTool = async (data: object, token: string) => {
   try {
