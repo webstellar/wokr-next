@@ -7,7 +7,7 @@ import { useAllJobsQuery } from "@/hooks/useAllJobsQuery";
 import { useUserQuery } from "@/hooks/useUserQuery";
 import { jobData } from "@/types/types";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteService } from "@/utils/api";
@@ -34,6 +34,10 @@ const Services = () => {
   const [itemsPerPage, setItemsPerPage] = useState(2);
 
   const filteredJobs = jobs?.filter((job: jobData) => job.owner === user?._id);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [jobs]);
 
   const paginatedJobs = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
