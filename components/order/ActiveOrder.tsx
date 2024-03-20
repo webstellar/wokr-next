@@ -5,15 +5,16 @@ import { HiOutlineChevronDown } from "react-icons/hi";
 
 const ActiveOrder = () => {
   return (
-    <div className="flex flex-row justify-between items-center rounded-sm bg-gray-50 py-8 px-8 w-full">
+    <div className="flex flex-row flex-wrap md:flex-nowrap gap-3 justify-between items-center rounded-sm bg-gray-50 py-8 px-8 w-full">
       <div className="flex items-center whitespace-nowrap gap-x-2">
-        <span className="text-2xl font-medium">Active orders</span> - 0 ($0)
+        <span className="text-lg md:text-2xl font-medium">Active orders</span> -
+        0 ($0)
       </div>
 
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="inline-flex justify-center items-center px-4 py-2.5 w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 border rounded-md border-gray-400">
-            <div className="mr-2"> Active orders (0)</div>
+            <div className="mr-2 text-sm md:text-base"> Active orders (0)</div>
             <HiOutlineChevronDown
               className="h-4 w-4 text-gray-400"
               aria-hidden="true"

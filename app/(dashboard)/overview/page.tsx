@@ -10,7 +10,7 @@ const DashboardHome = () => {
 
   return (
     <section className="mx-auto mb-20">
-      <div className="mx-auto grid md:grid-cols-3 justify-between items-start gap-10 max-w-screen-2xl px-6 lg:px-8">
+      <div className="mx-auto grid grid-cols-1 md:grid-cols-3 justify-between items-start gap-10 max-w-screen-2xl px-6 lg:px-8">
         <div className="md:col-span-2 mt-10 flex flex-col gap-y-5">
           <ActiveOrder />
         </div>

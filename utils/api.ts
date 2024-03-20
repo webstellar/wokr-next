@@ -113,7 +113,7 @@ export const deleteProfile = async (userId: string) => {
 };
 
 //Jobs
-export const createJob = async (data: jobData, token: string) => {
+export const createService = async (data: jobData, token: string) => {
   try {
     const response = await axios.post("/api/automation/create", data, {
       headers: {
@@ -218,7 +218,7 @@ export const updateJob = async (id: string, data: jobData, token: string) => {
   }
 };
 
-export const deleteJob = async (id: string) => {
+export const deleteService = async (id: string) => {
   try {
     const response = await axios.delete(`/api/automation/delete`, {
       headers: {
@@ -230,7 +230,7 @@ export const deleteJob = async (id: string) => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error("Error deleting tool");
+      throw new Error("Error deleting job");
     } else {
       throw error;
     }

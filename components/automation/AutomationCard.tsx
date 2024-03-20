@@ -6,14 +6,21 @@ import { HiOutlineChevronDown } from "react-icons/hi";
 
 interface jobProps {
   data: jobData;
+  deleteFunc: (id: string) => void;
 }
 
-const AutomationCard: React.FC<jobProps> = ({ data }) => {
+const AutomationCard = ({ data, deleteFunc }: jobProps) => {
+  let profileId = data?._id as string;
+
   return (
-    <div className="rounded-3xl border flex flex-row justify-center items-center md:divide-x gap-y-5 gap-x-10 py-8 px-10">
+    <div className="rounded-3xl border flex flex-col md:flex-row justify-center items-center md:divide-x gap-y-5 gap-x-10 py-8 px-10">
       <div className="basis-full md:basis-1/2 flex flex-col item-center justify-center gap-y-4">
-        <h3 className="font-semibold text-xl">{data?.title}</h3>
-        <p className="leading-6 text-sm text-gray-400 font-light">
+        <h3 className="font-semibold text-xl text-center md:text-left cursor-pointer">
+          <Link href={`/automations/${data.title}?_id=${data._id}`}>
+            {data?.title}
+          </Link>
+        </h3>
+        <p className="leading-6 text-sm text-gray-400 font-light text-center md:text-left">
           {data?.description.substring(0, 85)}
         </p>
       </div>
@@ -59,7 +66,10 @@ const AutomationCard: React.FC<jobProps> = ({ data }) => {
             <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
               <div className="px-1 py-1">
                 <Menu.Item>
-                  <Link href={`/my-services/${data?._id}/edit`} className="flex">
+                  <Link
+                    href={`/my-services/${data?._id}/edit`}
+                    className="flex"
+                  >
                     <button
                       type="button"
                       className="text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm hover:text-wokr-red-100"
@@ -73,6 +83,7 @@ const AutomationCard: React.FC<jobProps> = ({ data }) => {
                     <button
                       type="button"
                       className="text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm hover:text-wokr-red-100"
+                      onClick={() => deleteFunc(profileId)}
                     >
                       Delete
                     </button>

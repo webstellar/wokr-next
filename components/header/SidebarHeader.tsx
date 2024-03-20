@@ -175,8 +175,6 @@ const SidebarHeader = (props: Props) => {
           )}
         </Popover.Group>
       </nav>
-
-      {/* Create an Account */}
     </header>
   );
 };

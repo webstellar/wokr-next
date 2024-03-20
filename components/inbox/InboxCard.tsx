@@ -25,7 +25,7 @@ const InboxCard = () => {
         {message.map((item, index) => (
           <div
             key={index}
-            className="flex flex-row justify-between items-center w-full pt-4"
+            className="flex flex-col md:flex-row md:justify-between md:items-center w-full pt-4 gap-y-4 md:gap-y-0 items-start"
           >
             <div className="flex flex-row justify-start items-center gap-x-3">
               <svg

@@ -160,14 +160,10 @@ export const homeMenu = [
 export const profileLinks = [
   { href: "/my-services", label: "My Services" },
   { href: "/post-service", label: "Post a Service" },
-  { href: "/my-jobs", label: "My Jobs" },
-  { href: "/post-job", label: "Post a Job" },
 ];
 export const settinglinks = [
   { href: "/my-orders", label: "My Orders" },
   { href: "/settings", label: "Settings" },
-  { href: "/support", label: "Help & Support" },
-  { href: "/settings#billing", label: "Billing" },
 ];
 
 export const languages = [
@@ -341,7 +337,6 @@ export const deliveryTimes = [
 export const sortBy = [
   { id: 1, label: "Desc", value: "Desc" },
   { id: 2, label: "Asc", value: "Asc" },
-
 ];
 
 export const categorylists = [

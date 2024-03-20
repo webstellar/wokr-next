@@ -18,7 +18,7 @@ import {
   tagOptions,
 } from "../../data/data";
 import { useRouter } from "next/navigation";
-import { createJob } from "@/utils/api";
+import { createService } from "@/utils/api";
 import {
   WokrDashboardButton,
   WokrDashboardDescription,
@@ -47,9 +47,9 @@ const initState: valueProps = {
 const AddService = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const postMutation = useMutation({
+  const addServiceMutation = useMutation({
     mutationFn: ({ formData, token }: { formData: jobData; token: string }) =>
-      createJob(formData, token),
+      createService(formData, token),
     onSuccess: (data) => {
       queryClient.setQueryData(["automationJob", data._id], data);
       toast("Congrats your automation job is live!", {
@@ -58,7 +58,7 @@ const AddService = () => {
         type: "success",
         position: "bottom-right",
       });
-      router.push(`/automations/${data._id}`); //dynamic routing
+      router.push(`/automations/${data._id}`);
     },
   });
   const [formState, setFormState] = useState(initState);
@@ -88,9 +88,7 @@ const AddService = () => {
     setSkillLists((currentSkills) => {
       return currentSkills.map((item, i) => {
         if (i === index) {
-          // Check if the target name is 'skill' or 'skillLevel', then update accordingly
           if (name === "skill" || name === "skillLevel") {
-            // Assuming value is the identifier to find in skills or skillLevels array
             const updatedValue =
               name === "skill"
                 ? skills.find((skill) => skill.value === value)
@@ -107,8 +105,8 @@ const AddService = () => {
     setSkillLists((currentSkillLists) => [
       ...currentSkillLists,
       {
-        skill: { id: 0, value: "", label: "Select a skill" }, // Example default structure
-        skillLevel: { id: 0, value: "", label: "Select skill level" }, // Example default structure
+        skill: { id: 0, value: "", label: "Select a skill" },
+        skillLevel: { id: 0, value: "", label: "Select skill level" },
       },
     ]);
   };
@@ -119,7 +117,6 @@ const AddService = () => {
     );
   };
 
-  //automation tools
   const handleAutomationChange = (
     index: number,
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -148,8 +145,8 @@ const AddService = () => {
     setAutomationLists((currentTools) => [
       ...currentTools,
       {
-        automation: { id: 0, value: "", label: "Select an automation tool" }, // Example default structure
-        automationLevel: { id: 0, value: "", label: "Select automation level" }, // Example default structure
+        automation: { id: 0, value: "", label: "Select an automation tool" },
+        automationLevel: { id: 0, value: "", label: "Select automation level" },
       },
     ]);
   };
@@ -187,7 +184,7 @@ const AddService = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (imageUpload == null) return; //image is compulsory
+    if (imageUpload == null) return;
 
     try {
       const currentUser = auth.currentUser;
@@ -195,8 +192,6 @@ const AddService = () => {
 
       if (currentUser) {
         const imageRef = ref(storage, `images/${imageUpload?.name + v4()}`);
-
-        // Upload image to firebase
         await uploadBytes(imageRef, imageUpload);
 
         const uploadPromises = images.map(async (image) => {
@@ -243,7 +238,7 @@ const AddService = () => {
 
         //await createJob(formData, headers);
 
-        postMutation.mutate({ formData, token });
+        addServiceMutation.mutate({ formData, token });
       }
     } catch (error) {
       console.log(error);

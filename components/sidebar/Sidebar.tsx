@@ -46,7 +46,6 @@ const Sidebar = ({
             true,
         })}
       >
-        {/* logo and collapse button */}
         <div
           className={classNames({
             "flex items-center border-b": true,
@@ -75,7 +74,7 @@ const Sidebar = ({
               ) : (
                 <Image
                   className="h-10 w-auto"
-                  src="/images//wokr_icon_only.png"
+                  src="/images/wokr_icon_only.png"
                   alt="wokr marketplace logo"
                   width={100}
                   height={100}
@@ -157,12 +156,15 @@ const Sidebar = ({
             title="icon-button"
             type="button"
             className={classNames({
-              "grid md:grid-cols-2 place-content-center": true,
+              "flex gap-x-3 place-content-center": true,
               "w-auto h-14 rounded-full": true,
             })}
             onClick={() => setCollapsed(!collapsed)}
           >
-            <Icon className="w-6 h-6" /> {!collapsed && "Collapse All"}
+            <Icon className="w-6 h-6" />{" "}
+            {!collapsed && (
+              <span className="hidden lg:block">Collapse All</span>
+            )}
           </button>
         </div>
       </div>

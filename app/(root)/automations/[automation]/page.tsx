@@ -16,6 +16,7 @@ import {
 import { useSearchParams } from "next/navigation";
 import AutomationPriceCard from "@/components/automation/AutomationPriceCard";
 import AutomationGallery from "@/components/automation/AutomationGallery";
+import Image from "next/image";
 
 type Props = {
   params: { automations: string };
@@ -35,7 +36,18 @@ export default function Automation({ params }: Props) {
 
   if (status === "pending")
     return (
-      <div className="mx-auto max-w-screen-2xl px-6 lg:px-8">Loading...</div>
+      <div className="mx-auto max-w-screen-2xl px-6 lg:px-8">
+        {" "}
+        <div className="my-6 flex items-center justify-center h-min">
+          <Image
+            src="/images/wokr-loader.gif"
+            alt="loading gif"
+            width={100}
+            height={100}
+            className="h-10 w-10"
+          />
+        </div>
+      </div>
     );
   if (status === "error") {
     return <h1>{JSON.stringify(error)}</h1>;

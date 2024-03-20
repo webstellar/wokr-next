@@ -13,7 +13,6 @@ import { Suspense, useMemo, useState, useEffect } from "react";
 import Select from "react-select";
 import Image from "next/image";
 import Pagination from "@/components/pagination/Pagination";
-import { useRouter } from "next/navigation";
 
 interface objectProps {
   id: number;
@@ -26,7 +25,6 @@ const Automations = ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const router = useRouter();
   const { data: jobs, status, error } = useAllJobsQuery();
   const { data: users } = useAllUsersQuery();
 

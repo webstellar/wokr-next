@@ -101,7 +101,7 @@ const LoggedInHeader = (props: Props) => {
           {props.user && (
             <Menu as="div" className="relative inline-block text-left">
               <div>
-                <Menu.Button className="inline-flex justify-center items-center px-4 py-2 w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75">
+                <Menu.Button className="inline-flex justify-center items-center px-4 py-2 w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75 ">
                   <Link href="/overview">
                     <Image
                       src={props.user.profileImage}
@@ -126,7 +126,7 @@ const LoggedInHeader = (props: Props) => {
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
               >
-                <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none">
+                <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none z-40">
                   <div className="px-1 py-1">
                     {profileLinks.map((link, i) => (
                       <Menu.Item key={i}>
@@ -236,6 +236,28 @@ const LoggedInHeader = (props: Props) => {
                     {item.title}
                   </Link>
                 ))}
+
+                {props.user &&
+                  profileLinks.map((item, i) => (
+                    <Link
+                      key={i}
+                      href={item.href}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+
+                {props.user &&
+                  settinglinks.map((item, i) => (
+                    <Link
+                      key={i}
+                      href={item.href}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-normal leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
               </div>
             </div>
           </div>

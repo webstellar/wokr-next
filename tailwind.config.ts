@@ -35,6 +35,7 @@ const config = {
       gridTemplateColumns: {
         sidebar: "300px auto", //for sidebar layout
         "sidebar-collapsed": "64px auto",
+        "sidebar-collapsed-mobile": "0px auto",
       },
       keyframes: {
         "accordion-down": {

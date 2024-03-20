@@ -41,9 +41,18 @@ const DashboardLayoutProvider = ({
             "grid-cols-sidebar": !collapsed,
             "grid-cols-sidebar-collapsed": collapsed,
             "transition-[grid-template-columns] duration-300 ease-in-out": true,
+            "grid-cols-sidebar-collapsed-mobile": !showSidebar,
+            "grid-cols-sidebar-collapsed-mobile md:grid-cols-sidebar":
+              !showSidebar && !collapsed,
+            "grid-cols-sidebar-collapsed-mobile md:grid-cols-sidebar-collapsed":
+              !showSidebar && collapsed,
           })}
         >
-          <div className="bg-gray-100 text-gray-800">
+          <div
+            className={classNames({
+              "bg-gray-100 text-gray-800": true,
+            })}
+          >
             <Sidebar
               collapsed={collapsed}
               setCollapsed={() => setSidebarCollapsed((prev) => !prev)}

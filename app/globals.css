@@ -2,8 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .cursor-default {
   cursor: default; /* Prevent the hand cursor */
   pointer-events: none; /* Disable clicks */
+}
+
+.required:after {
+  content: " *";
+  color: red;
+}
+
+@layer components {
 }

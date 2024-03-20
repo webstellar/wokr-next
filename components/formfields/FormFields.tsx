@@ -17,7 +17,7 @@ export const WokrDashboardList = ({ ...props }) => {
     <div className="sm:col-span-3">
       <label
         htmlFor={props.htmlFor}
-        className="block text-sm font-medium leading-6 text-gray-900"
+        className={`${props.labelclass} block text-sm font-medium leading-6 text-gray-900`}
       >
         {props.label}
       </label>
@@ -228,7 +228,7 @@ export const WokrDashboardInput = ({ ...props }) => {
     <div className={`${props.classname}`}>
       <label
         htmlFor={props.htmlFor}
-        className="block text-sm font-medium leading-6 text-gray-900"
+        className={`${props.labelclass} block text-sm font-medium leading-6 text-gray-900`}
       >
         {props.label}
       </label>
@@ -255,7 +255,7 @@ export const WokrDashboardUrlInput = ({ ...props }) => {
     <div className={props.classname}>
       <label
         htmlFor={props.htmlFor}
-        className="block text-sm font-medium leading-6 text-gray-900"
+        className={`${props.labelclass} block text-sm font-medium leading-6 text-gray-900`}
       >
         {props.label}
       </label>
@@ -265,6 +265,7 @@ export const WokrDashboardUrlInput = ({ ...props }) => {
             {props.url}
           </span>
           <input
+            required={props.required}
             disabled={props.disabled}
             onChange={props.onChange}
             value={props.value}
@@ -287,7 +288,7 @@ export const WokrDashboardSelector = ({ ...props }) => {
     <div className="sm:col-span-5 w-full">
       <label
         htmlFor={props.htmlFor}
-        className="block text-sm font-medium leading-6 text-gray-900"
+        className={`${props.labelclass} block text-sm font-medium leading-6 text-gray-900`}
       >
         {props.label}
       </label>
@@ -345,8 +346,8 @@ export const WokrPhotoUpload = ({ ...props }) => {
   return (
     <div className={`${props.classname}`}>
       <label
-        htmlFor="cover-photo"
-        className="block text-sm font-medium leading-6 text-gray-900"
+        htmlFor={props.htmlFor}
+        className={`${props.labelclass} block text-sm font-medium leading-6 text-gray-900`}
       >
         {props.label}
       </label>
@@ -363,6 +364,7 @@ export const WokrPhotoUpload = ({ ...props }) => {
             >
               <span>{props.title}</span>
               <input
+                required={props.required}
                 multiple={props.multiple}
                 title={props.title}
                 onChange={props.onChange}
@@ -424,8 +426,8 @@ export const WokrDashboardDescription = ({ ...props }) => {
   return (
     <div className="col-span-full">
       <label
-        htmlFor="about"
-        className="block text-sm font-medium leading-6 text-gray-900"
+        htmlFor={props.htmlFor}
+        className={`${props.labelclass} block text-sm font-medium leading-6 text-gray-900`}
       >
         {props.title}
       </label>
@@ -436,6 +438,7 @@ export const WokrDashboardDescription = ({ ...props }) => {
           onChange={props.onChange}
           value={props.value}
           rows={props.row}
+          required={props.required}
           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 sm:text-sm sm:leading-6 px-2"
         />
       </div>
