@@ -12,6 +12,7 @@ if (!admin.apps.length) {
 export const authCheck = async (token) => {
   try {
     const currentUser = await getAuth().verifyIdToken(token);
+    console.log("CURRENT USER", currentUser);
     return currentUser;
   } catch (error) {
     console.log("AUTH CHECK ERROR", error);

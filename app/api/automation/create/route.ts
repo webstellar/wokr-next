@@ -3,6 +3,7 @@ import { User } from "@/lib/models/user.model";
 import { NextResponse, NextRequest } from "next/server";
 import { connectToDB } from "@/lib/mongoose";
 import { authCheck } from "@/helpers/auth";
+
 connectToDB();
 
 export async function POST(req: NextRequest) {
@@ -12,9 +13,6 @@ export async function POST(req: NextRequest) {
 
   try {
     const data = await req.json();
-
-    console.log(req.headers);
-
     const token = req.headers.get("Authorization")?.split("Bearer ")[1];
     if (!token) {
       throw new Error("No token provided");
@@ -23,7 +21,7 @@ export async function POST(req: NextRequest) {
     const currentUser = await authCheck(token);
 
     const user = await User.findOne({ email: currentUser.email });
-    const owner = user?._id;
+    const owner = user?._id; //
 
     if (!user) {
       throw new Error("User not found");

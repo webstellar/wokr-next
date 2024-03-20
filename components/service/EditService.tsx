@@ -18,7 +18,7 @@ import {
   tagOptions,
 } from "../../data/data";
 import { useRouter } from "next/navigation";
-import { createJob } from "@/utils/api";
+import { updateService } from "@/utils/api";
 import {
   WokrDashboardButton,
   WokrDashboardDescription,
@@ -33,6 +33,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { jobData } from "@/types/types";
 
 interface jobProps {
+  id: string;
   data: jobData;
 }
 
@@ -53,10 +54,10 @@ const EditService = (data: jobProps) => {
   const queryClient = useQueryClient();
   const postMutation = useMutation({
     mutationFn: ({ formData, token }: { formData: jobData; token: string }) =>
-      createJob(formData, token),
+      updateService(data?.id, formData, token),
     onSuccess: (data) => {
       queryClient.setQueryData(["automationJob", data._id], data);
-      toast("Congrats your automation job is live!", {
+      toast("Congrats your automation service is updated!", {
         hideProgressBar: true,
         autoClose: 2000,
         type: "success",

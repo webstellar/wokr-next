@@ -7,9 +7,10 @@ import { HiOutlineChevronDown } from "react-icons/hi";
 interface jobProps {
   data: jobData;
   deleteFunc: (id: string) => void;
+  duplicateFunc: (id: string) => void;
 }
 
-const AutomationCard = ({ data, deleteFunc }: jobProps) => {
+const AutomationCard = ({ data, deleteFunc, duplicateFunc }: jobProps) => {
   let profileId = data?._id as string;
 
   return (
@@ -94,6 +95,7 @@ const AutomationCard = ({ data, deleteFunc }: jobProps) => {
                     <button
                       type="button"
                       className="text-gray-900 group flex w-full items-center rounded-md px-2 py-2 text-sm hover:text-wokr-red-100"
+                      onClick={() => duplicateFunc(profileId)}
                     >
                       Duplicate
                     </button>

@@ -8,10 +8,16 @@ type Props = {
 
 const EditJob = ({ params }: Props) => {
   const id = params?.id;
-  const { data, error, status, isLoading } = useJobQuery(id);
+  const { data, isLoading } = useJobQuery(id);
 
   return (
-    <>{isLoading ? <div>Data is Loading</div> : <EditService data={data} />}</>
+    <>
+      {isLoading ? (
+        <div>Data is Loading</div>
+      ) : (
+        <EditService data={data} id={data?._id} />
+      )}
+    </>
   );
 };
 

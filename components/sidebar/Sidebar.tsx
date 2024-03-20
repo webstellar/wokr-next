@@ -35,7 +35,7 @@ const Sidebar = ({
         "z-20": true,
         "transition-all duration-300 ease-in-out": true,
         "fixed md:static md:translate-x-0": true,
-        "w-[300px]": !collapsed,
+        "w-[200px]": !collapsed,
         "w-16": collapsed,
         "-translate-x-full": !shown,
       })}

@@ -1,6 +1,5 @@
 import { jobData, userData } from "@/types/types";
 import axios from "axios";
-import { SortOrder } from "mongoose";
 
 //registers new users when login
 export const registerUser = async (data: object) => {
@@ -198,7 +197,11 @@ export const getAllJobs = async () => {
   }
 };
 
-export const updateJob = async (id: string, data: jobData, token: string) => {
+export const updateService = async (
+  id: string,
+  data: jobData,
+  token: string
+) => {
   try {
     const response = await axios.put("/api/automation/update", data, {
       headers: {
@@ -218,38 +221,40 @@ export const updateJob = async (id: string, data: jobData, token: string) => {
   }
 };
 
-export const deleteService = async (id: string) => {
+export const deleteService = async (id: string, token: string) => {
   try {
     const response = await axios.delete(`/api/automation/delete`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
       params: { id },
     });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error("Error deleting job");
+      throw new Error("Error deleting service");
     } else {
       throw error;
     }
   }
 };
 
-export const duplicateService = async (id: string) => {
+export const duplicateService = async (id: string, token: string) => {
   try {
-    const response = await axios.post(`/api/automation/duplicate`, {
+    const response = await axios.get(`/api/automation/duplicate`, {
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
       params: { id },
     });
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      throw new Error("Error deleting job");
+      throw new Error("Error duplicating service");
     } else {
       throw error;
     }

@@ -33,7 +33,7 @@ const config = {
         san: ["var(--font-pangram)"],
       },
       gridTemplateColumns: {
-        sidebar: "300px auto", //for sidebar layout
+        sidebar: "200px auto", //for sidebar layout
         "sidebar-collapsed": "64px auto",
         "sidebar-collapsed-mobile": "0px auto",
       },

@@ -1,5 +1,7 @@
 "use client";
 
+import { auth } from "@/config/firebase";
+import { getIdToken } from "firebase/auth";
 import AutomationCard from "@/components/automation/AutomationCard";
 import Pagination from "@/components/pagination/Pagination";
 import MiniProfileCard from "@/components/profileCard/MiniProfileCard";
@@ -10,7 +12,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteService } from "@/utils/api";
+import { deleteService, duplicateService } from "@/utils/api";
 import { toast } from "react-toastify";
 
 const Services = () => {
@@ -18,10 +20,25 @@ const Services = () => {
   const { data: user } = useUserQuery();
   const queryClient = useQueryClient();
   const deleteServiceMutation = useMutation({
-    mutationFn: (id: string) => deleteService(id),
+    mutationFn: ({ id, token }: { id: string; token: string }) =>
+      deleteService(id, token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["automations"] });
       toast("Your automation service was deleted successfully", {
+        hideProgressBar: true,
+        autoClose: 2000,
+        type: "success",
+        position: "bottom-right",
+      });
+    },
+  });
+
+  const duplicateServiceMutation = useMutation({
+    mutationFn: ({ id, token }: { id: string; token: string }) =>
+      duplicateService(id, token),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["automations"] });
+      toast("Your automation service was duplicated successfully", {
         hideProgressBar: true,
         autoClose: 2000,
         type: "success",
@@ -64,8 +81,16 @@ const Services = () => {
     return <h1>{JSON.stringify(error)}</h1>;
   }
 
-  const handleDeleteJob = (id: string) => {
-    deleteServiceMutation.mutate(id);
+  const handleDeleteJob = async (id: string) => {
+    const currentUser = auth.currentUser;
+    const token = await getIdToken(currentUser!, true);
+    deleteServiceMutation.mutate({ id, token });
+  };
+
+  const handleDuplicateJob = async (id: string) => {
+    const currentUser = auth.currentUser;
+    const token = await getIdToken(currentUser!, true);
+    duplicateServiceMutation.mutate({ id, token });
   };
 
   return (
@@ -77,6 +102,7 @@ const Services = () => {
               key={job._id}
               data={job}
               deleteFunc={handleDeleteJob}
+              duplicateFunc={handleDuplicateJob}
             />
           ))}
 
