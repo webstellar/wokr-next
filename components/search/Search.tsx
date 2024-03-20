@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useDebounce } from "use-debounce";
 
@@ -17,10 +17,12 @@ const Search = () => {
   }, [initialQuery, pathname]);
 
   useEffect(() => {
-    if (query?.trim()) {
+    if (pathname === "/automations" && query === "") {
+      router.push("/automations");
+    } else if (query) {
       router.push(`/automations?query=${encodeURIComponent(query)}`);
     }
-  }, [router, query]);
+  }, [router, query, pathname]);
 
   return (
     <div className="hidden lg:flex justify-center items-center">

@@ -1,54 +1,45 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import React from "react";
 
 interface Props {
-  pageNumber: number;
-  isNext: boolean;
-  path: string;
+  itemsPerPage: number;
+  totalItems: number;
+  paginate: (pageNumber: number) => void;
+  currentPage: number;
 }
 
-function Pagination({ pageNumber, isNext, path }: Props) {
-  const router = useRouter();
-  // Add refetch
-
-  const handleNavigation = (type: string) => {
-    let nextPageNumber = pageNumber;
-
-    if (type === "prev") {
-      nextPageNumber = Math.max(1, pageNumber - 1);
-    } else if (type === "next") {
-      nextPageNumber = pageNumber + 1;
-    }
-
-    if (nextPageNumber > 1) {
-      router.push(`/${path}?page=${nextPageNumber}`);
-    } else {
-      router.push(`/${path}`);
-    }
-  };
-
-  if (!isNext && pageNumber === 1) return null;
+const Pagination = ({
+  itemsPerPage,
+  totalItems,
+  paginate,
+  currentPage,
+}: Props) => {
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(totalItems / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
 
   return (
-    <div className="pagination">
-      <button
-        onClick={() => handleNavigation("prev")}
-        disabled={pageNumber === 1}
-        className="text-base font-normal"
-      >
-        Prev
-      </button>
-      <p className="text-base font-medium">{pageNumber}</p>
-      <button
-        onClick={() => handleNavigation("next")}
-        disabled={!isNext}
-        className="text-base font-normal"
-      >
-        Next
-      </button>
-    </div>
+    <nav>
+      <ul className="mt-10 flex w-full items-center justify-center gap-5">
+        {pageNumbers.map((number) => (
+          <li
+            key={number}
+            className={
+              number === currentPage ? "text-wokr-red-200" : "page-item"
+            }
+          >
+            <button
+              type="button"
+              onClick={() => paginate(number)}
+              className="hover:text-wokr-red-200"
+            >
+              {number}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
-}
+};
 
 export default Pagination;

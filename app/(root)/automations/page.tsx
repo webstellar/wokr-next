@@ -9,10 +9,11 @@ import CreatableSelect from "react-select/creatable";
 
 import { automationData, jobData, newJobData, userData } from "@/types/types";
 import { allTools } from "@/data/data";
-import { Suspense, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Suspense, useMemo, useState, useEffect } from "react";
 import Select from "react-select";
 import Image from "next/image";
+import Pagination from "@/components/pagination/Pagination";
+import { useRouter } from "next/navigation";
 
 interface objectProps {
   id: number;
@@ -25,7 +26,7 @@ const Automations = ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  console.log("searchParams", searchParams);
+  const router = useRouter();
   const { data: jobs, status, error } = useAllJobsQuery();
   const { data: users } = useAllUsersQuery();
 
@@ -38,8 +39,15 @@ const Automations = ({
   const [categories, setCategories] = useState<objectProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(4);
+
   //const searchParams = useSearchParams();
   const query = searchParams.query;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [query]);
 
   const jobsArray = jobs?.map((job: jobData) => {
     const user = users?.find((user: userData) => user._id === job.owner);
@@ -52,6 +60,7 @@ const Automations = ({
 
   const filteredJobs = useMemo(() => {
     let result = jobsArray;
+
     if (query) {
       result = result?.filter(
         (job: jobData) =>
@@ -88,6 +97,13 @@ const Automations = ({
 
     return result;
   }, [jobsArray, query, categories, tags, sort?.value]);
+
+  const paginatedJobs = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredJobs?.slice(startIndex, startIndex + itemsPerPage);
+  }, [currentPage, itemsPerPage, filteredJobs]);
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   if (status === "pending")
     return (
@@ -206,10 +222,10 @@ const Automations = ({
               className="h-10 w-10"
             />
           </div>
-        ) : filteredJobs.length > 0 ? (
+        ) : paginatedJobs.length > 0 ? (
           <div className="my-6 grid grid-cols-1 md:grid-cols-4 justify-between gap-10">
-            {filteredJobs &&
-              filteredJobs.map((job: newJobData) => (
+            {paginatedJobs &&
+              paginatedJobs.map((job: newJobData) => (
                 <AutomationStoreCard key={job._id} data={job} />
               ))}
           </div>
@@ -218,6 +234,13 @@ const Automations = ({
             No jobs found matching your criteria
           </div>
         )}
+
+        <Pagination
+          itemsPerPage={itemsPerPage}
+          totalItems={filteredJobs.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
       </Suspense>
     </div>
   );
