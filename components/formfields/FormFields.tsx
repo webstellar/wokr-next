@@ -1,16 +1,15 @@
 "use client";
 
 import { useState, Fragment } from "react";
-import { HiEye, HiEyeSlash } from "react-icons/hi2";
-import Spinner from "../spinner/Spinner";
+import { HiEye, HiEyeSlash, HiMiniPencil } from "react-icons/hi2";
 import {
   HiPhoto,
   HiCheckCircle,
   HiChevronUpDown,
   HiCheck,
 } from "react-icons/hi2";
-import PhoneInput from "react-phone-input-2";
 import { Transition, Listbox } from "@headlessui/react";
+import Image from "next/image";
 
 export const WokrDashboardList = ({ ...props }) => {
   return (
@@ -27,11 +26,13 @@ export const WokrDashboardList = ({ ...props }) => {
         multiple={props.multiple}
       >
         <div className="relative mt-2">
-          <Listbox.Button className="bg-white relative w-full cursor-default rounded-md shadow-sm border-0 text-left py-1.5 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6 outline-none">
+          <Listbox.Button className="bg-white relative w-full rounded-md shadow-sm border-0 text-left py-1.5 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6 outline-none">
             <span className="block truncate">
-              {Array.isArray(props.categories)
-                ? props.categories.map((person: any) => person.value).join(", ")
-                : props.categories.value}
+              {Array.isArray(props?.categories)
+                ? props?.categories
+                    .map((person: any) => person.value)
+                    .join(", ")
+                : props?.categories}
             </span>
             <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <HiChevronUpDown
@@ -53,7 +54,7 @@ export const WokrDashboardList = ({ ...props }) => {
                     key={person.id}
                     value={person}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                      `relative select-none py-2 pl-10 pr-4 ${
                         active
                           ? "bg-wokr-red-50 text-amber-900"
                           : "text-gray-900"
@@ -101,7 +102,7 @@ export const WokrList = ({ ...props }) => {
         multiple={props.multiple}
       >
         <div className="relative mt-2">
-          <Listbox.Button className="bg-white relative w-full cursor-default rounded-md shadow-sm border-0 text-left py-1.5 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6 outline-none">
+          <Listbox.Button className="bg-white relative w-full rounded-md shadow-sm border-0 text-left py-1.5 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6 outline-none">
             <span className="block truncate">
               {Array.isArray(props.categories)
                 ? props.categories.map((person: any) => person.value).join(", ")
@@ -127,7 +128,7 @@ export const WokrList = ({ ...props }) => {
                     key={person.id}
                     value={person}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                      `relative select-none py-2 pl-10 pr-4 ${
                         active
                           ? "bg-wokr-red-50 text-amber-900"
                           : "text-gray-900"
@@ -212,7 +213,13 @@ export const WokrButton = ({ ...props }) => {
       >
         {props.loading ? (
           <>
-            <Spinner />
+            <Image
+              src="/images/wokr-loader.gif"
+              alt="loading-button"
+              className="mr-2 h-4 w-4"
+              width={90}
+              height={90}
+            />
             {props.loadingText}
           </>
         ) : (
@@ -329,6 +336,7 @@ export const WokrDashboardSelect = ({ ...props }) => {
           name={props.name}
           onChange={props.onChange}
           required={props.required}
+          value={props.value}
           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 pl-2.5 sm:text-sm sm:leading-6 outline-none"
         >
           {props.options.map((option: any, i: any) => (
@@ -392,36 +400,6 @@ export const WokrPhotoUpload = ({ ...props }) => {
   );
 };
 
-export const WokrPhone = ({ ...props }) => {
-  return (
-    <div className="sm:col-span-3">
-      <label
-        className="block text-grey-darker text-sm font-medium leading-6"
-        htmlFor="PhoneNumber"
-      >
-        {props.label}
-      </label>
-      <div className="mt-2 relative w-full flex flex-col">
-        <PhoneInput
-          country={"us"}
-          value={props.phoneNumber}
-          inputStyle={{ width: "100%" }}
-          containerClass="focus:border-wokr-red-100"
-          inputClass="font-pangram-medium focus:border-wokr-red-100"
-          dropdownClass="font-pangram-medium focus:border-wokr-red-100"
-          onChange={props.onChange}
-          inputProps={{
-            required: true,
-            name: "phoneNumber",
-          }}
-        />
-
-        {!props.valid && <p>Please enter a valid phone number.</p>}
-      </div>
-    </div>
-  );
-};
-
 export const WokrDashboardDescription = ({ ...props }) => {
   return (
     <div className="col-span-full">
@@ -431,6 +409,9 @@ export const WokrDashboardDescription = ({ ...props }) => {
       >
         {props.title}
       </label>
+      <p className="mt-1 text-sm font-light leading-6 text-gray-600">
+        {props.writeUp}
+      </p>
       <div className="mt-2">
         <textarea
           id={props.id}
@@ -439,25 +420,59 @@ export const WokrDashboardDescription = ({ ...props }) => {
           value={props.value}
           rows={props.row}
           required={props.required}
-          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-wokr-red-100 sm:text-sm sm:leading-6 px-2"
+          className="block w-full rounded-md border py-1.5 text-gray-900 shadow-sm  placeholder:text-gray-400 focus:ring-wokr-red-100 sm:text-sm sm:leading-6 px-2"
         />
       </div>
       <p className="mt-3 text-sm font-light leading-6 text-gray-600">
-        {props.writeUp}
+        Description Character Count: {props.charCount}
       </p>
+
+      {props.charCount === props.maxChars ||
+        ("500" && (
+          <div className="text-red-500 text-xs">
+            You have reached the maximum characters
+          </div>
+        ))}
     </div>
+  );
+};
+
+export const WokrFloadingButton = ({ ...props }) => {
+  return (
+    <button
+      type="button"
+      onClick={props.handleClick}
+      className="fixed bottom-16 right-4 flex items-center justify-center w-12 h-12 bg-green-500 text-white rounded-full shadow-lg hover:bg-wokr-red-200 transition-colors duration-300 z-50 hover:motion-safe:animate-bounce"
+      aria-label="Create new item"
+    >
+      <HiMiniPencil className="h-5 w-5" />
+    </button>
   );
 };
 
 export const WokrDashboardButton = ({ ...props }) => {
   return (
-    <div className="mt-6 flex items-center justify-end gap-x-6">
+    <div className="mt-6 flex items-center gap-x-6">
       <button
+        title={props.cancelTitle}
         type="button"
-        className="text-sm font-semibold leading-6 text-gray-900"
+        className="text-sm font-semibold leading-6 text-gray-900 px-5 py-2 bg-gray-100 rounded-md"
         onClick={props.cancel}
       >
-        {props.cancelText}
+        {props.loading ? (
+          <>
+            <Image
+              src="/images/wokr-loader.gif"
+              alt="loading-button"
+              className="mr-2 h-4 w-4"
+              width={90}
+              height={90}
+            />
+            {props.preCancelText}
+          </>
+        ) : (
+          <>{props.cancelText}</>
+        )}
       </button>
       <button
         title={props.title}
@@ -468,26 +483,13 @@ export const WokrDashboardButton = ({ ...props }) => {
       >
         {props.loading ? (
           <>
-            <svg
-              className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M12 2C6.477 2 2 6.477 2 12c0 1.656.337 3.223 0.943 4.65C3.65 16.73 4.26 17 5 17c.74 0 1.35-.27 1.057-.35C7.663 15.223 8 13.656 8 12c0-2.21-.895-4.21-2.343-5.657C4.105 4.895 2.105 4 0 4"
-              ></path>
-            </svg>
+            <Image
+              src="/images/wokr-loader.gif"
+              alt="loading-button"
+              className="mr-2 h-4 w-4"
+              width={90}
+              height={90}
+            />
             {props.loadingText}
           </>
         ) : (

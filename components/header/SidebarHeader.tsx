@@ -86,7 +86,7 @@ const SidebarHeader = (props: Props) => {
                         alt={props?.user?.firstName}
                         width={100}
                         height={100}
-                        className="rounded-full w-8 h-8 cursor-pointer"
+                        className="rounded-full w-8 h-8 object-cover object-center cursor-pointer"
                       />
                     ) : (
                       <HiUser className="text-2xl text-gray-500" />

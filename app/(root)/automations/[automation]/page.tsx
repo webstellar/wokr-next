@@ -13,10 +13,12 @@ import {
   HiMiniArrowPath,
   HiMiniCog8Tooth,
 } from "react-icons/hi2";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import AutomationPriceCard from "@/components/automation/AutomationPriceCard";
 import AutomationGallery from "@/components/automation/AutomationGallery";
 import Image from "next/image";
+import { WokrFloadingButton } from "@/components/formfields/FormFields";
+import { auth } from "@/config/firebase";
 
 type Props = {
   params: { automations: string };
@@ -25,6 +27,8 @@ type Props = {
 export default function Automation({ params }: Props) {
   const id = params?.automations;
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const currentUser = auth.currentUser;
 
   const search = String(searchParams.get("_id"));
   const { data: job, error, status } = useJobQuery(search);
@@ -34,10 +38,12 @@ export default function Automation({ params }: Props) {
     state === "success" &&
     users.filter((user: userData) => user._id === job?.owner);
 
+  const loggedInUser = currentUser?.email;
+  const jobOwner = filterUserInfo[0]?.email;
+
   if (status === "pending")
     return (
       <div className="mx-auto max-w-screen-2xl px-6 lg:px-8">
-        {" "}
         <div className="my-6 flex items-center justify-center h-min">
           <Image
             src="/images/wokr-loader.gif"
@@ -53,6 +59,10 @@ export default function Automation({ params }: Props) {
     return <h1>{JSON.stringify(error)}</h1>;
   }
 
+  const handleClick = () => {
+    router.push(`/my-services/${job._id}/edit`);
+  };
+
   return (
     <div className="mx-auto flex flex-col max-w-screen-2xl item-center justify-start p-6 lg:px-8">
       <Breadcrumb
@@ -63,7 +73,6 @@ export default function Automation({ params }: Props) {
         listClasses="hover:underline mx-2 text-gray-500 text-xs md:text-sm font-light"
         capitalizeLinks
       />
-
       <div className="grid grid-col-1 md:grid-cols-2 justify-between items-start py-6 mx-2 gap-5 ">
         <div className="order-last md:order-first md:col-span-1 flex flex-col gap-y-4">
           <span className="font-medium text-2xl md:text-3xl mb-5">
@@ -170,6 +179,9 @@ export default function Automation({ params }: Props) {
           <AutomationPriceCard data={job} />
         </div>
       </div>
+      {loggedInUser === jobOwner && (
+        <WokrFloadingButton handleClick={handleClick} />
+      )}
     </div>
   );
 }

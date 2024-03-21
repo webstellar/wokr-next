@@ -37,6 +37,7 @@ export type jobData = {
   skills?: any;
   tools?: any;
   owner?: string;
+  status?: string;
 };
 
 export type userData = {

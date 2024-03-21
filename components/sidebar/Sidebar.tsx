@@ -70,6 +70,7 @@ const Sidebar = ({
                   alt="wokr marketplace logo"
                   width={100}
                   height={100}
+                  priority
                 />
               ) : (
                 <Image
@@ -123,19 +124,25 @@ const Sidebar = ({
             "grid place-content-stretch p-4 border-b": true,
           })}
         >
-          <div className="flex gap-4 items-center h-11 overflow-hidden">
+          <div className="flex gap-4 items-center h-auto overflow-hidden">
             <Image
               src={user ? user.profileImage : `/images/profile.svg`}
               alt="profile image"
-              className="rounded-full w-8 h-8"
+              className="rounded-full w-8 h-8 object-cover object-center"
               width="100"
               height="100"
             />
             {!collapsed && (
               <div className="flex flex-col ">
-                <span className="text-gray-600 my-0">
+                <span
+                  className="text-gray-600 my-0 break-all"
+                  title={
+                    user?.username || (user?.email && user?.email.split("@")[0])
+                  }
+                >
                   {user &&
-                    (user.username || (user.email && user.email.split("@")[0]))}
+                    (`${user?.username?.substring(0, 10)}...` ||
+                      (user?.email && user?.email?.split("@")[0]))}
                 </span>
                 <Link href="/my-profile" className="text-wokr-red-100 text-sm">
                   View Profile

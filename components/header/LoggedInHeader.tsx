@@ -9,7 +9,6 @@ import {
   HiOutlineBell,
   HiOutlineChevronDown,
 } from "react-icons/hi";
-import logo from "../../public/images/wokri_logo.png";
 
 //data
 import { homeMenu, profileLinks, settinglinks } from "../../data/data";
@@ -66,6 +65,9 @@ const LoggedInHeader = (props: Props) => {
               className="h-14 w-auto"
               src="/images/wokri_logo.png"
               alt="wokr marketplace logo"
+              width={100}
+              height={100}
+              priority
             />
           </Link>
         </div>
@@ -108,7 +110,7 @@ const LoggedInHeader = (props: Props) => {
                       alt={props.user.firstName}
                       width={100}
                       height={100}
-                      className="rounded-full w-8 h-8 cursor-pointer"
+                      className="rounded-full w-8 h-8 object-cover object-center cursor-pointer"
                     />
                   </Link>
                   <HiOutlineChevronDown
@@ -211,8 +213,11 @@ const LoggedInHeader = (props: Props) => {
               <span className="sr-only">Wokr Marketplace</span>
               <Image
                 className="h-12 w-auto"
-                src={logo}
+                src="/images/wokri_logo.png"
                 alt="wokr marketplace logo"
+                width={100}
+                height={100}
+                priority
               />
             </Link>
             <button

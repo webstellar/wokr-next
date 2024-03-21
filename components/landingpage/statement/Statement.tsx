@@ -18,6 +18,7 @@ const Statement = () => {
           alt="wokr official logo"
           width={100}
           height={100}
+          priority
         />
         <h3 className="font-pangram-medium text-3xl md:text-4xl text-left">
           Advance solutions and professional talent for businesses

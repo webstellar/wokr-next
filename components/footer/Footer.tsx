@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import logo from "../../public/images/wokri_logo.png";
-import glassLogo from "../../public/images/wokr_glass_logo.png";
 import lineLogo from "../../public/images/Wokr_line.png";
 import Socials from "../landingpage/socials/Socials";
 
@@ -33,8 +31,11 @@ const Footer = () => {
             <span className="sr-only">Wokr Marketplace</span>
             <Image
               className="h-14 w-auto"
-              src={logo}
+              src="/images/wokri_logo.png"
               alt="wokr marketplace logo"
+              width={300}
+              height={300}
+              priority
             />
           </Link>
 
@@ -46,8 +47,10 @@ const Footer = () => {
         <div className="hidden lg:flex items-center justify-start md:justify-center lg:basis-1/2">
           <Image
             className="w-auto"
-            src={glassLogo}
+            src="/images/wokr_glass_logo.png"
             alt="wokr marketplace logo"
+            width={300}
+            height={300}
           />
         </div>
 

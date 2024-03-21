@@ -99,7 +99,7 @@ const LoginModal = ({ setOpen, open }: ModalProps) => {
         });
 
         setTimeout(function () {
-          router.push("/post-job");
+          router.push("/post-service");
         }, 2000);
 
         toast("Logged in successfully", {

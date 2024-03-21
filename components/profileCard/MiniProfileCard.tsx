@@ -13,7 +13,7 @@ const MiniProfileCard: React.FC<userProps> = ({ data }) => {
           src={data && data?.profileImage}
           alt={data && data?.firstName}
           height="100"
-          className="rounded-full w-48 h-48"
+          className="rounded-full w-48 h-48 object-center object-cover"
           width="100"
         />
         <div className="bg-green-300 -mt-5 text-gray-500 text-sm uppercase py-1 px-3">

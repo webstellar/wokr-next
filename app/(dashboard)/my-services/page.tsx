@@ -16,7 +16,7 @@ import { deleteService, duplicateService } from "@/utils/api";
 import { toast } from "react-toastify";
 
 const Services = () => {
-  const { data: jobs, status, error } = useAllJobsQuery();
+  const { data: jobs, status, error, isLoading } = useAllJobsQuery();
   const { data: user } = useUserQuery();
   const queryClient = useQueryClient();
   const deleteServiceMutation = useMutation({
@@ -48,7 +48,7 @@ const Services = () => {
   });
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(2);
+  const [itemsPerPage, setItemsPerPage] = useState(3);
 
   const filteredJobs = jobs?.filter((job: jobData) => job.owner === user?._id);
 
@@ -97,14 +97,20 @@ const Services = () => {
     <section className="mx-auto mb-20">
       <div className="mx-auto grid md:grid-cols-3 justify-between items-start gap-10 max-w-screen-2xl px-6 lg:px-8">
         <div className="md:col-span-2 mt-10 flex flex-col gap-y-5">
-          {paginatedJobs.map((job: jobData) => (
-            <AutomationCard
-              key={job._id}
-              data={job}
-              deleteFunc={handleDeleteJob}
-              duplicateFunc={handleDuplicateJob}
-            />
-          ))}
+          {paginatedJobs.length > 0 ? (
+            paginatedJobs.map((job: jobData) => (
+              <AutomationCard
+                key={job._id}
+                data={job}
+                deleteFunc={handleDeleteJob}
+                duplicateFunc={handleDuplicateJob}
+              />
+            ))
+          ) : (
+            <div className="my-6 text-center">
+              You have no jobs yets...
+            </div>
+          )}
 
           <Pagination
             itemsPerPage={itemsPerPage}

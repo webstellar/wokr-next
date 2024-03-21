@@ -401,6 +401,16 @@ const AddService = () => {
           </div>
 
           <div className="mt-10 md:space-y-6">
+            <WokrDashboardButton
+              cancel={handleCancel}
+              cancelText={"Cancel"}
+              title="Publish"
+              type="submit"
+              disabled={false}
+              loading={loading}
+              loadingText="Publishing ..."
+              preLoadingText="Publish"
+            />
             <WokrDashboardInput
               classname="col-span-full"
               htmlFor="price"
@@ -497,17 +507,6 @@ const AddService = () => {
               autocomplete="video url"
               inputPlaceholder="Video url"
               onChange={handleChange}
-            />
-
-            <WokrDashboardButton
-              cancel={handleCancel}
-              cancelText={"Cancel"}
-              title="Publish"
-              type="submit"
-              disabled={false}
-              loading={loading}
-              loadingText="Publishing ..."
-              preLoadingText="Publish"
             />
           </div>
         </div>

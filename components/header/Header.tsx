@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 import RegisterModal from "../auth/modal/RegisterModal";
 import LoginModal from "../auth/modal/LoginModal";
 import Image from "next/image";
-import logo from "../../public/images/wokri_logo.png";
 
 const homeMenu = [
   {
@@ -53,8 +52,9 @@ const Header = () => {
               className="h-14 w-auto"
               height="100"
               width="100"
-              src={logo}
+              src="/images/wokri_logo.png"
               alt="wokr marketplace logo"
+              priority
             />
           </Link>
         </div>
@@ -119,8 +119,11 @@ const Header = () => {
               <span className="sr-only">Wokr Marketplace</span>
               <Image
                 className="h-12 w-auto"
-                src={logo}
+                src="/images/wokri_logo.png"
                 alt="wokr marketplace logo"
+                width={200}
+                height={200}
+                priority
               />
             </Link>
             <button
