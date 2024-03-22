@@ -51,7 +51,7 @@ const EditProfile = () => {
     },
   });
 
-  const initialSkillSets = data?.skillsets.map(
+  const initialSkillSets = data?.skillsets?.map(
     (set: { skill: string; skillLevel: string }) => ({
       skill: skillList.includes(set.skill) ? set.skill : "Select Skill",
       skillLevel: skillLevelList.includes(set.skillLevel)
@@ -60,7 +60,7 @@ const EditProfile = () => {
     })
   );
 
-  const initialToolSets = data?.automationTools.map(
+  const initialToolSets = data?.automationTools?.map(
     (set: { automation: string; automationLevel: string }) => ({
       automation: toolList.includes(set.automation)
         ? set.automation
@@ -71,7 +71,7 @@ const EditProfile = () => {
     })
   );
 
-  const initialLanguageSets = data?.languages.map(
+  const initialLanguageSets = data?.languages?.map(
     (set: { language: string; languageLevel: string }) => ({
       language: languageList.includes(set.language)
         ? set.language

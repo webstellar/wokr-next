@@ -65,7 +65,7 @@ const Services = () => {
 
   if (status === "pending")
     return (
-      <section className="mx-auto max-w-screen-2xl h-screen px-6 lg:px-8">
+      <section className="mx-auto flex flex-col justify-center items-center h-[50%]">
         <div className="my-6 flex items-center justify-center h-min">
           <Image
             src="/images/wokr-loader.gif"
@@ -78,7 +78,11 @@ const Services = () => {
       </section>
     );
   if (status === "error") {
-    return <h1>{JSON.stringify(error)}</h1>;
+    return (
+      <section className="mx-auto flex flex-col justify-center items-center h-[50%]">
+        <h1>Error: {JSON.stringify(error)}</h1>
+      </section>
+    );
   }
 
   const handleDeleteJob = async (id: string) => {
@@ -107,9 +111,7 @@ const Services = () => {
               />
             ))
           ) : (
-            <div className="my-6 text-center">
-              You have no jobs yets...
-            </div>
+            <div className="my-6 text-center">You have no jobs yets...</div>
           )}
 
           <Pagination

@@ -50,8 +50,6 @@ export default function Automation({ params }: Props) {
     router.push("/automations");
   };
 
-
-
   if (status === "pending")
     return (
       <div className="mx-auto flex flex-col justify-center items-center h-[50%]">
@@ -69,18 +67,29 @@ export default function Automation({ params }: Props) {
 
   if (status === "error") {
     return (
-      <div className="mx-auto flex flex-col justify-center items-center h-[50%]">
-        <h1 className="text-lg md:text-xl">
-          The automation service you're trying to access does not exist anymore
-        </h1>
-        <button
-          title="reset-button"
-          type="button"
-          className="rounded-md bg-wokr-red-100 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-wokr-red-100  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wokr-200 mt-6 cursor-pointer"
-          onClick={handleEmptyClick}
-        >
-          Click to see other services
-        </button>
+      <div className="mx-auto flex flex-col max-w-screen-2xl item-center justify-start p-6 lg:px-8 gap-y-32">
+        <Breadcrumb
+          homeElement={"Home"}
+          separator={<span className="text-xs md:text-sm font-light"> | </span>}
+          activeClasses="text-gray-800 font-normal cursor-default"
+          containerClasses="flex flex-wrap gap-y-2"
+          listClasses="hover:underline mx-2 text-gray-500 text-xs md:text-sm font-light"
+          capitalizeLinks
+        />
+        <div className="flex flex-col justify-center items-start">
+          <h1 className="text-base md:text-lg">
+            The automation service you&apos;re trying to access does not exist
+            anymore
+          </h1>
+          <button
+            title="reset-button"
+            type="button"
+            className="rounded-md bg-wokr-red-100 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-wokr-red-100  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-wokr-200 mt-6 cursor-pointer"
+            onClick={handleEmptyClick}
+          >
+            Click to see other services
+          </button>
+        </div>
       </div>
     );
   }

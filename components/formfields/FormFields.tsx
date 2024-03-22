@@ -571,7 +571,7 @@ export const WokrDashboardButton = ({ ...props }) => {
 };
 export const WokrDashboardServiceButton = ({ ...props }) => {
   return (
-    <div className="mt-6 flex items-center gap-x-6">
+    <div className="mt-8 mb-3 md:mb-5 flex items-center gap-x-6">
       <div className="w-full">
         <Listbox
           value={props.value}

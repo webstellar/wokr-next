@@ -26,6 +26,8 @@ import {
   WokrDashboardInput,
   WokrDashboardList,
   WokrDashboardSelect,
+  WokrDashboardServiceButton,
+  WokrDashboardSingleList,
   WokrPhotoUpload,
 } from "../formfields/FormFields";
 import Image from "next/image";
@@ -59,7 +61,7 @@ const AddService = () => {
         type: "success",
         position: "bottom-right",
       });
-      router.push(`/automations/${data._id}`);
+      router.push(`/automations/${data.title}?_id=${data._id}`); //dynamic routing
     },
   });
 
@@ -77,7 +79,7 @@ const AddService = () => {
   const [automationLists, setAutomationLists] = useState([
     { automation: automationTools[0], automationLevel: automationLevels[0] },
   ]);
-  const [status, setStatus] = useState(statusList);
+  const [status, setStatus] = useState(statusList[0]);
 
   const handleAutomationChange = (
     index: number,
@@ -360,22 +362,24 @@ const AddService = () => {
               categorylist={includedServices}
               multiple={true}
             />
-            <WokrDashboardList
+            <WokrDashboardSingleList
               htmlFor="feeType"
               label="Fee Type"
-              categories={feeType}
-              setCategories={setFeeType}
-              categorylist={feeTypes}
+              value={feeType}
+              onChange={setFeeType}
+              lists={feeList}
               multiple={false}
+              required={true}
             />
 
-            <WokrDashboardList
+            <WokrDashboardSingleList
               htmlFor="deliveryTime"
               label="Delivery Time (days)"
-              categories={deliveryTime}
-              setCategories={setDeliveryTime}
-              categorylist={deliveryTimes}
+              value={deliveryTime}
+              onChange={setDeliveryTime}
+              lists={deliveryList}
               multiple={false}
+              required={true}
             />
 
             <WokrDashboardInput
@@ -397,15 +401,17 @@ const AddService = () => {
           </div>
 
           <div className="mt-10 md:space-y-6">
-            <WokrDashboardButton
-              cancel={handleCancel}
-              cancelText={"Cancel"}
-              title="Publish"
+            <WokrDashboardServiceButton
+              onChange={setStatus}
+              value={status}
+              options={statusList}
+              multiple={false}
+              title="Save Button"
               type="submit"
-              disabled={false}
-              loading={loading}
-              loadingText="Publishing ..."
-              preLoadingText="Publish"
+              disabled={loading ? true : false}
+              loading={loading ? true : false}
+              loadingText="Saving..."
+              preLoadingText="Save"
             />
             <WokrDashboardInput
               classname="col-span-full"

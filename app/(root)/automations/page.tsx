@@ -122,7 +122,18 @@ const Automations = ({
       </section>
     );
   if (status === "error") {
-    return <h1>{JSON.stringify(error)}</h1>;
+    return (
+      <div className="mx-auto flex flex-col max-w-screen-2xl item-center justify-start p-6 lg:px-8 gap-y-32">
+        <Breadcrumb
+          homeElement={"Home"}
+          separator={<span className="text-xs md:text-sm font-light"> | </span>}
+          activeClasses="text-gray-800 font-normal cursor-default"
+          containerClasses="flex flex-wrap gap-y-2"
+          listClasses="hover:underline mx-2 text-gray-500 text-xs md:text-sm font-light"
+          capitalizeLinks
+        />
+      </div>
+    );
   }
 
   return (

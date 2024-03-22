@@ -239,7 +239,7 @@ const EditService = (data: jobProps) => {
     <section className="mx-auto mb-20">
       <form onSubmit={handleSubmit}>
         <div className="mx-auto grid md:grid-cols-3 justify-start items-start gap-10 max-w-screen-2xl px-6 lg:px-8">
-          <div className="-order-1 md:order-1 md:col-span-2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="md:-order-1 order-1 md:col-span-2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <WokrDashboardInput
               labelclass="required"
               required={true}
