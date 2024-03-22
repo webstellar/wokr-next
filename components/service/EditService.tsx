@@ -125,7 +125,6 @@ const EditService = (data: jobProps) => {
   );
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
-
   const [servicesIncluded, setServicesIncluded] = useState(mappedServices);
   const [categories, setCategories] = useState(mappedCategories);
   const [tags, setTags] = useState(mappedTags);
@@ -162,7 +161,6 @@ const EditService = (data: jobProps) => {
 
   const urls = images.map((file) => URL.createObjectURL(file));
   let url = null;
-
   if (imageUpload instanceof File) {
     url = URL.createObjectURL(imageUpload);
   }
@@ -185,7 +183,8 @@ const EditService = (data: jobProps) => {
 
     const id = data?.data?._id!;
 
-    //if (imageUpload == null) return; //image is compulsory
+    //if (imageUpload == null) return;
+    //image is not compulsory for update
 
     try {
       const currentUser = auth.currentUser;
@@ -240,7 +239,7 @@ const EditService = (data: jobProps) => {
     <section className="mx-auto mb-20">
       <form onSubmit={handleSubmit}>
         <div className="mx-auto grid md:grid-cols-3 justify-start items-start gap-10 max-w-screen-2xl px-6 lg:px-8">
-          <div className="md:col-span-2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+          <div className="-order-1 md:order-1 md:col-span-2 mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <WokrDashboardInput
               labelclass="required"
               required={true}

@@ -14,6 +14,9 @@ import {
   categorylists,
   includedServices,
   tagOptions,
+  feeList,
+  deliveryList,
+  statusList,
 } from "../../data/data";
 import { useRouter } from "next/navigation";
 import { createService } from "@/utils/api";
@@ -59,9 +62,10 @@ const AddService = () => {
       router.push(`/automations/${data._id}`);
     },
   });
+
   const [formState, setFormState] = useState(initState);
-  const [feeType, setFeeType] = useState(feeTypes[0]);
-  const [deliveryTime, setDeliveryTime] = useState(deliveryTimes[0]);
+  const [feeType, setFeeType] = useState(feeList[0]);
+  const [deliveryTime, setDeliveryTime] = useState(deliveryList[0]);
   const [imageUpload, setImageUpload] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [servicesIncluded, setServicesIncluded] = useState([
@@ -70,10 +74,10 @@ const AddService = () => {
   const [categories, setCategories] = useState([categorylists[0]]); //array
   const [tags, setTags] = useState([tagOptions[0]]); //array
   const [images, setImages] = useState<File[]>([]);
-
   const [automationLists, setAutomationLists] = useState([
     { automation: automationTools[0], automationLevel: automationLevels[0] },
   ]);
+  const [status, setStatus] = useState(statusList);
 
   const handleAutomationChange = (
     index: number,
@@ -116,15 +120,10 @@ const AddService = () => {
   };
 
   const urls = images.map((file) => URL.createObjectURL(file));
-
   let url = null;
   if (imageUpload instanceof File) {
     url = URL.createObjectURL(imageUpload);
   }
-
-  const handleCancel = () => {
-    router.push("/dashboard");
-  };
 
   const handleChange = (
     e:
@@ -173,23 +172,20 @@ const AddService = () => {
             servicesIncluded.map((service) => ({
               name: service.value,
             })) || null,
-          categories:
-            categories.map((category) => ({ name: category.value })) || null,
-          tags: tags.map((tag) => ({ name: tag.value })) || null,
+          categories: categories.map((category) => ({ name: category.value })),
+          tags: tags.map((tag) => ({ name: tag.value })),
           email: currentUser?.email,
           title: formState?.title,
           description: formState?.description,
           price: formState?.price,
-          deliveryTime: deliveryTime?.label,
+          deliveryTime: deliveryTime,
           maxRevisions: formState?.maxRevisions,
-          images: imageUrls.map((url) => ({ url })) || null,
+          images: imageUrls.map((url) => ({ url })),
           video: formState?.videoUrl,
           featuredImage: imageUrl,
-          fee: feeType?.label,
-          tools: tranformedTools || null,
+          fee: feeType,
+          tools: tranformedTools,
         };
-
-        //await createJob(formData, headers);
 
         addServiceMutation.mutate({ formData, token });
       }
