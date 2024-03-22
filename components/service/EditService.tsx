@@ -130,7 +130,7 @@ const EditService = (data: jobProps) => {
   const [tags, setTags] = useState(mappedTags);
   const [images, setImages] = useState<File[]>([]);
   const [automationLists, setAutomationLists] = useState(initialToolSets);
-  const [status, setStatus] = useState(originalStatus || statusList[0]);
+  const [status, setStatus] = useState(originalStatus);
 
   //automation tools
   const handleAutomationChange = (

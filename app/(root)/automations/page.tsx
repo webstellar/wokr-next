@@ -107,7 +107,7 @@ const Automations = ({
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  if (status === "pending")
+  if (status === "pending") {
     return (
       <section className="mx-auto flex flex-col justify-center items-center h-[50%]">
         <div className="my-6 flex items-center justify-center h-min">
@@ -121,6 +121,8 @@ const Automations = ({
         </div>
       </section>
     );
+  }
+
   if (status === "error") {
     return (
       <div className="mx-auto flex flex-col max-w-screen-2xl item-center justify-start p-6 lg:px-8 gap-y-32">

@@ -50,9 +50,9 @@ export default function Automation({ params }: Props) {
     router.push("/automations");
   };
 
-  if (status === "pending")
+  if (status === "pending") {
     return (
-      <div className="mx-auto flex flex-col justify-center items-center h-[50%]">
+      <section className="mx-auto flex flex-col justify-center items-center h-[50%]">
         <div className="my-6 flex items-center justify-center h-min">
           <Image
             src="/images/wokr-loader.gif"
@@ -62,8 +62,9 @@ export default function Automation({ params }: Props) {
             className="h-10 w-10"
           />
         </div>
-      </div>
+      </section>
     );
+  }
 
   if (status === "error") {
     return (
@@ -171,22 +172,6 @@ export default function Automation({ params }: Props) {
                     Max Revisions:
                   </span>
                   {job?.maxRevisions}
-                </div>
-
-                <div className="sm:col-span-full flex flex-row gap-x-3 items-start text-gray-500">
-                  <HiMiniCog8Tooth className="text-gray-600" />
-                  <span className="font-medium text-gray-600">Skill</span>
-                  <div className="flex flex-row justify-start gap-x-2">
-                    {job?.skills.map((skill: any) => (
-                      <span
-                        key={skill._id}
-                        className="text-gray-500 font-light"
-                      >
-                        {skill.skill} |{" "}
-                        <span className="font-normal">{skill.skillLevel}</span>,
-                      </span>
-                    ))}
-                  </div>
                 </div>
               </div>
 
