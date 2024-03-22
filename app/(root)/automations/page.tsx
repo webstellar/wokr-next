@@ -56,8 +56,12 @@ const Automations = ({
     return { ...job, user, toolIcons };
   });
 
+  const publishedPosts = jobsArray?.filter(
+    (job: jobData) => job.status === "Published"
+  );
+
   const filteredJobs = useMemo(() => {
-    let result = jobsArray;
+    let result = publishedPosts;
 
     if (query) {
       result = result?.filter(

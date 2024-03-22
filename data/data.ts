@@ -376,6 +376,42 @@ export const includedServices = [
   { id: 4, value: "Customer support" },
 ];
 
+export const postStatus = [
+  { id: 1, value: "Published" },
+  { id: 2, value: "Draft" },
+];
+
+export const feeList = [
+  "One-time",
+  "Fixed Price",
+  "Subscription",
+  "Pay-As-You-Go",
+];
+
+export const deliveryList = [
+  "1 day",
+  "2 days",
+  "3 days",
+  "4 days",
+  "5 days",
+  "6 days",
+  "7 days",
+  "8 days",
+  "9 days",
+  "10 days",
+  "11 days",
+  "12 days",
+  "13 days",
+  "14 days",
+  "15 days",
+  "16 days",
+  "17 days",
+  "18 days",
+  "19 days",
+  "20 days",
+  "21 days",
+];
+
 export const skillLevelList = ["Beginner", "Intermediate", "Proficient"];
 
 export const skillList = [
@@ -384,6 +420,7 @@ export const skillList = [
   "Web scraping",
   "Web development",
 ];
+export const statusList = ["Published", "Draft"];
 
 export const toolLevelList = ["beginner", "intermediate", "proficient"];
 export const toolList = [

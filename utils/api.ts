@@ -69,7 +69,6 @@ export const getAllUsers = async () => {
   }
 };
 
-//api pending (not working)
 export const deleteUserByAdminProfile = async (id: string, token: string) => {
   try {
     const response = await axios.delete(`/api/user/delete`, {
