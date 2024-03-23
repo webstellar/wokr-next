@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useDebounce } from "use-debounce";
 
@@ -31,7 +31,7 @@ const Search = () => {
           onChange={(e) => setSearch(e.target.value)}
           value={search}
           type="search"
-          name="domain"
+          name="search"
           className="w-full md:w-[600px] backdrop-blur-sm bg-gray-200 py-2 pl-10 pr-4 rounded-full focus:outline-none border-2 focus:border-wokr-red-100/5 transition-colors duration-300"
           placeholder="Search services"
         />

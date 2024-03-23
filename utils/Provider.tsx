@@ -15,7 +15,7 @@ export const Provider = ({ children }: { children: React.ReactNode }) => {
             refetchOnMount: false,
             refetchOnReconnect: false,
             retry: false,
-            staleTime: twentyFourHoursInMs,
+            staleTime: 1000,
           },
         },
       })
