@@ -39,8 +39,6 @@ const Automations = ({
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(4);
-
-  //const searchParams = useSearchParams();
   const query = searchParams.query;
 
   useEffect(() => {
@@ -49,7 +47,6 @@ const Automations = ({
 
   const jobsArray = jobs?.map((job: jobData) => {
     const user = users?.find((user: userData) => user._id === job.owner);
-
     const toolIcons = job.tools.map((automation: automationData) => {
       return allTools.find((tool) => tool.name === automation.automation);
     });
@@ -98,7 +95,7 @@ const Automations = ({
     }
 
     return result;
-  }, [jobsArray, query, categories, tags, sort?.value]);
+  }, [publishedPosts, query, categories, tags, sort?.value]);
 
   const paginatedJobs = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;

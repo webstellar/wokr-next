@@ -12,7 +12,7 @@ export async function GET(req: NextRequest) {
   try {
     const url = req.nextUrl;
     const data = url.searchParams.get("data");
-    const automation = await Automation.findById(data).exec();
+    const automation = await Automation.findById(data).lean().exec();
     return NextResponse.json(automation);
   } catch (error) {
     console.error(error);

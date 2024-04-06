@@ -2,8 +2,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { AuthContext } from "@/context/authContext";
 import { getUser } from "@/utils/api";
-import { userData } from "@/types/types";
-import { jobData } from "../types/types";
 
 export const useUserQuery = () => {
   const { state } = useContext(AuthContext);
@@ -16,9 +14,8 @@ export const useUserQuery = () => {
     queryKey: ["loggedUser", email],
     queryFn: () => getUser(token),
     initialData: () => {
-      return queryClient
-        .getQueryData(["users"])
-        ?.find((d: userData) => d.email === email);
+      const userData = queryClient.getQueryData(["users"]) as any[];
+      return userData.find((d: any) => d.email === email);
     },
   });
 

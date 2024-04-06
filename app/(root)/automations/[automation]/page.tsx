@@ -31,7 +31,7 @@ export default function Automation({ params }: Props) {
   const currentUser = auth.currentUser;
 
   const search = String(searchParams.get("_id"));
-  const { data: job, error, status } = useJobQuery(search);
+  const { data: job, error, status, isLoading } = useJobQuery(search);
   const { data: users, status: state } = useAllUsersQuery();
 
   const filterUserInfo =
@@ -50,7 +50,7 @@ export default function Automation({ params }: Props) {
     router.push("/automations");
   };
 
-  if (status === "pending") {
+  if (isLoading) {
     return (
       <section className="mx-auto flex flex-col justify-center items-center h-[50%]">
         <div className="my-6 flex items-center justify-center h-min">

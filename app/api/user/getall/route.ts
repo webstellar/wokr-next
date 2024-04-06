@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
     return new NextResponse("Method Not Allowed", { status: 405 });
   }
   try {
-    const users = await User.find().exec();
+    const users = await User.find().lean().exec();
     return NextResponse.json(users);
   } catch (error) {
     console.error(error);

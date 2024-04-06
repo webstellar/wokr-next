@@ -33,7 +33,9 @@ export async function GET(request: Request) {
 
     const userProfile = await User.findOne({
       email: currentUser?.email,
-    }).exec();
+    })
+      .lean()
+      .exec();
 
     return NextResponse.json(userProfile);
   } catch (error) {

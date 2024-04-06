@@ -3,8 +3,6 @@ import { useState } from "react";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-const twentyFourHoursInMs = 1000 * 60 * 60 * 24;
-
 export const Provider = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(
     () =>
