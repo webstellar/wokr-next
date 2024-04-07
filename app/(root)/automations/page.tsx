@@ -14,6 +14,8 @@ import Select from "react-select";
 import Image from "next/image";
 import Pagination from "@/components/pagination/Pagination";
 
+export const dynamic = "force-dynamic";
+
 interface objectProps {
   id: number;
   value: string;
