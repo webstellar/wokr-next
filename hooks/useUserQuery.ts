@@ -14,8 +14,15 @@ export const useUserQuery = () => {
     queryKey: ["loggedUser", email],
     queryFn: () => getUser(token),
     initialData: () => {
-      const userData = queryClient.getQueryData(["users"]) as any[];
-      return userData.find((d: any) => d.email === email);
+      const userData = (queryClient.getQueryData(["users"]) as any[]) || [];
+
+      if (userData) {
+        const user = Array.from(userData).find((d: any) => d.email === email);
+        if (user) {
+          return user;
+        }
+      }
+      return null;
     },
   });
 
